@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+db.sqlite3
+*.jpeg
+*.jpg
+*.png
+*.pdf
+*.ppt
+*.pptx
+*.h5
+.env
+.venv
+.venv*
