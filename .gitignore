@@ -13,3 +13,4 @@ db.sqlite3
 .env
 .venv
 .venv*
+backend/virtual
