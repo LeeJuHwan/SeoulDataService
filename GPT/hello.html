@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pseudo-Text Search System</title>
+    <style>
+      #text-container {
+        position: relative;
+        height: 500px;
+        width: 800px;
+        margin: auto;
+      }
+
+      .text {
+        position: absolute;
+        cursor: pointer;
+      }
+
+      .selected {
+        border: 3px solid red;
+        z-index: 1;
+      }
+
+      .similar {
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="text-container"></div>
+
+    <script>
+      // Example data
+      const data = [
+        { text: "안녕하세요, 반갑습니다.", score: 0.1 },
+        { text: "오늘 날씨가 좋네요.", score: 0.3 },
+        { text: "저는 파이썬 개발자입니다.", score: 0.5 },
+        { text: "저는 파이썬 개발자입니다.", score: 0.5 },
+        { text: "저는 파이썬 개발자입니다.", score: 0.5 },
+        { text: "저는 파이썬 개발자입니다.", score: 0.5 },
+        { text: "저는 파이썬 개발자입니다.", score: 0.5 },
+        { text: "저는 파이썬 개발자입니다.", score: 0.5 },
+        { text: "저는 파이썬 개발자입니다.", score: 0.5 },
+        { text: "저는 파이썬 개발자입니다.", score: 0.5 },
+        { text: "저는 파이썬 개발자입니다.", score: 0.5 },
+        // ... add more texts here
+      ];
+
+      // Create text elements and append them to the container
+      const container = document.getElementById("text-container");
+      const texts = [];
+      for (let i = 0; i < data.length; i++) {
+        const text = document.createElement("div");
+        text.innerText = data[i].text;
+        text.className = "text";
+        text.style.top =
+          Math.random() * (container.clientHeight - text.clientHeight) + "px";
+        text.style.left =
+          Math.random() * (container.clientWidth - text.clientWidth) + "px";
+        container.appendChild(text);
+        texts.push(text);
+      }
+
+      // Highlight selected text and similar texts
+      function highlightText(index) {
+        const selected = texts[index];
+        selected.classList.add("selected");
+        for (let i = 0; i < data.length; i++) {
+          if (i === index) {
+            continue;
+          }
+          const text = texts[i];
+          const similarity = data[index].score - data[i].score;
+          if (similarity > 0.5) {
+            text.classList.add("similar");
+          }
+        }
+      }
+
+      // Remove all highlights
+      function clearHighlights() {
+        for (let i = 0; i < data.length; i++) {
+          const text = texts[i];
+          text.classList.remove("selected", "similar");
+        }
+      }
+
+      // Add click event listener to each text element
+      for (let i = 0; i < data.length; i++) {
+        texts[i].addEventListener("click", () => {
+          clearHighlights();
+          highlightText(i);
+        });
+      }
+    </script>
+  </body>
+</html>
