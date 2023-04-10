@@ -7,3 +7,6 @@
 
 ### OpenAI
 - [GPT](./GPT/README.md)
+
+### AWS
+- good
