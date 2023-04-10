@@ -8,5 +8,5 @@
 ### OpenAI
 - [GPT](./GPT/README.md)
 
-### AWS
-- good
+### AWS EC2
+- ssh -i [.pem file] ubuntu@ip
