@@ -7,4 +7,4 @@ class PreprocessedImageSerializer(serializers.ModelSerializer):
         model = PreprocessedImages
         # fields = '__all__'
         fields = ["image_title", "image_context"]
-        read_only_fields = ["image_id"]
+        # read_only_fields = ["image_id"]
