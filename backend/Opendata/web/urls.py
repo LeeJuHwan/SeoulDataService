@@ -11,4 +11,3 @@ urlpatterns = [
     path("detail_car/<int:pk>", views.OpenDetailView.as_view(), name = "car-detail"),
     # path("update_car/<int:pk>", views.CarUpdateView.as_view(), name = "car-update"),
     # path("delete_car/<int:pk>", views.CarDeleteView.as_view(), name = "car-delete"),
-]

@@ -18,15 +18,6 @@ class MainView(TemplateView) :
         context["name"] = "My project"
         return context
 
-# class CarCreateView(CreateView) :
-#     model = SeoulData
-#     fields = "__all__"
-#     success_url = reverse_lazy("web:car-list")
-
-#     def form_valid(self, form) : 
-#         print(form.cleaned_data)
-#         return super().form_valid(form)
-
 class OpenListView(ListView) :
     model = SeoulData
     paginate_by = 100
@@ -39,14 +30,3 @@ class OpenListView(ListView) :
 
 class OpenDetailView(DetailView) :
     model = SeoulData
-
-# class CarUpdateView(UpdateView) : 
-#     model = Car
-#     fields =  ["brand", "model", "color", "year"]
-#     success_url = reverse_lazy("web:car-list")
-
-#     template_name_suffix = "_update_form"
-
-# class CarDeleteView(DeleteView) :
-#     model = Car
-#     success_url = reverse_lazy("web:car-list")
