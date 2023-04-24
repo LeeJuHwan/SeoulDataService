@@ -1,0 +1,50 @@
+<h1>Opendata</h1>
+<table>
+    <thead>
+      <tr>
+        <th>서비스ID</th>
+        <th>서비스명</th>
+        <th>대분류</th>
+        <th>중분류</th>
+        <th>소분류</th>
+        <th>제공기관</th>
+        <th>제공부서명</th>
+        <th>시스템명</th>
+        <th>담당자명</th>
+        <th>담당자연락처</th>
+        <th>갱신주기</th>
+        <th>최종갱신일자</th>
+        <th>제공사이트</th>
+        <th>제공형식</th>
+        <th>서비스설명</th>
+        <th>urls</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for data in object_list %}
+      <tr>
+        <td>{{ data.서비스ID }}</td>
+        <td>{{ data.서비스명 }}</td>
+        <td>{{ data.대분류 }}</td>
+        <td>{{ data.중분류 }}</td>
+        <td>{{ data.소분류 }}</td>
+        <td>{{ data.제공기관 }}</td>
+        <td>{{ data.제공부서명 }}</td>
+        <td>{{ data.시스템명 }}</td>
+        <td>{{ data.담당자명 }}</td>
+        <td>{{ data.담당자연락처 }}</td>
+        <td>{{ data.갱신주기 }}</td>
+        <td>{{ data.최종갱신일자 }}</td>
+        <td>{{ data.제공사이트 }}</td>
+        <td>{{ data.제공형식 }}</td>
+        <td>{{ data.서비스설명 }}</td>
+        <td>{{ data.urls }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="16">No data yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
