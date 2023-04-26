@@ -1,4 +1,7 @@
 <h1>Opendata</h1>
+
+
+
 <table>
     <thead>
       <tr>
@@ -24,7 +27,7 @@
       {% for data in object_list %}
       <tr>
         <td>{{ data.서비스ID }}</td>
-        <td>{{ data.서비스명 }}</td>
+        <td><a href="{% url 'web:detail-page' data.id %}">{{ data.서비스명 }}</a></td>
         <td>{{ data.대분류 }}</td>
         <td>{{ data.중분류 }}</td>
         <td>{{ data.소분류 }}</td>
