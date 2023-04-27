@@ -1,10 +1,9 @@
-
 from django import forms
+from .models import Datacart
 
-class CarForm(forms.Form) :
-    brand = forms.CharField()
-    model = forms.CharField()
-    color = forms.CharField()
-    year = forms.IntegerField()
-
-    
+class DataCartForm(forms.ModelForm):
+    class Meta:
+        model = Datacart
+        fields = ['seoul_data', 'quantity']
+        quantity = forms.NumberInput()
+        

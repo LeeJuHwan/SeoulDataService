@@ -3,3 +3,9 @@
 <p>{{ object.제공사이트 }}</p>
 <p>{{ object.서비스설명 }}</p>
 
+
+<form method="POST" action="{% url 'web:create-page' object.id %}">
+    {% csrf_token %}
+    <input type="hidden" name="quantity" value="1">
+    <button type="submit">Add to cart</button>
+  </form>
