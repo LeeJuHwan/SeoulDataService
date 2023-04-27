@@ -5,7 +5,7 @@ from django.views.generic.edit import FormView,  CreateView, UpdateView, DeleteV
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.detail import DetailView
-
+from django.views import View
 from .models import SeoulData, Datacart
 from django.utils import timezone
 
@@ -30,9 +30,6 @@ class OpenListView(ListView) :
 class OpenDetailView(DetailView) :
     model = SeoulData
 
-from django.views.generic import TemplateView
-from django.shortcuts import redirect
-
 class CartView(TemplateView):
     template_name = 'web/datacart.html'
 
@@ -48,4 +45,18 @@ class CartView(TemplateView):
             cart_data[seoul_data_id] = cart_data.get(seoul_data_id, 0) + 1
             request.session['cart'] = cart_data
         return redirect('cart')
+
+class AddToCartView(View):
+    def post(self, request, *args, **kwargs):
+        product_id = kwargs.get('pk')
+        print("###### ID ######", product_id)
+        quantity = request.POST.get('quantity', 1)
+        cart = Datacart.objects.filter(seoul_data_id=product_id).first()
+        if cart:
+            cart.quantity += int(quantity)
+            cart.save()
+        else:
+            Datacart.objects.create(seoul_data_id=product_id, quantity=quantity)
+        return redirect(reverse_lazy('web:datacart'))
+
 

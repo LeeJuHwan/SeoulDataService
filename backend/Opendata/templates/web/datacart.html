@@ -1,29 +1,7 @@
-{% block content %}
-  <h1>Cart</h1>
-  {% if cart_data %}
-    <table>
-      <thead>
-        <tr>
-          <th>Item Name</th>
-          <th>Quantity</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for seoul_data_id, quantity in cart_data.items %}
-          <tr>
-            <td>{{ SeoulData.objects.get(id=seoul_data_id).name }}</td>
-            <td>{{ quantity }}</td>
-            <td>{{ SeoulData.objects.get(id=seoul_data_id).price }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <p>Total: {{ cart_total }}</p>
-    <form method="post" action="{% url 'checkout' %}">
-      {% csrf_token %}
-      <button type="submit">Checkout</button>
-    </form>
-  {% else %}
-    <p>Your cart is empty.</p>
-  {% endif %}
+{% for item in object_list %}
+    <div class="cart-item">
+      <p>{{ item }}</p>
+        <h3>{{ item.seoul_data }}</h3>
+        <p>Quantity: {{ item.quantity }}</p>
+    </div>
+{% endfor %}
