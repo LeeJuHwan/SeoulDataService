@@ -1,7 +1,32 @@
-{% for item in object_list %}
-    <div class="cart-item">
-      <p>{{ item }}</p>
-        <h3>{{ item.seoul_data }}</h3>
-        <p>Quantity: {{ item.quantity }}</p>
-    </div>
-{% endfor %}
+<h1>Cart</h1>
+
+  {% if items %}
+    <table>
+      <thead>
+        <tr>
+          <th>Service ID</th>
+          <th>Product</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td>{{ item.service_id }}</td>
+            <td>{{ item.product }}</td>
+            <td>{{ item.category }}</td>
+            <td>
+              <form action="{% url 'web:remove_from_cart' item.product_id %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="item_id" value="{{ item.product_id }}">
+                <button type="submit">Remove</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Your cart is empty.</p>
+  {% endif %}
+  <a href="{% url 'web:list-page' %}"><h3>Click To OpenData List</h1></a>
