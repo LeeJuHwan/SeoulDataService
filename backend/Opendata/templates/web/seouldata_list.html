@@ -1,5 +1,4 @@
 <h1>Opendata</h1>
-<a href="{% url 'web:cart' %}"><h3>Click To DataMart</h3></a>
 <form method="post">
   {% csrf_token %}
   <button type="submit">Add to cart</button>
@@ -19,7 +18,7 @@
       <td>{{ item.product }}</td>
       <td>{{ item.category }}</td>
       <td>
-        <form action="{% url 'web:remove_from_cart' item.product_id %}" method="post">
+        <form action="{% url 'web:list-page' %}" method="post">
           {% csrf_token %}
           <input type="hidden" name="item_id" value="{{ item.product_id }}">
           <button type="submit">Remove</button>
@@ -42,14 +41,10 @@
     <tbody>
       {% for data in seouldata_list %}
       <tr>
-        <td><input type="checkbox" name="selected_items" value="{{ data.pk }}">{{ data.서비스ID }}</td>
-        <td><a href="{% url 'web:detail-page' data.id %}">{{ data.서비스명 }}</a></td>
+        <td><input type="checkbox" name="selected_items" value="{{ data.id }}">{{ data.서비스ID }}</td>
+        <td>{{ data.서비스명 }}</td>
         <td>{{ data.소분류 }}</td>
         <td>{{ data.서비스설명 }}</td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="16">No data yet.</td>
       </tr>
       {% endfor %}
     </tbody>
@@ -57,5 +52,5 @@
 </form>
 
 <script>
-  
+
 </script>
