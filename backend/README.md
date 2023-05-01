@@ -3,28 +3,7 @@
 ### How to start?
 > setting by virtual env
 ```
-python3 -m venv virtual
-```
-
-> enable virtual env 
-```
-source activate
-```
-
-> lib install
-```
-pip3 install -r requirments.txt
-```
-
-> run server
-```
-cd Opendata && python3 manage.py makemigrations
-
-python3 manage.py migrate
-
-python3 manage,py db_uploader
-
-python3 manage.py runserver
+cd backend && / docker-compose up
 ```
 
 
