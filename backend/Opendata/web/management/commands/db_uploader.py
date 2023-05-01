@@ -13,9 +13,9 @@ class Command(BaseCommand):
         # columns = ['서비스ID', '서비스명', '대분류', '중분류', '소분류', '제공기관', '제공부서명', '시스템명', '담당자명',
                     # '담당자연락처', '갱신주기', '최종갱신일자', '제공사이트', '제공형식', '서비스설명', 'urls']
         
-        df = pd.read_csv("/Users/juhwan.lee/Desktop/GitHub/SeoulDataService/Crawling/서울시 공공데이터 최종.csv")
+        df = pd.read_csv("/Opendata/csv_file/서울시 공공데이터 최종.csv")
         # df = df.rename(columns=dict(zip(df.columns, columns)))
-        engine = create_engine("postgresql://postgres:0000@localhost:5432/project")
+        engine = create_engine("postgresql://postgres:0000@db:5432/postgres")
         df.to_sql(SeoulData._meta.db_table, if_exists='append' ,con=engine, index=False)
 
     #     sub_category = ['일반행정', '산업/경제', '환경', '문화/관광', '보건', '안전', '복지', '주택/건설', '교육',

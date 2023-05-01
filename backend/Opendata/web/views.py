@@ -9,7 +9,7 @@ from .models import SeoulData, Datacart
 from django.utils import timezone
 from .get_session import get_session
 
-class MainView(TemplateView) :
+class MainView(TemplateView):
     template_name = "web/main.html"
     
     def get_context_data(self, **kwargs: str) -> dict[str, str]:
