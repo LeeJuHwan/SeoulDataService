@@ -1,13 +1,11 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, RedirectView
-from django.views.generic.edit import FormView,  CreateView, UpdateView, DeleteView
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
 from django.views import View
-from .models import SeoulData, Datacart
-from django.utils import timezone
+from .models import SeoulData
 from .get_session import get_session
+import time
+from django.core.cache import cache
 
 class MainView(TemplateView):
     template_name = "web/main.html"
@@ -23,14 +21,21 @@ class OpenDataView(View):
 
     def get(self, request):
         """Connect urls."""
-        seouldata_queryset = SeoulData.objects.all()
-        cart_items = self.request.session.get('cart_items', {})
-        print("cart_items", cart_items)
-        datacart_items = get_session(cart_items, SeoulData)
-        context = {"seouldata_list" : seouldata_queryset,
-                    "datacart_list" : datacart_items}
-        
-        return render(request, self.template_name, context)
+        start_time = time.time()
+        get_redis = cache.get('seouldata')
+        print("get_reids", get_redis)
+        if not get_redis:
+            seouldata_queryset = SeoulData.objects.all()
+            cart_items = self.request.session.get('cart_items', {})
+            print("cart_items", cart_items)
+            datacart_items = get_session(cart_items, SeoulData)
+            context = {"seouldata_list" : seouldata_queryset,
+                        "datacart_list" : datacart_items}
+            get_redis = cache.set('seouldata', context)
+        end_time = time.time()
+        get_redis = cache.get('seouldata')
+        print(f"get : {end_time - start_time}")
+        return render(request, self.template_name, get_redis)
 
     def post(self, request):
         """Submit or remove data."""

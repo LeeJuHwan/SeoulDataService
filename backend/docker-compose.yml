@@ -15,6 +15,7 @@ services:
       - DB_USER=postgres
       - DB_PASS=0000
     depends_on:
+      - redis
       - db
 
   db:
@@ -24,6 +25,12 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=0000
+
+  redis:
+    container_name: redis_service
+    image: redis:alpine
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres-data:

@@ -23,11 +23,3 @@ class SeoulData(models.Model):
         db_table = "seoul_data"
 
 
-class Datacart(models.Model):
-    seoul_data = models.ForeignKey(SeoulData, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-    add_date = models.DateTimeField(auto_now_add=True)
-
-    class Meta():
-        db_table = "data_cart"
-        ordering = ["-add_date"]

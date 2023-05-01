@@ -3,3 +3,4 @@ djangorestframework==3.14.0
 pandas==1.4.4
 SQLAlchemy==1.4.39
 psycopg2-binary==2.9.6
+django-redis==5.2.0
