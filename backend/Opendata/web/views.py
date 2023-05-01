@@ -39,6 +39,7 @@ class OpenDataView(View):
 
     def post(self, request):
         """Submit or remove data."""
+        start_time = time.time()
         cart_items = self.request.session.get('cart_items', {})
         print("REQUEST : ", request.POST)
         if 'selected_items' in request.POST:  # 데이터를 추가하는 경우
@@ -55,8 +56,10 @@ class OpenDataView(View):
                 if cart_items[product_id] == 0:
                     del cart_items[product_id]
             self.request.session['cart_items'] = cart_items
+
         queryset = SeoulData.objects.all()
         context = {"seouldata_list" : queryset, "datacart_list" : get_session(cart_items, SeoulData)}
+        print(f"post : {time.time() - start_time}")
         return render(request, self.template_name, context)
 
 

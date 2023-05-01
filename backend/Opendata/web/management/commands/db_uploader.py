@@ -9,7 +9,6 @@ cur = conn.cursor()
 cur.execute("select count(*) from seoul_data")
 data_count = cur.fetchone()[0]
 
-
 class Command(BaseCommand):
     def handle(self, *args, **options):
         columns = [
@@ -21,7 +20,8 @@ class Command(BaseCommand):
                     # '담당자연락처', '갱신주기', '최종갱신일자', '제공사이트', '제공형식', '서비스설명', 'urls']
         
         df = pd.read_csv("/Opendata/csv_file/서울시 공공데이터 최종.csv")
-        if data_count <= len(df): 
+        if data_count < len(df): 
+            print(f"저장 되어 있는 데이터 : {data_count} 입력할 데이터 :{len(df)} > 데이터 저장 성공")
             engine = create_engine("postgresql://postgres:0000@db:5432/postgres")
             df.to_sql(SeoulData._meta.db_table, if_exists='append' ,con=engine, index=False)
 
