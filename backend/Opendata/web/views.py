@@ -3,11 +3,12 @@ from django.views.generic import TemplateView
 from django.views import View
 from .models import SeoulData
 from .get_session import get_session
-import time
 from django.core.cache import cache
 from django.middleware import csrf
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
+
 import json
+import time
 
 
 class MainView(TemplateView):
@@ -47,14 +48,14 @@ class OpenDataView(View):
         queryset = SeoulData.objects.all()
         context = {"seouldata_list" : queryset, "datacart_list" : get_session(cart_items, SeoulData)}
 
-        if 'selected_items' in request.POST:
+        if 'selected_items' in request.POST: # add data
             id_list = self.request.POST.getlist("selected_items")
             for product_id in id_list:
                 cart_items[product_id] = cart_items.get(product_id, 1)
             self.request.session['cart_items'] = cart_items
             return render(request, self.template_name, context)
             
-        elif 'item_id' in request.POST:
+        elif 'item_id' in request.POST: # remove data
             product_id = self.request.POST.get("item_id")
             if product_id in cart_items:
                 cart_items[product_id] -= 1
