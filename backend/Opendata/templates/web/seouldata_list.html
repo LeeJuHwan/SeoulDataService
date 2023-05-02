@@ -1,35 +1,74 @@
+<head>
+<!-- JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
+<script>
+
+  function Checked(event){
+    
+    data = event.target.id
+    console.log(data)
+    
+    const csrftoken = Cookies.get('csrftoken');
+
+    fetch("/web/list/", {
+      method: "POST",
+      headers: {
+        'X-CSRFToken': csrftoken,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({"data": data})
+    })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error(error))
+  }
+</script>
+</head>
+
+<body>
+<!-- HTML -->
 <h1>Opendata</h1>
+<div id='result'></div>
 <form method="post">
   {% csrf_token %}
-  <button type="submit">Add to cart</button>
 
-<table>
-  <thead>
-    <tr>
-      <th>Service ID</th>
-      <th>Product</th>
-      <th>Category</th>
-    </tr>
-  </thead>
-<tbody>
-  {% for item in datacart_list %}
-    <tr>
-      <td>{{ item.service_id }}</td>
-      <td>{{ item.product }}</td>
-      <td>{{ item.category }}</td>
-      <td>
-        <form action="{% url 'web:list-page' %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="item_id" value="{{ item.product_id }}">
-          <button type="submit">Remove</button>
-        </form>
-      </td>
-    </tr>
-      {% endfor %}
+  <h2>DETAIL</h2>  
+  <div id="detail">
+    {% for item in response_data %}
+      {{item.urls}}
+    {% endfor %}
+  </div>
+  
+  <h2>CART</h2>    
+  <table>
+    <thead>
+      <tr>
+        <th>Service ID</th>
+        <th>Product</th>
+        <th>Category</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in datacart_list %}
+        <tr>
+          <td>{{ item.service_id }}</td>
+          <td>{{ item.product }}</td>
+          <td>{{ item.category }}</td>
+          <td>
+            <form action="{% url 'web:list-page' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="item_id" value="{{ item.product_id }}">
+              <button type="submit">Remove</button>
+            </form>
+          </td>
+        </tr>
+          {% endfor %}
     </tbody>
   </table>
 
-<table>
+  <h2>CONTENT</h2>
+  <button type="submit">Add to cart</button>
+  <table>
     <thead>
       <tr>
         <th>서비스ID</th>
@@ -41,7 +80,7 @@
     <tbody>
       {% for data in seouldata_list %}
       <tr>
-        <td><input type="checkbox" name="selected_items" value="{{ data.id }}">{{ data.서비스ID }}</td>
+        <td><input type="checkbox" name="selected_items" value="{{ data.id }}" id="{{data.서비스ID}}" onclick='Checked(event)'>{{ data.서비스ID }}</td>
         <td>{{ data.서비스명 }}</td>
         <td>{{ data.소분류 }}</td>
         <td>{{ data.서비스설명 }}</td>
@@ -50,7 +89,5 @@
     </tbody>
   </table>
 </form>
+</body>
 
-<script>
-
-</script>

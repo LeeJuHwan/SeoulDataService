@@ -6,6 +6,10 @@ from .models import SeoulData
 from .get_session import get_session
 import time
 from django.core.cache import cache
+from django.middleware import csrf
+from django.http import HttpResponse, JsonResponse
+import json
+
 
 class MainView(TemplateView):
     template_name = "web/main.html"
@@ -18,8 +22,10 @@ class MainView(TemplateView):
 class OpenDataView(View):
     """Project data list and cart product."""
     template_name = "web/seouldata_list.html"
-
+    
     def get(self, request):
+        # del request.session['cart_items']
+        
         """Connect urls."""
         start_time = time.time()
         get_redis = cache.get('seouldata')
@@ -27,7 +33,6 @@ class OpenDataView(View):
         if not get_redis:
             seouldata_queryset = SeoulData.objects.all()
             cart_items = self.request.session.get('cart_items', {})
-            print("cart_items", cart_items)
             datacart_items = get_session(cart_items, SeoulData)
             context = {"seouldata_list" : seouldata_queryset,
                         "datacart_list" : datacart_items}
@@ -42,12 +47,18 @@ class OpenDataView(View):
         start_time = time.time()
         cart_items = self.request.session.get('cart_items', {})
         print("REQUEST : ", request.POST)
+        queryset = SeoulData.objects.all()
+        context = {"seouldata_list" : queryset, "datacart_list" : get_session(cart_items, SeoulData)}
+
         if 'selected_items' in request.POST:  # 데이터를 추가하는 경우
             id_list = self.request.POST.getlist("selected_items")
             print("#####", id_list)
             for product_id in id_list:
                 cart_items[product_id] = cart_items.get(product_id, 1)
-            self.request.session['cart_items'] = cart_items  
+            self.request.session['cart_items'] = cart_items
+            print(f"post : {time.time() - start_time}")  
+            return render(request, self.template_name, context)
+            
         elif 'item_id' in request.POST:  # 데이터를 삭제하는 경우
             product_id = self.request.POST.get("item_id")
             print("this is product id : ", product_id)
@@ -56,11 +67,27 @@ class OpenDataView(View):
                 if cart_items[product_id] == 0:
                     del cart_items[product_id]
             self.request.session['cart_items'] = cart_items
-
-        queryset = SeoulData.objects.all()
-        context = {"seouldata_list" : queryset, "datacart_list" : get_session(cart_items, SeoulData)}
-        print(f"post : {time.time() - start_time}")
-        return render(request, self.template_name, context)
+            print(f"post : {time.time() - start_time}")
+            return render(request, self.template_name, context)
+        
+        else: # 데이터를 선택하는 경우
+            print("fetch")
+            responseData = json.loads(request.body)
+            id = responseData["data"]
+            print(id)
+            # response_data = {"msg": "Data received"}
+            detail = SeoulData.objects.filter(서비스ID=id)
+            print(detail)
+            serialized_data = [item.to_dict() for item in detail]
+            response_data = {
+                'data': serialized_data,
+                'message': 'success',
+            }
+            return JsonResponse(response_data)
+        
+        # queryset = SeoulData.objects.all()
+        # context = {"seouldata_list" : queryset, "datacart_list" : get_session(cart_items, SeoulData)}
+        # return render(request, self.template_name, context, csrf_token)
 
 
     
