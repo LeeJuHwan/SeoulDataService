@@ -21,6 +21,9 @@
       .then(response => response.json())
       .then(data => console.log(data))
       .catch(error => console.error(error))
+      .then(jsonData => {
+        json = jsonData['data']
+    })
   }
 </script>
 </head>
@@ -34,6 +37,7 @@
 
   <h2>DETAIL</h2>  
   <div id="detail">
+    {{ response_data }}
     {% for item in response_data %}
       {{item.urls}}
     {% endfor %}
