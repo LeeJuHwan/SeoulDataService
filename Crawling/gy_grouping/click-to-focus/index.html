@@ -29,6 +29,12 @@
             node, // lookAt ({ x, y, z })
             3000  // ms transition duration
           );
+          console.log('adgsadgs',node)
+          //fgRef.current.cameraPosition({x:0,y:0,z:0},node,3000);
+          fgRef.current.refresh()
+          console.log('sadgagsd')
+          //fgRef.current.dagNodeFilter(node => true);
+          console.log('dfgasdg')
         }, [fgRef]);
 
         return <ForceGraph3D
@@ -37,6 +43,8 @@
           nodeLabel="id"
           nodeAutoColorBy="group"
           onNodeClick={handleClick}
+          warmupTicks = {170}
+          linkDirectionalParticles = {1}
         />;
       };
 
