@@ -1,50 +1,8 @@
-<head>
-<!-- JS -->
+{% load static %}
+<script src="{% static 'javascript/dataCont.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
-<script>
+<head>
 
-  function Checked(event) {
-    data = event.target.id;
-    const csrftoken = Cookies.get("csrftoken");
-  
-    fetch("/web/list/", {
-      method: "POST",
-      headers: {
-        "X-CSRFToken": csrftoken,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ "data": data }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        return data;
-      })
-      .then((jsonData) => {
-        const json = jsonData["data"][0];
-        const resultDiv = document.querySelector('#detail');
-
-        resultDiv.innerHTML = `
-          <p>서비스ID: ${json['서비스ID']}</p>
-          <p>서비스명: ${json['서비스명']}</p>
-          <p>대분류: ${json['대분류']}</p>
-          <p>중분류: ${json['중분류']}</p>
-          <p>소분류: ${json['소분류']}</p>
-          <p>제공기관: ${json['제공기관']}</p>
-          <p>제공부서명: ${json['제공부서명']}</p>
-          <p>시스템명: ${json['시스템명']}</p>
-          <p>담당자명: ${json['담당자명']}</p>
-          <p>담당자연락처: ${json['담당자연락처']}</p>
-          <p>갱신주기: ${json['갱신주기']}</p>
-          <p>최종갱신일자: ${json['최종갱신일자']}</p>
-          <p>제공사이트: ${json['제공사이트']}</p>
-          <p>제공형식: ${json['제공형식']}</p>
-          <p>서비스설명: ${json['서비스설명']}</p>
-          <p>urls: ${json['urls']}</p>
-        `;
-      })
-      .catch((error) => console.error(error));
-  }
-</script>
 </head>
 
 <body>
@@ -53,10 +11,10 @@
 <form method="post">
   {% csrf_token %}
 
-  <h2>DETAIL</h2>  
+  <h2>[DETAIL]</h2>  
   <div id="detail"></div>
   
-  <h2>CART</h2>    
+  <h2>[CART]</h2>    
   <table>
     <thead>
       <tr>
@@ -83,7 +41,7 @@
     </tbody>
   </table>
 
-  <h2>CONTENT</h2>
+  <h2>[CONTENT]</h2>
   <button type="submit">Add to cart</button>
   <table>
     <thead>
