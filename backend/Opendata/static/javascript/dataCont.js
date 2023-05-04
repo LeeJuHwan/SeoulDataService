@@ -1,6 +1,7 @@
 function Checked(event) {
   data = event.target.id;
   const csrftoken = Cookies.get("csrftoken");
+  
   fetch("/web/list/", {
     method: "POST",
     headers: {
@@ -29,10 +30,9 @@ function Checked(event) {
       } else {
         try{
           del = document.querySelectorAll(`li[id='${data}']`);
-          del[0].remove()
-          del[1].remove()
-          del[2].remove()
-          del[3].remove()
+          for (var i = 0; i < del.length; i++) {
+            del[i].remove()
+          }
         } catch{
         }
       }
