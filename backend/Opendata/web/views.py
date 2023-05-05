@@ -12,7 +12,7 @@ import time
 
 class MainView(TemplateView):
     template_name = "web/index.html"
-
+    
 class ChangeListView(TemplateView):
     template_name = "web/list_view.html"
 

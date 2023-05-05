@@ -12,6 +12,7 @@ RUN python3 -m venv /py && \
     /py/bin/pip3 install --upgrade pip && \
     apt-get update && \
     apt-get install -y --no-install-recommends build-essential gcc && \
+    /py/bin/pip3 install transformers faiss-cpu numpy torch && \
     /py/bin/pip3 install -r /tmp/requirments.txt && \
     rm -rf /tmp
 ENV PATH="/py/bin:$PATH"
