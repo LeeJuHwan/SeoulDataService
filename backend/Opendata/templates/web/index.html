@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Seoul</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+
+        <script defer src="//unpkg.com/3d-force-graph"></script>
+        <script defer src="{% static 'javascript/main.js' %}"></script>
+    </head>
+    <body>
+        <div class="side-bar left-bar">
+            <a class="listview_link" href="{% url 'web:toggle_list' %}">
+                리스트 뷰 전환
+            </a>
+
+            <span class="search_box">
+                <input class="search" type="text" placeholder="검색" />
+                <button class="material-icons search_button">search</button>
+            </span>
+
+            <div class="side-section graph_option">
+                <span>그래프 설정</span>
+                <div></div>
+            </div>
+
+            <div class="side-section selected_data">
+                <span>관심 데이터</span>
+                <div></div>
+            </div>
+
+            <div class="side-section featured_topic">
+                <span>추천 주제</span>
+                <div></div>
+            </div>
+        </div>
+
+        <div class="side-bar right-bar">
+            <div class="side-section data_info">
+                <span class="title">데이터 정보</span>
+                <div class="content">
+                    <span> 이름: <span class="val"></span></span>
+                    <span> 대분류: <span class="val"></span></span>
+                    <span> 중분류: <span class="val"></span></span>
+                    <span> 소분류: <span class="val"></span></span>
+                    <span> 제공 형식: <span class="val"></span></span>
+                    <span> 서비스 설명: <span class="val"></span></span>
+
+                    <div class="buttons">
+                        <button class="detail-button">상세정보</button>
+                        <button class="data-select-button">관심</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="side-section similar_data">
+                <span>유사 데이터</span>
+                <div class="content">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="graph"></div>
+    </body>
+</html>

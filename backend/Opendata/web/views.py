@@ -11,13 +11,10 @@ import time
  
 
 class MainView(TemplateView):
-    template_name = "web/main.html"
+    template_name = "web/index.html"
 
-    def get_context_data(self, **kwargs: str) -> dict[str, str]:
-        context = super().get_context_data(**kwargs)
-        context["name"] = "My project"
-        return context
-
+class ChangeListView(TemplateView):
+    template_name = "web/list_view.html"
 
 class OpenDataView(View):
     """Project data list and cart product."""
