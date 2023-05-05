@@ -1,0 +1,107 @@
+<head>
+  <style> body { margin: 0; } </style>
+
+  <script src="//unpkg.com/3d-force-graph"></script>
+<!--  <script src="../../dist/3d-force-graph.js"></script>-->
+
+  <style>
+    .clickable { cursor: unset !important }
+  </style>
+</head>
+
+<body>
+  <div id="3d-graph"></div>
+  <script>
+      const rootId = '일반행정'
+      const rootCategory = ['일반행정','환경']
+
+      function load(){
+        return  fetch('../datasets/gy_test_collapsed.json')
+        .then((response) => response.json())
+      }
+      function once(){
+        if (is_action === true) { is_action = false;
+          return false } 
+        else{
+          is_action = true; 
+          return true
+        }};
+
+      (async function () {
+        jsonData = await load();
+        //data 리스트화
+        const nodesById = Object.fromEntries(jsonData.nodes.map(node => [node.id, node]))
+        const getPrunedTree = (nh) => {
+
+          //category노드 default로
+          const visibleNodes = rootCategory.map(cate => nodesById[cate]);
+          const visibleLinks = [];
+          let num = null
+          //category노드 -> [해당 그룹, 붕괴 여부]
+          store_test = rootCategory.map(i => [nodesById[i].group, nodesById[i].collapsed])
+          // 만약 붕괴 했으면 visible에 default로 다시 푸시
+          store_test.forEach(category_node => {if (category_node[1] == false){
+            let node_groups = category_node[0]
+            jsonData[node_groups].forEach(i => visibleNodes.push(i))
+          }
+          })
+
+          is_action = false;
+
+          // main func
+          (function traverseTree(node = nodesById[rootId]) {
+            //기본 붕괴 상태 저장
+            let state = node.collapsed
+            // 상태와 node를 해당 클릭된 노드로 변경
+            if (nh && nh !== nodesById[rootId] && nh.category && is_action === false){
+              //once를 돌려 is_action을 true에서 false로 변경
+              is_action = once()
+              state = nh.collapsed
+              node = nh
+            }
+            // 리스트에 node 포함 되어 있으면 실행 x
+            if (visibleNodes.includes(node)){
+              //console.log('pass') 
+            }else{
+              visibleNodes.push(node)
+            }
+            //console.log('현재 상태입니다.',node,nh,state)
+            
+
+            // 카테고리를 제외한 노드를 선택 할 시 아무런 반응 안하게
+            rootCategory.forEach(i => {
+              if (nh && nh.group === nodesById[i].group && is_action == false){
+                is_action = once()
+                state = nodesById[i].collapsed
+            }
+            })              
+
+            // collapsed가 붕괴 상태면 종료
+            if (state) return;
+
+            num = String(nh.group)
+            //재귀
+            jsonData[num].forEach(traverseTree)
+          }
+          )(); // IIFE
+          return { nodes: visibleNodes, links: visibleLinks };
+      };
+
+
+        const elem = document.getElementById('3d-graph');
+        const Graph = ForceGraph3D()(elem)
+          .nodeLabel("id")
+          .graphData(getPrunedTree())
+          .linkDirectionalParticles(2)
+          .onNodeClick(node => {
+              if (node.category){
+                node.collapsed = !node.collapsed; // toggle collapse state
+                console.log('asd?')
+              }
+              Graph.graphData(getPrunedTree(node));
+          });
+
+
+        })();
+    </script>
+   </body>

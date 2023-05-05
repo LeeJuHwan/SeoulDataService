@@ -27,30 +27,31 @@
       }; 
       console.log('gdata입니다.')
       console.log(gData)
-      console.log('adfshahdfhadfhadfda')
       // link parent/children
       const nodesById = Object.fromEntries(gData.nodes.map(node => [node.id, node]));
-      console.log('ㅎㄴㅁㅇㅎㄴㅁㅇ',nodesById)
       gData.links.forEach(link => {
         nodesById[link.source].childLinks.push(link);
       });
-  
+
       const getPrunedTree = () => {
         const visibleNodes = [];
         const visibleLinks = [];
-  
         (function traverseTree(node = nodesById[rootId]) {
+          console.log('node들입니다.',visibleNodes)
           visibleNodes.push(node);
+          console.log('node입니당.',node)
+          console.log(gData)
+          console.log(node.collapsed)
           if (node.collapsed) return;
+          console.log('asggsagsadgsadgsadgsdagsadgasdgdsadgsa')
           visibleLinks.push(...node.childLinks);
           node.childLinks
             .map(link => ((typeof link.target) === 'object') ? link.target : nodesById[link.target]) // get child node
             .forEach(traverseTree);
         })(); // IIFE
-  
         return { nodes: visibleNodes, links: visibleLinks };
-      };
-  
+        };
+        //childlink로 도는거다
       const elem = document.getElementById('3d-graph');
       const Graph = ForceGraph3D()(elem)
         .nodeLabel("id")
@@ -60,7 +61,7 @@
         .onNodeHover(node => elem.style.cursor = node && node.childLinks.length ? 'pointer' : null)
         .onNodeClick(node => {
             console.log(node)
-            console.log(node.childLinks.length)
+            //console.log(node.childLinks.length)
           if (node.childLinks.length) {
             node.collapsed = !node.collapsed; // toggle collapse state
             Graph.graphData(getPrunedTree());

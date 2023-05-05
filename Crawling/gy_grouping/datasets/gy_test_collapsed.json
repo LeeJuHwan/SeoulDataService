@@ -1,0 +1,25 @@
+{"nodes": [{"id": "일반행정", "group": 5, "collapsed": true, "category": true},
+{"id": "환경", "group": 3, "collapsed": true, "category": true},
+  {"id": "서울시 강동구 명일2동 주민센터 새소식 정보", "group": 5, "collapsed": false, "category": false},
+ {"id": "서울시 강동구 암사2동 주민센터 새소식 정보", "group": 5, "collapsed": false, "category": false}, 
+ {"id": "서울시 강동구 길동 주민센터 새소식 정보", "group": 5, "collapsed": false, "category": false},
+  {"id": "서울시 성동구 통신판매업 인허가 정보", "group": 2, "collapsed": false, "category": false},
+   {"id": "서울시 성북구 건물위생관리업 인허가 정보", "group": 3, "collapsed": false, "category": false},
+    {"id": "서울시 성동구 건물위생관리업 인허가 정보", "group": 3, "collapsed": false, "category": false},
+     {"id": "서울시 중랑구 건설폐기물처리업 인허가 정보", "group": 3, "collapsed": false, "category": false}, 
+     {"id": "서울시 광진구 건설폐기물처리업 인허가 정보", "group": 3, "collapsed": false, "category": false}, 
+     {"id": "서울시 은평구 건설폐기물처리업 인허가 정보", "group": 3, "collapsed": false, "category": false}], 
+
+      "links": [
+        {"source": "서울시 은평구 건설폐기물처리업 인허가 정보", "target": "서울시 광진구 건설폐기물처리업 인허가 정보", "value": 1}
+
+      ],
+      "5": [{"id": "서울시 강동구 명일2동 주민센터 새소식 정보", "group": 5, "collapsed": true, "category": false},
+      {"id": "서울시 강동구 암사2동 주민센터 새소식 정보", "group": 5, "collapsed": true, "category": false}, 
+      {"id": "서울시 강동구 길동 주민센터 새소식 정보", "group": 5, "collapsed": true, "category": false}],
+
+    "3": [   {"id": "서울시 성북구 건물위생관리업 인허가 정보", "group": 3, "collapsed": true, "category": false},
+    {"id": "서울시 성동구 건물위생관리업 인허가 정보", "group": 3, "collapsed": true, "category": false},
+     {"id": "서울시 중랑구 건설폐기물처리업 인허가 정보", "group": 3, "collapsed": true, "category": false}, 
+     {"id": "서울시 광진구 건설폐기물처리업 인허가 정보", "group": 3, "collapsed": true, "category": false}, 
+     {"id": "서울시 은평구 건설폐기물처리업 인허가 정보", "group": 3, "collapsed": true, "category": false}]}
