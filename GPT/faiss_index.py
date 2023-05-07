@@ -173,24 +173,24 @@ if __name__ == '__main__':
 
     # Faiss 구축(처음에만)
     # FaissIndex 객체를 생성합니다.
-    index = FaissIndex(index_file_path='index.faiss')
+    # index = FaissIndex(index_file_path='index.faiss')
 
     # 데이터 파일로부터 인덱스를 구축합니다.
-    index.build_index(data_file_path='Crawling/서울시 공공데이터 최종.csv',
-                      id_Col='서비스ID', data_Col='서비스명')
+    # index.build_index(data_file_path='Crawling/서울시 공공데이터 최종.csv',
+    #                   id_Col='서비스ID', data_Col='서비스명')
 
     # 인덱스를 저장합니다.
-    index.save_index()
+    # index.save_index()
 
     # --------------------------------------------
     # Faiss 로드
     # FaissIndex 객체를 생성합니다.
-    index = FaissIndex(index_file_path='index.faiss')
+    index = FaissIndex(index_file_path='GPT/index.faiss')
 
     # 인덱스를 로드
     index.load_index()
 
     # 검색 예시
-    query = '테스트'
+    query = '지하철'
     result = index.search_query(query=query, k=5)
     print(result)
