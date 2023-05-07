@@ -17,7 +17,7 @@
       //const rootCategory = ['보건', '문화/관광', '산업/경제', '환경', '일반행정', '주택/건설']
       //const rootCategory = ['일반행정','환경']
       function load(){
-        return  fetch('../datasets/gy_test_collapsed_4.json')
+        return  fetch('../datasets/gy_test_collapsed_5.json')
         .then((response) => response.json())
       }
       function once(){
@@ -32,18 +32,29 @@
         jsonData = await load();
         //data 리스트화
         const nodesById = Object.fromEntries(jsonData.nodes.map(node => [node.id, node]))
-        const getPrunedTree = (nh) => {
+        const nodesByLinks = Object.fromEntries(jsonData.links_category.map(node => [node.source, node]))
+        //sg = Object.fromEntries(rootCategory.map(i => [{"source": i, "target": nodesByLinks[i].target}]))
 
+        //const nodesByLinks = [{"id": "일반행정", "group": 5, "collapsed": true, "category": true}, {"id": "교통", "group": 6, "collapsed": true, "category": true}]
+        const getPrunedTree = (nh) => {
           //category노드 default로
           const visibleNodes = rootCategory.map(cate => nodesById[cate]);
-          const visibleLinks = [];
+          const visibleLinks = rootCategory.map(cate => nodesByLinks[cate])
+          visibleLinkstot = []
+
+          //.slice(0,11) 1자로 만들고 싶으면
+
+
           let num = null
           //category노드 -> [해당 그룹, 붕괴 여부]
-          store_test = rootCategory.map(i => [nodesById[i].group, nodesById[i].collapsed])
+          store_test = rootCategory.map(i => [nodesById[i].group, nodesById[i].collapsed,i])
           // 만약 붕괴 했으면 visible에 default로 다시 푸시
           store_test.forEach(category_node => {if (category_node[1] == false){
+            console.log('as??')
             let node_groups = category_node[0]
+            let node_ids = category_node[2]
             jsonData[node_groups].forEach(i => visibleNodes.push(i))
+            jsonData[node_groups].forEach(i=>visibleLinks.push({"source":node_ids, "target":i.target}))
           }
           })
 
@@ -65,9 +76,18 @@
             }else{
               visibleNodes.push(node)
             }
-            //console.log('현재 상태입니다.',node,nh,state)
+
+            if (!node.category && visibleLinks.includes({"source":node.source, "target":node.target})){
+              //console.log('pass') 
+            }else if (!node.category){
+              // group 에 맞는 source
+
+              visibleLinks.push({"source":node.source, "target":node.target})
+            }
+
             
             // 카테고리를 제외한 노드를 선택 할 시 아무런 반응 안하게
+            
             rootCategory.forEach(i => {
               if (nh && nh.group === nodesById[i].group && is_action == false){
                 is_action = once()
@@ -78,9 +98,13 @@
             if (state) return;
             num = String(nh.group)
             //재귀
+
+
             jsonData[num].forEach(traverseTree)
           }
           )(); // IIFE
+
+          console.log(visibleLinks)
           return { nodes: visibleNodes, links: visibleLinks };
       };
 
@@ -88,8 +112,8 @@
         const Graph = ForceGraph3D({controlType: 'orbit'})(elem)
           .nodeLabel("id")
           .graphData(getPrunedTree())
-          .linkDirectionalParticles(2)
-
+          .linkDirectionalParticles(1) // 링크 선 사이끼리 분자 떠다니는 거
+          .linkWidth(2)
           //.nodeColor(node => !node.category ? 'green' : node.collapsed ? 'red' : 'yellow')
           .nodeAutoColorBy('category')
           .nodeRelSize(10)
@@ -110,7 +134,8 @@
         //page reload시 문제가 발생한다.
 
 
-        //source , target연결하고
+        //source , target연결하고 okay!
         //random으로 value =(group)에 맞는 노드 끼리 연결하는 json파일 만들기 -> 적용 ㅎㅎ -> 카테고리랑 연결해야 하는데,,, 이거 선을 어케 해야하지
+        // category노드 가만히 있게 static
     </script>
    </body>

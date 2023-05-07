@@ -25,6 +25,7 @@
             target: id
           }))
       }; 
+
       console.log('gdata입니다.')
       console.log(gData)
       // link parent/children
@@ -49,6 +50,7 @@
             .map(link => ((typeof link.target) === 'object') ? link.target : nodesById[link.target]) // get child node
             .forEach(traverseTree);
         })(); // IIFE
+        console.log(visibleLinks)
         return { nodes: visibleNodes, links: visibleLinks };
         };
         //childlink로 도는거다
