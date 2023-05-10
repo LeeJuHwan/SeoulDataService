@@ -27,8 +27,8 @@ SECRET_KEY = "django-insecure-ih6^fgez@jn&_=iy)y^^gl=ou-fj(85n_z7dn#ge=w6+_@n-$)
 DEBUG = True
 
 CORS_ALLOW_METHODS = [
-    'GET',
-    'POST',
+    "GET",
+    "POST",
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "web.apps.WebConfig",
     "corsheaders",
+    "django_celery_results",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -90,24 +92,39 @@ WSGI_APPLICATION = "Opendata.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': "db",
-        'NAME': "postgres",
-        'USER': "postgres",
-        'PASSWORD': "0000",
-        "PORT": 5432
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": "db",
+        "NAME": "postgres",
+        "USER": "postgres",
+        "PASSWORD": "0000",
+        "PORT": 5432,
     }
 }
 
+# rabbitmq
+RABBITMQ_HOSTS = ("HOST",)
+RABBITMQ_USER = os.environ.get("RABBITMQ_USER", "guest")
+RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD", "guest")
+RABBITMQ_QUEUE_EXPIRES = 300.0
+RABBITMQ_MESSAGE_EXPIRES = RABBITMQ_QUEUE_EXPIRES
+
+# celery
+CELERY_TIMEZONE = "Asia/Seoul"
+CELERY_BROKER_URL = "redis://redis_service:6379/1"
+CELERY_RESULT_BACKEND = "redis://redis_service:6379/1"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+
 # Cache
-CACHES = {  
+CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://redis_service:6379//1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        },
     }
 }
 
@@ -133,9 +150,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'ko-KR'
+LANGUAGE_CODE = "ko-KR"
 
-TIME_ZONE = 'Asia/Seoul'
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
@@ -144,16 +161,13 @@ USE_L10N = True
 USE_TZ = True
 
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    STATIC_DIR
-]
+STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [STATIC_DIR]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
