@@ -15,4 +15,4 @@ db.sqlite3
 .venv*
 *.pem
 backend/virtual
-**/celerybeat-schedule
+**/*.csv
