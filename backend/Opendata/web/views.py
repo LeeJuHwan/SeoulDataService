@@ -40,8 +40,8 @@ class MainView(TemplateView):
 
     query = "지하철"  # input
     # result = LoadConfig.index.search_query(query=query, k=6)["data"]
-    result = LoadConfig.index.search_idx(12035, k=6)["data"][1:]
-    print(result)
+    # result = LoadConfig.index.search_idx(12035, k=6)["data"][1:]
+    # print(result)
     # for num, i in enumerate(result):
     #     # filtering = f"OA-{result[0]}"
     #     filtering = f"OA-{i[0]}"

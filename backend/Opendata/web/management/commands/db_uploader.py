@@ -1,40 +1,62 @@
 import pandas as pd
 from sqlalchemy import create_engine
 from django.core.management.base import BaseCommand
-from web.models import SeoulData
+from web.models import SeoulData, DataColumn
 import psycopg2
 
-conn = psycopg2.connect(host="db", dbname="postgres", user="postgres", password="0000")
-cur = conn.cursor()
-cur.execute("select count(*) from seoul_data")
-data_count = cur.fetchone()[0]
+engine = create_engine("postgresql://postgres:0000@db:5432/postgres")
+
+
+def seouldata_length():
+    try:
+        conn = psycopg2.connect(
+            host="db", dbname="postgres", user="postgres", password="0000"
+        )
+        cur = conn.cursor()
+        cur.execute("select count(*) from seoul_data")
+        return cur.fetchone()[0]
+
+    except:
+        return None
+
+
+def datacolumns_length():
+    try:
+        conn = psycopg2.connect(
+            host="db", dbname="postgres", user="postgres", password="0000"
+        )
+        cur = conn.cursor()
+        cur.execute("select count(*) from seouldata_columns")
+        return cur.fetchone()[0]
+    except:
+        return None
+
+
+print("SEOUL", seouldata_length())
+print("COLIMN", datacolumns_length())
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
         columns = [
-            "service_id",
-            "service_name",
-            "category",
-            "provider",
-            "sub_category",
-            "agency" "department",
-            "system",
-            "contact_person",
-            "contact_phone",
-            "renewal_cycles",
-            "last_renewal_date",
-            "serving_sites",
-            "delivery_format",
-            "service_url",
-            "data_info",
+            "INF_ID",
+            "COL_ENG_NM",
+            "COL_KOR_NM",
         ]
 
         df = pd.read_csv("/Opendata/csv_file/서울시 공공데이터 최종.csv")
+        df2 = pd.read_csv("/Opendata/csv_file/data columns.csv")
+        df2 = df2[columns]
 
-        if data_count < len(df):
-            print(f"저장 되어 있는 데이터 : {data_count} 입력할 데이터 :{len(df)} > 데이터 저장 성공")
-            engine = create_engine("postgresql://postgres:0000@db:5432/test")
+        if seouldata_length() < len(df):
+            print("seoul data db uploading...")
             df.to_sql(
                 SeoulData._meta.db_table, if_exists="append", con=engine, index=False
             )
+            print("finish db upload")
+        if datacolumns_length() < len(df2):
+            print("data columns db uploading...")
+            df2.to_sql(
+                DataColumn._meta.db_table, if_exists="append", con=engine, index=False
+            )
+            print("finished")

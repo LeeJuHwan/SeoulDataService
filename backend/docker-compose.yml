@@ -43,36 +43,23 @@ services:
       - "15672:15672"
 
   celery_worker:
-    container_name: celery_worker
     build:
       context: .
-    environment:
-      - DB_USER=postgres
-      - DB_PASS=0000
-    volumes:
-      - ./Opendata:/Opendata
-    working_dir: /Opendata/
-    command: >
-      bash -c "celery -A Opendata worker --loglevel=info"
+    container_name: 'celery_worker'
+    command: celery -A Opendata worker --loglevel=info
     depends_on:
-      - app
       - rabbitmq
+      - db
 
   celery_beat:
     container_name: celery_beat
     build:
       context: .
-    environment:
-      - DB_USER=postgres
-      - DB_PASS=0000
-    volumes:
-      - ./Opendata:/Opendata
-    working_dir: /Opendata/
+    command: sh -c "celery -A Opendata beat --loglevel=info"
     depends_on:
       - app
       - rabbitmq
       - celery_worker
-    command: sh -c "celery -A Opendata beat --loglevel=info"
 
 volumes:
   postgres-data:
