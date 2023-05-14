@@ -44,7 +44,7 @@ class Command(BaseCommand):
             "COL_KOR_NM",
         ]
 
-        df = pd.read_csv("/Opendata/csv_file/서울시 공공데이터 최종.csv")
+        df = pd.read_csv("/Opendata/csv_file/서울시 공공데이터 최종_reg1.csv")
         df2 = pd.read_csv("/Opendata/csv_file/data columns.csv")
         df2 = df2[columns]
 

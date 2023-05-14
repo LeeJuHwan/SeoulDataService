@@ -6,3 +6,12 @@ psycopg2-binary==2.9.6
 django-redis==5.2.0
 requests==2.28.1
 django-cors-headers==3.14.0
+faiss-cpu==1.7.4
+celery==5.2.7
+transformers==4.29.0
+numpy==1.24.3
+torch==2.0.1
+django-celery-results==2.5.1
+django-celery-beat==2.5.0
+python-dotenv==0.21.0
+openai==0.27.6

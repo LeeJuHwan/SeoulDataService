@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views import View
-from .models import SeoulData
+from .models import SeoulData, DataColumn
 from .get_session import get_session
 from django.core.cache import cache
 from django.http import JsonResponse
@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from celery.result import AsyncResult
 
 from web.tasks import add
+from web.gpt import Brainstoming
 
 
 class Test(views.APIView):
@@ -36,7 +37,31 @@ class Test(views.APIView):
 
 
 class MainView(TemplateView):
+    bs = Brainstoming()
     template_name = "web/index.html"
+
+    test = "OA-2532"
+    queryset = DataColumn.objects.filter(INF_ID=test)
+    gpt_input_columns = []
+    for i in queryset.values_list():
+        temp = {}
+        temp["column_name"] = i[2]
+        temp["column_description"] = i[3]
+        gpt_input_columns.append(temp)
+    queryset = SeoulData.objects.filter(서비스ID=test).values()[0]
+
+    data_info = {
+        queryset["id"]: {
+            "data_name": queryset["서비스명"],
+            "data_description": queryset["서비스설명"],
+            "columns": gpt_input_columns,
+        }
+    }
+    field = "사회"  # 사용자 입력 값
+    purpose = "공모전"  # 사용자 입력 값
+    num_topics = 5
+    # print("########### 프롬프트 아웃풋 #########")
+    # print(bs.process_run(data_info, field, purpose, num_topics))  # 비동기 처리 필수
 
     query = "지하철"  # input
     # result = LoadConfig.index.search_query(query=query, k=6)["data"]
