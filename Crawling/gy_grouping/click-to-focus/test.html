@@ -1,69 +1,46 @@
 <head>
   <style> body { margin: 0; } </style>
 
-  <script src="//unpkg.com/3d-force-graph"></script>
-<!--  <script src="../../dist/3d-force-graph.js"></script>-->
+  <script src="//unpkg.com/three"></script>
 
-  <style>
-    .clickable { cursor: unset !important }
-  </style>
+  <script src="//unpkg.com/3d-force-graph"></script>
+  <!--<script src="../../dist/3d-force-graph.js"></script>-->
 </head>
 
 <body>
   <div id="3d-graph"></div>
 
   <script>
-    const rootId = 0;
-      fetch('../datasets/gy_test_divide.json')
-  .then((data) => data.json())
-  .then((obj) => {
-    const gData = obj
-    console.log('성공인가')
-    console.log(gData.nodes)
-
-
-    
-    const nodesById = Object.fromEntries(gData.nodes.map(node => [node.id, node]));
-    gData.links.forEach(link => {
-      nodesById[link.source].childLinks.push(link);
-    });
-
-    const getPrunedTree = () => {
-      const visibleNodes = [];
-      const visibleLinks = [];
-
-      (function traverseTree(node = nodesById[rootId]) {
-        visibleNodes.push(node);
-        if (node.collapsed) return;
-        visibleLinks.push(...node.childLinks);
-        node.childLinks
-          .map(link => ((typeof link.target) === 'object') ? link.target : nodesById[link.target]) // get child node
-          .forEach(traverseTree);
-      })(); // IIFE
-
-      return { nodes: visibleNodes, links: visibleLinks };
+    // Random tree
+    const N = 100;
+    const gData = {
+      nodes: [...Array(N).keys()].map(i => ({ id: i })),
+      links: [...Array(N).keys()]
+        .filter(id => id)
+        .map(id => ({
+          source: id,
+          target: Math.round(Math.random() * (id-1))
+        }))
     };
 
-    const elem = document.getElementById('3d-graph');
-    const Graph = ForceGraph3D()(elem)
-      .graphData(getPrunedTree())
-      .linkDirectionalParticles(2)
-      .nodeColor(node => !node.childLinks.length ? 'green' : node.collapsed ? 'red' : 'yellow')
-      .onNodeHover(node => elem.style.cursor = node && node.childLinks.length ? 'pointer' : null)
-      .onNodeClick(node => {
-        if (node.childLinks.length) {
-          node.collapsed = !node.collapsed; // toggle collapse state
-          Graph.graphData(getPrunedTree());
-        }
-      });
-  });
-  console.log('마지막',)
-    // Random tree
-    const N = 300;
-
-    console.log('gdata입니다.')
-    console.log('adfshahdfhadfhadfda')
-    // link parent/children
-    
+    const Graph = ForceGraph3D()
+      (document.getElementById('3d-graph'))
+        .nodeThreeObject(({ id }) => new THREE.Mesh(
+          [
+            new THREE.BoxGeometry(Math.random() * 20, Math.random() * 20, Math.random() * 20),
+            new THREE.ConeGeometry(Math.random() * 10, Math.random() * 20),
+            new THREE.CylinderGeometry(Math.random() * 10, Math.random() * 10, Math.random() * 20),
+            new THREE.DodecahedronGeometry(Math.random() * 10),
+            new THREE.SphereGeometry(Math.random() * 10),
+            new THREE.TorusGeometry(Math.random() * 10, Math.random() * 2),
+            new THREE.TorusKnotGeometry(Math.random() * 10, Math.random() * 2)
+          ][id%15],
+          new THREE.MeshLambertMaterial({
+            color: Math.round(Math.random() * Math.pow(2, 24)),
+            transparent: true,
+            opacity: 0.75
+          })
+        ))
+        .graphData(gData);
   </script>
 </body>

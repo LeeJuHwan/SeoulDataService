@@ -1,34 +1,17 @@
 {
     "nodes": [
       {"id": "Myriel", "group": 1},
+      
+      
       {"id": "Napoleon", "group": 1},
-      {"id": "Mlle.Baptistine", "group": 1},
-      {"id": "Mme.Magloire", "group": 1},
-      {"id": "CountessdeLo", "group": 1},
-      {"id": "Geborand", "group": 1},
-      {"id": "Champtercier", "group": 1},
-      {"id": "Cravatte", "group": 1},
-      {"id": "Count", "group": 1},
-      {"id": "OldMan", "group": 1},
-      {"id": "Labarre", "group": 2},
-      {"id": "Valjean", "group": 2},
-      {"id": "Marguerite", "group": 3},
-      {"id": "Mme.deR", "group": 2},
-      {"id": "Isabeau", "group": 2},
-      {"id": "Gervais", "group": 2},
-      {"id": "Tholomyes", "group": 3},
-      {"id": "Listolier", "group": 3},
-      {"id": "Fameuil", "group": 3},
-      {"id": "Blacheville", "group": 3},
-      {"id": "Favourite", "group": 3},
-      {"id": "Dahlia", "group": 3},
-      {"id": "Zephine", "group": 3},
-      {"id": "Fantine", "group": 3}
-    ]
+      
+      {"id": "Mlle.Baptistine", "group": 1}
+          ]
       
       
       ,
       "links": [
-        {"source": "Napoleon", "target": "Myriel", "value": 1}
-
-      ]}
+        {"source": "Napoleon", "target": "Myriel", "value": 1},
+        {"source": "Napoleon", "target": "Mlle.Baptistine", "value": 1}
+      ]
+    }

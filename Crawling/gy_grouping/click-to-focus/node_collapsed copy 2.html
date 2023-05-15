@@ -17,7 +17,7 @@
       //const rootCategory = ['보건', '문화/관광', '산업/경제', '환경', '일반행정', '주택/건설']
       //const rootCategory = ['일반행정','환경']
       function load(){
-        return  fetch('../datasets/gy_test_collapsed_5.json')
+        return  fetch('../datasets/total_1.json')
         .then((response) => response.json())
       }
       function once(){
@@ -31,19 +31,14 @@
       (async function () {
         jsonData = await load();
         //data 리스트화
-        const nodesById = Object.fromEntries(jsonData.nodes.map(node => [node.id, node]))
-        const nodesByLinks = Object.fromEntries(jsonData.links_category.map(node => [node.source, node]))
-        //sg = Object.fromEntries(rootCategory.map(i => [{"source": i, "target": nodesByLinks[i].target}]))
+        const nodesById = Object.fromEntries(jsonData.nodes.map(node => [node.name, node]))
+        //const nodesByLinks = Object.fromEntries(jsonData.links_category.map(node => [node.source, node]))
 
         //const nodesByLinks = [{"id": "일반행정", "group": 5, "collapsed": true, "category": true}, {"id": "교통", "group": 6, "collapsed": true, "category": true}]
         const getPrunedTree = (nh) => {
           //category노드 default로
-          const visibleNodes = rootCategory.map(cate => nodesById[cate]);
-          const visibleLinks = rootCategory.map(cate => nodesByLinks[cate])
-          visibleLinkstot = []
-
-          //.slice(0,11) 1자로 만들고 싶으면
-
+          const visibleNodes = Object.fromEntries(jsonData.nodes.map(node => [node]))
+          //const visibleLinks = rootCategory.map(cate => nodesByLinks[cate])
 
           let num = null
           //category노드 -> [해당 그룹, 붕괴 여부]
@@ -54,15 +49,13 @@
             let node_groups = category_node[0]
             let node_ids = category_node[2]
             jsonData[node_groups].forEach(i => visibleNodes.push(i))
-            jsonData[node_groups].forEach(i=>visibleLinks.push({"source":node_ids, "target":i.target}))
+            //jsonData[node_groups].forEach(i=>visibleLinks.push({"source":node_ids, "target":i.target}))
           }
           })
 
           is_action = false;
           // main func
           (function traverseTree(node = nodesById[rootId]) {
-            console.log('여기 처음입니다.')
-
             //기본 붕괴 상태 저장
             let state = node.collapsed
             // 상태와 node를 해당 클릭된 노드로 변경
@@ -126,17 +119,13 @@
                 console.log('asd?')
               }
               Graph.graphData(getPrunedTree(node));
-          
           });
           //화면 조정
           //.cooldownTicks(100)
           //Graph.onEngineStop(() => Graph.zoomToFit(10, 10, node => node.category ? true : false));
 
         })();
-        //page reload시 문제가 발생한다.
 
-        //source , target연결하고 okay!
-        //random으로 value =(group)에 맞는 노드 끼리 연결하는 json파일 만들기 -> 적용 ㅎㅎ -> 카테고리랑 연결해야 하는데,,, 이거 선을 어케 해야하지
-        // category노드 가만히 있게 static
+
     </script>
    </body>
