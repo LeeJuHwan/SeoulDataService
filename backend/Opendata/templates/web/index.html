@@ -28,35 +28,65 @@
         <script defer src="//unpkg.com/3d-force-graph"></script>
         <script defer src="{% static 'javascript/main.js' %}"></script>
     </head>
+
     <body>
         <!-- Left -->
-        <div class="side-bar left-bar">
-            <a class="listview_link" href="{% url 'web:toggle_list' %}">
-                리스트 뷰 전환
-            </a>
+        <div class="search_box">
+            <input class="search" type="text" placeholder=" 노드 검색" />
+            <button class="material-icons search_button">search</button>
+        </div>
 
-            <span class="search_box">
-                <input class="search" type="text" placeholder="검색" />
-                <button class="material-icons search_button">search</button>
-            </span>
+        <div class="side_window setting open">
+            <button class="material-icons">settings</button>
+            <div class="window">
+                <span class="title">그래프 설정</span>
+                <div class="content">
+                    <span>태그 선택</span>
+                    <ul class="tag_list">
+                        <script>
+                            let tagDict = {};
+                            tagDict["education"] = "교육";
+                            tagDict["traffic"] = "교통";
+                            tagDict["city"] = "도시관리";
+                            tagDict["culture"] = "문화/관광";
+                            tagDict["health"] = "보건";
+                            tagDict["welfare"] = "복지";
+                            tagDict["industry"] = "산업/경제";
+                            tagDict["safety"] = "안전";
+                            tagDict["population"] = "인구/가구";
+                            tagDict["administration"] = "일반행정";
+                            tagDict["building"] = "주택/건설";
+                            tagDict["environment"] = "환경";
+                            tagDict["etc"] = "기타";
 
-            <div class="side-section graph_option">
-                <span>그래프 설정</span>
-                <div></div>
-            </div>
+                            let content_list =
+                                document.querySelector(".setting .tag_list");
+                            for (let tag in tagDict) {
+                                console.log(tag);
+                                console.log(tagDict[tag]);
 
-            <div class="side-section selected_data">
-                <span>관심 데이터</span>
-                <div></div>
-            </div>
+                                let li = document.createElement("li");
+                                let label = document.createElement("label");
+                                let input = document.createElement("input");
+                                input.setAttribute("type", "checkbox");
+                                input.setAttribute("id", tag);
+                                label.appendChild(input);
+                                label.appendChild(
+                                    document.createTextNode(tagDict[tag])
+                                );
 
-            <div class="side-section featured_topic">
-                <span>추천 주제</span>
-                <div></div>
+                                li.appendChild(label);
+                                content_list.appendChild(li);
+                            }
+                        </script>
+                    </ul>
+                    <button class="create_graph">그래프 생성</button>
+                </div>
             </div>
         </div>
 
         <!-- Right -->
+        <!--
         <div class="side-bar right-bar">
             <div class="side-section data_info">
                 <span class="title">데이터 정보</span>
@@ -66,7 +96,6 @@
                     <span> 소분류: <span class="val"></span></span>
                     <span> 제공 형식: <span class="val"></span></span>
                     <span> URL: <span class="val"></span></span>
-                    <!--<span> 소분류: <span class="val"></span></span>-->
 
                     <div class="buttons">
                         <button class="detail-button">상세정보</button>
@@ -79,6 +108,48 @@
                 <span>유사 데이터</span>
                 <div class="content">
 
+                </div>
+            </div>
+        </div>
+        -->
+
+        <div class="side_window data_info open">
+            <button class="material-icons">info</button>
+            <div class="window">
+                <span class="title">데이터 정보</span>
+                <div class="content">
+                    <ul class="content_list">
+                        <li>이름 <span class="val"> 알 수 없음 </span></li>
+                        <li>서비스 설명: <span class="val"> 알 수 없음 </span></li>
+                        <li>소분류 <span class="val"> 알 수 없음 </span></li>
+                        <li>제공 형식 <span class="val"> 알 수 없음 </span></li>
+                        <li>URL <span class="val"> 알 수 없음 </span></li>
+                    </ul>
+                    <div class="buttons">
+                        <button class="detail-button">상세정보</button>
+                        <button class="data-select-button">관심</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="side_window selected_data open">
+            <button class="material-icons">favorite</button>
+            <div class="window">
+                <span class="title">관심 데이터</span>
+                <div class="content">
+                    <ul class="selected_list"></ul>
+                    <button class="make-topic">주제 생성</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="side_window similar_data open">
+            <button class="material-icons">view_list</button>
+            <div class="window">
+                <span class="title">유사 데이터</span>
+                <div class="content">
+                    <ul class="similar_list"></ul>
                 </div>
             </div>
         </div>
