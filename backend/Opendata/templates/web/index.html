@@ -24,10 +24,12 @@
         />
         <link rel="stylesheet" href="{% static 'css/main.css' %}" />
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
         <script defer src="//unpkg.com/3d-force-graph"></script>
         <script defer src="{% static 'javascript/main.js' %}"></script>
     </head>
     <body>
+        <!-- Left -->
         <div class="side-bar left-bar">
             <a class="listview_link" href="{% url 'web:toggle_list' %}">
                 리스트 뷰 전환
@@ -54,16 +56,17 @@
             </div>
         </div>
 
+        <!-- Right -->
         <div class="side-bar right-bar">
             <div class="side-section data_info">
                 <span class="title">데이터 정보</span>
                 <div class="content">
                     <span> 이름: <span class="val"></span></span>
-                    <span> 대분류: <span class="val"></span></span>
-                    <span> 중분류: <span class="val"></span></span>
+                    <span> 서비스 설명: <span class="val"></span></span>
                     <span> 소분류: <span class="val"></span></span>
                     <span> 제공 형식: <span class="val"></span></span>
-                    <span> 서비스 설명: <span class="val"></span></span>
+                    <span> URL: <span class="val"></span></span>
+                    <!--<span> 소분류: <span class="val"></span></span>-->
 
                     <div class="buttons">
                         <button class="detail-button">상세정보</button>

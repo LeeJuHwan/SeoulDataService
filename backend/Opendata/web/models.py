@@ -41,8 +41,7 @@ class SeoulData(models.Model):
             "서비스설명": self.서비스설명,
             "urls": self.urls,
         }
-
-
+# GPT
 class DataColumn(models.Model):
     id = models.AutoField(primary_key=True)
     INF_ID = models.CharField(max_length=100)

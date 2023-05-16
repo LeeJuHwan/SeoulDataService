@@ -19,70 +19,56 @@ from celery.result import AsyncResult
 from web.tasks import add
 from web.gpt import Brainstoming
 
+############### JSON DATA ###############
+def node_coordinate(request):
+        with open('/Opendata/csv_file/json/total_0.json', 'r') as f:
+            data = json.load(f)
+        return JsonResponse(data)
 
-class Test(views.APIView):
-    def get(self, request: HttpRequest):
-        result = add.delay(2, 5)
-        while not result.ready():
-            time.sleep(1)
-        task_result = AsyncResult(result.task_id)
-
-        result_dict = {
-            "task_id": result.task_id,
-            "task_status": task_result.status,
-            "task_result": task_result.result,
-        }
-        print("RESULT:, ", result_dict)
-        return Response(result.task_id, status=202)
-
-
-class MainView(TemplateView):
-    bs = Brainstoming()
+############### Graph View ###############
+class MainView(View):
+    # template_name = "web/main.html"
     template_name = "web/index.html"
+    
+    def get(self, request):
+        return render(request, self.template_name)
 
-    test = "OA-2532"
-    queryset = DataColumn.objects.filter(INF_ID=test)
-    gpt_input_columns = []
-    for i in queryset.values_list():
-        temp = {}
-        temp["column_name"] = i[2]
-        temp["column_description"] = i[3]
-        gpt_input_columns.append(temp)
-    queryset = SeoulData.objects.filter(서비스ID=test).values()[0]
+    def post(self, request):
+        
+        responseData = json.loads(request.body)
+        id = responseData["data"]
+        # print("ID: ", id)
+        
+        filtering = f"OA-{id}"
+        detail = SeoulData.objects.filter(서비스ID=filtering)
+        serialized_data = [item.to_dict() for item in detail]
+        # print("serialized_data", serialized_data)
 
-    data_info = {
-        queryset["id"]: {
-            "data_name": queryset["서비스명"],
-            "data_description": queryset["서비스설명"],
-            "columns": gpt_input_columns,
+        similar_data = []
+        result = LoadConfig.index.search_idx(int(id), k=6)["data"][1:]
+        # print("RESULT: ", result)
+        
+        for num, i in enumerate(result):
+            filtering = f"OA-{i[0]}"
+            queryset = SeoulData.objects.filter(서비스ID=filtering)
+            temp = [item.to_dict() for item in queryset]
+            similar_data.append(temp)
+        # print("similar_data", similar_data)
+
+        response_data = {
+            "data": serialized_data,
+            "similar_data": similar_data,
+            "message": "success",
         }
-    }
-    field = "사회"  # 사용자 입력 값
-    purpose = "공모전"  # 사용자 입력 값
-    num_topics = 5
-    # print("########### 프롬프트 아웃풋 #########")
-    # print(bs.process_run(data_info, field, purpose, num_topics))  # 비동기 처리 필수
-
-    query = "지하철"  # input
-    # result = LoadConfig.index.search_query(query=query, k=6)["data"]
-    # result = LoadConfig.index.search_idx(12035, k=6)["data"][1:]
-    # print(result)
-    # for num, i in enumerate(result):
-    #     # filtering = f"OA-{result[0]}"
-    #     filtering = f"OA-{i[0]}"
-    #     queryset = SeoulData.objects.filter(서비스ID=filtering)
-    #     print(f"{num} >> {queryset.values_list()}")
-    # queryset = SeoulData.objects.filter(서비스ID=filtering)
-    # print(queryset.values_list())
+        return JsonResponse(response_data)
 
 
+############### List View ###############
 class ChangeListView(TemplateView):
     template_name = "web/list_view.html"
 
-
 class OpenDataView(View):
     """Project data list and cart product."""
-
     template_name = "web/seouldata_list.html"
 
     def get(self, request):
@@ -146,3 +132,19 @@ class OpenDataView(View):
                 "message": "success",
             }
             return JsonResponse(response_data)
+
+################ GPT ###############
+# class Test(views.APIView):
+#     def get(self, request: HttpRequest):
+#         result = add.delay(2, 5)
+#         while not result.ready():
+#             time.sleep(1)
+#         task_result = AsyncResult(result.task_id)
+
+#         result_dict = {
+#             "task_id": result.task_id,
+#             "task_status": task_result.status,
+#             "task_result": task_result.result,
+#         }
+#         print("RESULT:, ", result_dict)
+#         return Response(result.task_id, status=202)

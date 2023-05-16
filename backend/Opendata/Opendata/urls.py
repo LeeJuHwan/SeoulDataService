@@ -24,11 +24,3 @@ urlpatterns = [
     path("web/", include("web.urls")),
     path("", RedirectView.as_view(url = "web/")),
 ]
-
-
-
-# urlpatterns = [
-    
-#     # path('accounts/', include('django.contrib.auth.urls')),
-#     path("accounts/", include("allauth.urls")),
-#     path("signup", views.SignUpView.as_view(), name = "signup"),

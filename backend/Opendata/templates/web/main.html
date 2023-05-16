@@ -1,2 +1,27 @@
-<h1>웹사이트 소개도 넣고 싶어요</h1>
-<a href="{% url 'web:list-page' %}"><h3>Click To OpenData List</h1></a>
+<head>
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+    <script src="//unpkg.com/3d-force-graph"></script>
+  </head>
+  
+  <body>
+    <div id="3d-graph"></div>
+  
+    <script>
+      const Graph = ForceGraph3D()(document.getElementById("3d-graph"))
+        .jsonUrl("/web/node-coordinate/") 
+        .nodeLabel("name") // hover print
+        .nodeAutoColorBy("group")
+        .nodeResolution(100)
+        .onNodeDragEnd((node) => {
+          node.fx = node.x;
+          node.fy = node.y;
+          node.fz = node.z;
+          console.log(node.x, node.y, node.z);
+        });
+    </script>
+  </body>
+  
