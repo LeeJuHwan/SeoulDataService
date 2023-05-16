@@ -115,7 +115,7 @@ function dragElement(elmnt, target_elemnt) {
 
 //건영 수정 /////////////////////////////////////////////////////////
 function load(){
-    return  fetch('./datasets/total_1.json')
+    return  fetch('./jsondata/total_0.json')
     .then((response) => response.json())
   }
 
