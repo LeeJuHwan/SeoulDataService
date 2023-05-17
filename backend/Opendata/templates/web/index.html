@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="ko">
+    
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -30,7 +31,6 @@
     </head>
 
     <body>
-        <!-- Left -->
         <div class="search_box">
             <input class="search" type="text" placeholder=" 노드 검색" />
             <button class="material-icons search_button">search</button>
@@ -41,77 +41,42 @@
             <div class="window">
                 <span class="title">그래프 설정</span>
                 <div class="content">
-                    <span>태그 선택</span>
-                    <ul class="tag_list">
-                        <script>
-                            let tagDict = {};
-                            tagDict["education"] = "교육";
-                            tagDict["traffic"] = "교통";
-                            tagDict["city"] = "도시관리";
-                            tagDict["culture"] = "문화/관광";
-                            tagDict["health"] = "보건";
-                            tagDict["welfare"] = "복지";
-                            tagDict["industry"] = "산업/경제";
-                            tagDict["safety"] = "안전";
-                            tagDict["population"] = "인구/가구";
-                            tagDict["administration"] = "일반행정";
-                            tagDict["building"] = "주택/건설";
-                            tagDict["environment"] = "환경";
-                            tagDict["etc"] = "기타";
-
-                            let content_list =
-                                document.querySelector(".setting .tag_list");
-                            for (let tag in tagDict) {
-                                console.log(tag);
-                                console.log(tagDict[tag]);
-
-                                let li = document.createElement("li");
-                                let label = document.createElement("label");
-                                let input = document.createElement("input");
-                                input.setAttribute("type", "checkbox");
-                                input.setAttribute("id", tag);
-                                label.appendChild(input);
-                                label.appendChild(
-                                    document.createTextNode(tagDict[tag])
-                                );
-
-                                li.appendChild(label);
-                                content_list.appendChild(li);
-                            }
-                        </script>
+                    <ul class="setting_list">
+                        <li>
+                            링크 보이기<label class="switch">
+                                <input type="checkbox" />
+                                <span class="slider"></span>
+                            </label>
+                        </li>
+                        <li>
+                            드래그<label class="switch">
+                                <input type="checkbox" />
+                                <span class="slider"></span>
+                            </label>
+                        </li>
+                        <li>
+                            하이라이트<label class="switch">
+                                <input type="checkbox" />
+                                <span class="slider"></span>
+                            </label>
+                        </li>
+                        <li>
+                            조명 효과<label class="switch">
+                                <input type="checkbox" />
+                                <span class="slider"></span>
+                            </label>
+                        </li>
+                        <li>
+                            관심 데이터 강조<label class="switch">
+                                <input type="checkbox" />
+                                <span class="slider"></span>
+                            </label>
+                        </li>
                     </ul>
-                    <button class="create_graph">그래프 생성</button>
+                    <button class="graph_modal_open">그래프 생성</button>
                 </div>
             </div>
         </div>
-
-        <!-- Right -->
-        <!--
-        <div class="side-bar right-bar">
-            <div class="side-section data_info">
-                <span class="title">데이터 정보</span>
-                <div class="content">
-                    <span> 이름: <span class="val"></span></span>
-                    <span> 서비스 설명: <span class="val"></span></span>
-                    <span> 소분류: <span class="val"></span></span>
-                    <span> 제공 형식: <span class="val"></span></span>
-                    <span> URL: <span class="val"></span></span>
-
-                    <div class="buttons">
-                        <button class="detail-button">상세정보</button>
-                        <button class="data-select-button">관심</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="side-section similar_data">
-                <span>유사 데이터</span>
-                <div class="content">
-
-                </div>
-            </div>
-        </div>
-        -->
 
         <div class="side_window data_info open">
             <button class="material-icons">info</button>
@@ -121,7 +86,6 @@
                     <ul class="content_list">
                         <li>이름 <span class="val"> 알 수 없음 </span></li>
                         <li>서비스 설명: <span class="val"> 알 수 없음 </span></li>
-                        <li>소분류 <span class="val"> 알 수 없음 </span></li>
                         <li>제공 형식 <span class="val"> 알 수 없음 </span></li>
                         <li>URL <span class="val"> 알 수 없음 </span></li>
                     </ul>
@@ -154,9 +118,271 @@
             </div>
         </div>
 
+        <div class="modal_overlay hidden">
+            <div class="graph_make_modal modal_window hidden">
+                <button
+                    class="graph_modal_close modal_close_button material-icons"
+                >
+                    close
+                </button>
+                <div class="modal_title">
+                    <h3>그래프 생성 옵션</h3>
+                </div>
+                <div class="modal_content">
+                    <ul class="graph_options">
+                        <li>
+                            <label>주제 선택</label>
+                            <ul class="tag_list">
+                                <script>
+                                    let tagDict = {};
+                                    tagDict["education"] = "교육";
+                                    tagDict["traffic"] = "교통";
+                                    tagDict["city"] = "도시관리";
+                                    tagDict["culture"] = "문화/관광";
+                                    tagDict["health"] = "보건";
+                                    tagDict["welfare"] = "복지";
+                                    tagDict["industry"] = "산업/경제";
+                                    tagDict["safety"] = "안전";
+                                    tagDict["population"] = "인구/가구";
+                                    tagDict["administration"] = "일반행정";
+                                    tagDict["building"] = "주택/건설";
+                                    tagDict["environment"] = "환경";
+                                    tagDict["etc"] = "기타";
+
+                                    let content_list = document.querySelector(
+                                        ".graph_make_modal .tag_list"
+                                    );
+                                    for (let tag in tagDict) {
+                                        console.log(tag);
+                                        console.log(tagDict[tag]);
+
+                                        let li = document.createElement("li");
+                                        let label =
+                                            document.createElement("label");
+                                        let input =
+                                            document.createElement("input");
+                                        input.setAttribute("type", "checkbox");
+                                        input.setAttribute("id", tag);
+                                        label.appendChild(input);
+                                        label.appendChild(
+                                            document.createTextNode(
+                                                tagDict[tag]
+                                            )
+                                        );
+
+                                        li.appendChild(label);
+                                        content_list.appendChild(li);
+                                    }
+                                </script>
+                            </ul>
+                        </li>
+                        <li>
+                            <label>노드 크기 설정</label>
+                            <ul class="option_list">
+                                <li>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="node_size"
+                                            value="data_size"
+                                            checked
+                                        />
+                                        데이터 크기 비례
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="node_size"
+                                            value="big"
+                                        />
+                                        크게
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="node_size"
+                                            value="middle"
+                                        />
+                                        중간
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="node_size"
+                                            value="small"
+                                        />
+                                        작게
+                                    </label>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <label>노드 색 설정</label>
+                            <ul class="option_list">
+                                <li>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="node_color"
+                                            value="topic"
+                                            checked
+                                        />
+                                        주제별로 구분
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="node_color"
+                                            value="one"
+                                        />
+                                        단색
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="node_color"
+                                            value="random"
+                                        />
+                                        무작위
+                                    </label>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <label>링크 기준</label>
+                            <ul class="option_list">
+                                <li>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="link_criteria"
+                                            checked
+                                        />
+                                        좁은 범위
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="link_criteria"
+                                        />
+                                        넓은 범위
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="link_criteria"
+                                            value="big"
+                                        />
+                                        링크하지 않음
+                                    </label>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <label>주제 미리보기</label>
+                            <ul class="option_list">
+                                <li>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="show_topic"
+                                            checked
+                                        />
+                                        O
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="radio" name="show_topic" />
+                                        X
+                                    </label>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <button class="graph_make">그래프 생성</button>
+                </div>
+            </div>
+
+            <div class="topic_make_modal modal_window hidden">
+                <button
+                    class="topic_modal_close modal_close_button material-icons"
+                >
+                    close
+                </button>
+                <div class="modal_title">
+                    <h3>주제 생성 결과</h3>
+                </div>
+                <div class="modal_content"></div>
+            </div>
+
+            <div class="detail_info_modal modal_window hidden">
+                <button
+                    class="detail_modal_close modal_close_button material-icons"
+                >
+                    close
+                </button>
+                <div class="modal_title">
+                    <h3>상세 정보</h3>
+                </div>
+                <div class="modal_content">
+                    <ul class="detail_list scrollbar">
+                        <li>서비스ID <span class="val"> 알 수 없음 </span></li>
+                        <li>서비스명 <span class="val"> 알 수 없음 </span></li>
+                        <li>
+                            서비스 설명 <span class="val"> 알 수 없음 </span>
+                        </li>
+
+                        <li>
+                            제공사이트 <span class="val"> 알 수 없음 </span>
+                        </li>
+                        <li>제공형식 <span class="val"> 알 수 없음 </span></li>
+                        
+                        <li>대분류 <span class="val"> 알 수 없음 </span></li>
+                        <li>중분류 <span class="val"> 알 수 없음 </span></li>
+                        <li>소분류 <span class="val"> 알 수 없음 </span></li>
+                        
+                        <li>시스템명 <span class="val"> 알 수 없음 </span></li>
+                        <li>제공 기관 <span class="val"> 알 수 없음 </span></li>
+                        <li>
+                            제공 부서명 <span class="val"> 알 수 없음 </span>
+                        </li>
+                        
+                        <li>담당자명 <span class="val"> 알 수 없음 </span></li>
+                        <li>
+                            담당자 연락처 <span class="val"> 알 수 없음 </span>
+                        </li>
+                        
+                        <li>갱신주기 <span class="val"> 알 수 없음 </span></li>
+                        <li>
+                            최종갱신일자 <span class="val"> 알 수 없음 </span>
+                        </li>
+
+
+                    </ul>
+                    <div class="buttons">
+                        <a class="url_link">페이지 이동</a>
+                        <button class="data_select_button">관심</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="graph"></div>
     </body>
 
-
-    
 </html>
