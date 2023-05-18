@@ -102,7 +102,7 @@ if __name__ == '__main__':
     data_file_path = 'Opendata/csv_file/서울시 공공데이터 최종_reg1.csv'
     embeddings_path = 'Opendata/csv_file/embeddings.pkl'
 
-    node_json_path = 'Opendata/backend/csv_file/json/'
+    node_json_path = 'Opendata/csv_file/json/'
 
     data2node = Data2Node(index_file_path, data_file_path,
                           node_json_path, embeddings_path)
