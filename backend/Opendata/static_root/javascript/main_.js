@@ -161,16 +161,26 @@ function Checked(node) {
       .catch((error) => console.error(error));
   }
 
-function basket(){
-    cart_data_id = document.querySelector(".data_info .content_list > li:nth-child(1) > .val > .liVal").innerHTML;
-    cart_data_name = document.querySelector(".data_info .content_list > li:nth-child(2) > .val > .liVal").innerHTML;
-    if (cart_data_id){
-        console.log("basketData", cart_data_id)
-        console.log("basketData", cart_data_name)
-        interest_data_content.innerHTML = `<li>${cart_data_name}</li>`
+  function basket() {
+    cart_data_id = document.querySelector(
+        ".data_info .content_list > li:nth-child(1) > .val > .liVal"
+    ).innerHTML;
+    cart_data_name = document.querySelector(
+        ".data_info .content_list > li:nth-child(2) > .val > .liVal"
+    ).innerHTML;
+    if (cart_data_id) {
+        console.log("basketData", cart_data_id);
+        console.log("basketData", cart_data_name);
+        let li = document.createElement("li");
 
-    }else{
-        console.log("정보가 없습니다.")
+        li.setAttribute("id", cart_data_id);
+        li.innerText = cart_data_name;
+
+        interest_data_content.appendChild(li);
+
+        // interest_data_content.innerHTML = `<li>${cart_data_name}</li>`;
+    } else {
+        console.log("정보가 없습니다.");
     }
 }
 
