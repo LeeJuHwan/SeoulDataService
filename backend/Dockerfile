@@ -13,6 +13,7 @@ RUN python3 -m venv /py && \
     apt-get update && \
     apt-get install -y --no-install-recommends build-essential gcc && \
     /py/bin/pip3 install langchain&& \
+    /py/bin/pip3 install scikit-learn&& \
     /py/bin/pip3 install -r /tmp/requirments.txt && \
     rm -rf /tmp
 ENV PATH="/py/bin:$PATH"

@@ -3,6 +3,7 @@ import faiss
 import numpy as np
 import torch
 import pandas as pd
+import pickle
 
 
 class FaissIndex:
@@ -10,7 +11,7 @@ class FaissIndex:
     Faiss index for semantic search using BERT embeddings.
     """
 
-    def __init__(self, index_file_path: str):
+    def __init__(self, index_file_path: str, data_file_path: str, embeddings_path: str):
         """
         Initialize Faiss index with a specified file path.
 
@@ -20,6 +21,9 @@ class FaissIndex:
         self.tokenizer = AutoTokenizer.from_pretrained("kykim/bert-kor-base")
         self.model = AutoModel.from_pretrained("kykim/bert-kor-base")
         self.index_file_path = index_file_path
+        self.data_file_path = data_file_path
+        self.embeddings_path = embeddings_path
+
         self.index = None
         if not self.load_index():
             print('index_file_path is not exist ')
@@ -41,14 +45,14 @@ class FaissIndex:
             embeddings = model_output.last_hidden_state[:, 0, :].numpy()
         return embeddings
 
-    def build_index(self, data_file_path: str, id_Col: str, data_Col: str):
+    def build_index(self, id_Col: str, data_Col: str):
         """
         Build Faiss index using data from a CSV file.
 
         Args:
             data_file_path: Path to CSV file containing data to index.
         """
-        df = pd.read_csv(data_file_path)
+        df = pd.read_csv(self.data_file_path)
 
         titles = df[data_Col].to_list()
         idxs = df[id_Col].to_list()
@@ -56,9 +60,14 @@ class FaissIndex:
                          for idx in idxs]).astype('int64')
 
         embeddings = self._get_embeddings(titles)
+
         self.index = faiss.IndexFlatL2(embeddings.shape[1])
         self.index = faiss.IndexIDMap2(self.index)
         self.index.add_with_ids(embeddings, idxs)
+
+        ############# -----------------#############
+        with open(self.embeddings_path, 'wb') as f:
+            pickle.dump(embeddings, f)
 
     def save_index(self):
         """
@@ -185,7 +194,16 @@ if __name__ == '__main__':
     # --------------------------------------------
     # Faiss 로드
     # FaissIndex 객체를 생성합니다.
-    index = FaissIndex(index_file_path='GPT/index.faiss')
+    index_file_path = 'Opendata/web/index.faiss'
+    data_file_path = 'Opendata/csv_file/서울시 공공데이터 최종_reg1.csv'
+    embeddings_path = 'Opendata/web/embeddings.pkl'
+
+    index = FaissIndex(index_file_path=index_file_path,
+                       data_file_path=data_file_path,
+                       embeddings_path=embeddings_path)
+
+    # index.build_index(data_file_path='Crawling/서울시 공공데이터 최종.csv',
+    #                   id_Col='서비스ID', data_Col='서비스명')
 
     # 인덱스를 로드
     index.load_index()
