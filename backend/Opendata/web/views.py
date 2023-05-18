@@ -34,14 +34,14 @@ class MainView(View):
         return render(request, self.template_name)
 
     def post(self, request):
-        
+    
         responseData = json.loads(request.body)
         id = responseData["data"]
         # print("ID: ", id)
         
         filtering = f"OA-{id}"
         detail = SeoulData.objects.filter(서비스ID=filtering)
-        serialized_data = [item.to_dict() for item in detail]
+        detail_data = [item.to_dict() for item in detail]
         # print("serialized_data", serialized_data)
 
         similar_data = []
@@ -56,7 +56,7 @@ class MainView(View):
         # print("similar_data", similar_data)
 
         response_data = {
-            "data": serialized_data,
+            "detail_data": detail_data,
             "similar_data": similar_data,
             "message": "success",
         }
