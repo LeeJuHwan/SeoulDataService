@@ -1,6 +1,6 @@
 // <div class = "graph"> 에 3D graph 생성
-const graph_elem = document.querySelector(".graph")
-const Graph = ForceGraph3D()(graph_elem)
+const graph_elem = document.querySelector(".graph");
+const Graph = ForceGraph3D()(graph_elem);
 
 // 이게 뭐지
 const modal_overlay = document.querySelector(".modal_overlay");
@@ -9,60 +9,100 @@ const topic_make_modal = document.querySelector(".topic_make_modal");
 const detail_info_modal = document.querySelector(".detail_info_modal");
 
 // 데이터 정보 선택
-var data_info_id = document.querySelector(".data_info .content_list > li:nth-child(1) > .val")
-var data_info_name = document.querySelector(".data_info .content_list > li:nth-child(2) > .val")
-var data_info_description = document.querySelector(".data_info .content_list > li:nth-child(3) > .val")
-var data_info_type = document.querySelector(".data_info .content_list > li:nth-child(4) > .val")
-var data_info_URL = document.querySelector(".data_info .content_list > li:nth-child(5) > .val")
+var data_info_id = document.querySelector(
+    ".data_info .content_list > li:nth-child(1) > .val"
+);
+var data_info_name = document.querySelector(
+    ".data_info .content_list > li:nth-child(2) > .val"
+);
+var data_info_description = document.querySelector(
+    ".data_info .content_list > li:nth-child(3) > .val"
+);
+var data_info_type = document.querySelector(
+    ".data_info .content_list > li:nth-child(4) > .val"
+);
+var data_info_URL = document.querySelector(
+    ".data_info .content_list > li:nth-child(5) > .val"
+);
 
 // 상세 정보 선택
-var data_info_detail_id = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(1) > .val")
-var data_info_detail_name = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(2) > .val")
-var data_info_detail_description = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(3) > .val")
+var data_info_detail_id = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(1) > .val"
+);
+var data_info_detail_name = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(2) > .val"
+);
+var data_info_detail_description = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(3) > .val"
+);
 
-var data_info_detail_type = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(4) > .val")
-var data_info_detail_URL = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(5) > .val")
+var data_info_detail_type = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(4) > .val"
+);
+var data_info_detail_URL = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(5) > .val"
+);
 
-var data_info_detail_major = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(6) > .val")
-var data_info_detail_middle = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(7) > .val")
-var data_info_detail_sub = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(8) > .val")
+var data_info_detail_major = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(6) > .val"
+);
+var data_info_detail_middle = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(7) > .val"
+);
+var data_info_detail_sub = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(8) > .val"
+);
 
-var data_info_detail_system = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(9) > .val")
-var data_info_detail_agency = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(10) > .val")
-var data_info_detail_department = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(11) > .val")
+var data_info_detail_system = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(9) > .val"
+);
+var data_info_detail_agency = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(10) > .val"
+);
+var data_info_detail_department = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(11) > .val"
+);
 
-var data_info_detail_charge_nm = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(12) > .val")
-var data_info_detail_charge_tel = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(13) > .val")
+var data_info_detail_charge_nm = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(12) > .val"
+);
+var data_info_detail_charge_tel = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(13) > .val"
+);
 
-var data_info_detail_renewal_cycle = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(14) > .val")
-var data_info_detail_final_renewal = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(15) > .val")
+var data_info_detail_renewal_cycle = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(14) > .val"
+);
+var data_info_detail_final_renewal = document.querySelector(
+    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(15) > .val"
+);
 
 // 유사 데이터 div 선택
 var similar_data_content = document.querySelector(
-  ".similar_data .similar_list"
+    ".similar_data .similar_list"
 );
 
 // 관심 데이터 div 선택
 var interest_data_content = document.querySelector(
     ".selected_data .selected_list"
-)
+);
 
-window.onload = function(){
-    Graph.onNodeClick(node => {
+window.onload = function () {
+    Graph.onNodeClick((node) => {
         select_node(node);
-    })
+    });
 
     // search button click -> 검색창에 있는 value 찾아줌
-    let search = document.querySelector(".search_button")
+    let search = document.querySelector(".search_button");
     search.addEventListener("click", (e) => {
-        let search_target = document.querySelector(".search").value
+        let search_target = document.querySelector(".search").value;
         //console.log("search_target: ", search_target)
-        search_node(parseInt(search_target))
-    })
-}
+        search_node(parseInt(search_target));
+    });
+};
 
-function select_node(node){
-    Checked(node)
+function select_node(node) {
+    Checked(node);
     // get_adjacent_data(node)
 
     const distance = 400;
@@ -90,166 +130,195 @@ function search_node(idx) {
     } catch {
         console.log(`failed to search ${idx}`);
     }
-  }
+}
 
 function Checked(node) {
     nodeData = node.id;
     const csrftoken = Cookies.get("csrftoken");
-    
+
     fetch("/web/", {
-      method: "POST",
-      headers: {
-        "X-CSRFToken": csrftoken,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({"data": nodeData}),
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: nodeData }),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        return data;
-      })
-      .then((jsonData) => {
-        // console.log("jsonData: ", jsonData)
-        
-        // detail data info
-        detail = jsonData["detail_data"][0];
+        .then((response) => response.json())
+        .then((data) => {
+            return data;
+        })
+        .then((jsonData) => {
+            // console.log("jsonData: ", jsonData)
 
-        // similar data info
-        for (let i = 0; i < 5; i++) {
-            window["similar_" + i] = jsonData["similar_data"][i][0];
-          }
-        
-        // Insert info
-        data_info_id.innerHTML = `<li class='liVal' id='${detail['서비스ID']}'>${detail['서비스ID']} </li>`
-        data_info_name.innerHTML = `<li class='liVal' id='${detail['서비스ID']}'>${detail['서비스명']} </li>`
-        data_info_description.innerHTML = `<li class='liVal' id='${detail['서비스ID']}'>${detail['서비스설명']} </li>`
-        
-        data_info_type.innerHTML = `<li class='liVal' id='${detail['서비스ID']}'>${detail['제공형식']} </li>`
-        data_info_URL.innerHTML = `<li class='liVal' id='${detail['서비스ID']}'>${detail['urls']} </li>`
-        
-        // Insert detail info
-        data_info_detail_id.innerHTML = `<li id='${detail['서비스ID']}'>${detail['서비스ID']} </li>`
-        data_info_detail_name.innerHTML = `<li id='${detail['서비스ID']}'>${detail['서비스명']} </li>`
-        data_info_detail_description.innerHTML = `<li id='${detail['서비스ID']}'>${detail['서비스설명']} </li>`
+            // detail data info
+            detail = jsonData["detail_data"][0];
 
-        data_info_detail_type.innerHTML = `<li id='${detail['서비스ID']}'>${detail['제공형식']} </li>`
-        data_info_detail_URL.innerHTML = `<li id='${detail['서비스ID']}'>${detail['urls']} </li>`
+            // similar data info
+            similar_data = new Array();
+            for (let i = 0; i < 5; i++) {
+                similar_data.push(jsonData["similar_data"][i][0]);
+            }
 
-        data_info_detail_major.innerHTML = `<li id='${detail['서비스ID']}'>${detail['대분류']} </li>`
-        data_info_detail_sub.innerHTML = `<li id='${detail['서비스ID']}'>${detail['중분류']} </li>`
-        data_info_detail_middle.innerHTML =`<li id='${detail['서비스ID']}'>${detail['소분류']} </li>`
+            // Insert info
+            data_info_id.innerHTML = `<li class='liVal' id='${detail["서비스ID"]}'>${detail["서비스ID"]} </li>`;
+            data_info_name.innerHTML = `<li class='liVal' id='${detail["서비스ID"]}'>${detail["서비스명"]} </li>`;
+            data_info_description.innerHTML = `<li class='liVal' id='${detail["서비스ID"]}'>${detail["서비스설명"]} </li>`;
 
-        data_info_detail_system.innerHTML = `<li id='${detail['서비스ID']}'>${detail['시스템명']} </li>`
-        data_info_detail_agency.innerHTML = `<li id='${detail['서비스ID']}'>${detail['제공기관']} </li>`
-        data_info_detail_department.innerHTML = `<li id='${detail['서비스ID']}'>${detail['제공부서명']} </li>`
+            data_info_type.innerHTML = `<li class='liVal' id='${detail["서비스ID"]}'>${detail["제공형식"]} </li>`;
+            data_info_URL.innerHTML = `<li class='liVal' id='${detail["서비스ID"]}'>${detail["urls"]} </li>`;
 
-        data_info_detail_charge_nm.innerHTML = `<li id='${detail['서비스ID']}'>${detail['담당자명']} </li>`
-        data_info_detail_charge_tel.innerHTML = `<li id='${detail['서비스ID']}'>${detail['담당자연락처']} </li>`
+            // Insert detail info
+            data_info_detail_id.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["서비스ID"]} </li>`;
+            data_info_detail_name.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["서비스명"]} </li>`;
+            data_info_detail_description.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["서비스설명"]} </li>`;
 
-        data_info_detail_renewal_cycle.innerHTML = `<li id='${detail['서비스ID']}'>${detail['갱신주기']} </li>`
-        data_info_detail_final_renewal.innerHTML = `<li id='${detail['서비스ID']}'>${detail['최종갱신일자']} </li>`
+            data_info_detail_type.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["제공형식"]} </li>`;
+            data_info_detail_URL.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["urls"]} </li>`;
 
-        // Insert similar data 
-        similar_data_content.innerHTML = `
-        <li id='${similar_0['서비스ID']}'>${similar_0['서비스명']}</li>
-        <li id='${similar_1['서비스ID']}'>${similar_1['서비스명']}</li>
-        <li id='${similar_2['서비스ID']}'>${similar_2['서비스명']}</li>
-        <li id='${similar_3['서비스ID']}'>${similar_3['서비스명']}</li>
-        <li id='${similar_4['서비스ID']}'>${similar_4['서비스명']}</li>
-        `
-      })
-      .catch((error) => console.error(error));
-  }
+            data_info_detail_major.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["대분류"]} </li>`;
+            data_info_detail_sub.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["중분류"]} </li>`;
+            data_info_detail_middle.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["소분류"]} </li>`;
 
-function basket(){
-    cart_data_id = document.querySelector(".data_info .content_list > li:nth-child(1) > .val > .liVal").innerHTML;
-    cart_data_name = document.querySelector(".data_info .content_list > li:nth-child(2) > .val > .liVal").innerHTML;
-    if (cart_data_id){
-        console.log("basketData", cart_data_id)
-        console.log("basketData", cart_data_name)
-        interest_data_content.innerHTML = `<li>${cart_data_name}</li>`
+            data_info_detail_system.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["시스템명"]} </li>`;
+            data_info_detail_agency.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["제공기관"]} </li>`;
+            data_info_detail_department.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["제공부서명"]} </li>`;
 
-    }else{
-        console.log("정보가 없습니다.")
+            data_info_detail_charge_nm.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["담당자명"]} </li>`;
+            data_info_detail_charge_tel.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["담당자연락처"]} </li>`;
+
+            data_info_detail_renewal_cycle.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["갱신주기"]} </li>`;
+            data_info_detail_final_renewal.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["최종갱신일자"]} </li>`;
+
+            // Insert similar data
+            similar_data_content.innerHTML = "";
+            for (let i = 0; i < 5; i++) {
+                let sim_li = document.createElement("li");
+
+                sim_li.setAttribute("id", similar_data[i]["서비스ID"]);
+
+                let scrolled_text = document.createElement("label");
+                scrolled_text.classList.add("scrolled_text");
+                scrolled_text.innerText = similar_data[i]["서비스명"];
+                sim_li.appendChild(scrolled_text);
+
+                similar_data_content.appendChild(sim_li);
+            }
+            //     similar_data_content.innerHTML = `
+            // <li id='${similar_0["서비스ID"]}'>${similar_0["서비스명"]}</li>
+            // <li id='${similar_1["서비스ID"]}'>${similar_1["서비스명"]}</li>
+            // <li id='${similar_2["서비스ID"]}'>${similar_2["서비스명"]}</li>
+            // <li id='${similar_3["서비스ID"]}'>${similar_3["서비스명"]}</li>
+            // <li id='${similar_4["서비스ID"]}'>${similar_4["서비스명"]}</li>
+            // `;
+        })
+        .catch((error) => console.error(error));
+}
+
+function basket() {
+    let cart_data_id = document.querySelector(
+        ".data_info .content_list > li:nth-child(1) > .val > .liVal"
+    ).innerHTML;
+    let cart_data_name = document.querySelector(
+        ".data_info .content_list > li:nth-child(2) > .val > .liVal"
+    ).innerHTML;
+    if (cart_data_id) {
+        console.log("basketData", cart_data_id);
+        console.log("basketData", cart_data_name);
+        let li = document.createElement("li");
+
+        li.setAttribute("id", cart_data_id);
+        li.innerText = cart_data_name;
+
+        interest_data_content.appendChild(li);
+
+        // interest_data_content.innerHTML = `<li>${cart_data_name}</li>`;
+    } else {
+        console.log("정보가 없습니다.");
     }
 }
 
 // 드래그 앤 드랍 코드
 function dragElement(elmnt, target_elemnt) {
-  let pos1 = 0,
-      pos2 = 0,
-      pos3 = 0,
-      pos4 = 0;
-  elmnt.onmousedown = dragMouseDown;
+    let pos1 = 0,
+        pos2 = 0,
+        pos3 = 0,
+        pos4 = 0;
+    elmnt.onmousedown = dragMouseDown;
 
-  function dragMouseDown(e) {
-      e = e || window.event;
-      e.preventDefault();
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      document.onmouseup = closeDragElement;
-      document.onmousemove = elementDrag;
-  }
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+    }
 
-  function elementDrag(e) {
-      e = e || window.event;
-      e.preventDefault();
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      target_elemnt.style.top = target_elemnt.offsetTop - 10 - pos2 + "px";
-      target_elemnt.style.left = target_elemnt.offsetLeft - 10 - pos1 + "px";
-  }
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        target_elemnt.style.top = target_elemnt.offsetTop - 10 - pos2 + "px";
+        target_elemnt.style.left = target_elemnt.offsetLeft - 10 - pos1 + "px";
+    }
 
-  function closeDragElement() {
-      document.onmouseup = null;
-      document.onmousemove = null;
-  }
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+    }
 }
 
-function load(){
-  return  fetch('/web/node-coordinate/')
-  .then((response) => response.json())
+function load() {
+    return fetch("/web/node-coordinate/").then((response) => response.json());
 }
 
+function once() {
+    if (is_action === true) {
+        is_action = false;
+        return false;
+    } else {
+        is_action = true;
+        return true;
+    }
+}
+//link 생성
+function similar_link(node_source, node_target) {
+    var person1 = new Object();
+    person1.source = node_source.id;
+    person1.target = node_target.id;
+    return person1;
+}
+//randomnum
+function getRandomNum() {
+    min = -40;
+    max = +40;
+    return parseFloat((Math.random() * (max - min) + min).toFixed(3));
+}
+function intoTheNode(node, Graph) {
+    const distance = 120;
+    const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
 
-function once(){
-  if (is_action === true) { is_action = false;
-      return false } 
-  else{
-      is_action = true; 
-      return true
-  }};
-  //link 생성
-  function similar_link(node_source,node_target){
-      var person1 = new Object();
-      person1.source = node_source.id
-      person1.target = node_target.id
-      return person1
-  }
-  //randomnum
-  function getRandomNum(){
-      min = -40
-      max = +40
-      return parseFloat((Math.random()*(max - min) + min).toFixed(3));
-  }
-  function intoTheNode(node,Graph){
-      const distance = 120;
-      const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
-  
-      const newPos = node.x || node.y || node.z
-        ? { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }
-        : { x: 0, y: 0, z: distance }; // special case if node is in (0,0,0)
-      Graph.cameraPosition(
-          newPos, // new position
-          node, // lookAt ({ x, y, z })
-          3000  // ms transition duration
-        );
-  }
-  is_action = false
-  //유사 데이터 불러오기
-  function similardata(nh) {
+    const newPos =
+        node.x || node.y || node.z
+            ? {
+                  x: node.x * distRatio,
+                  y: node.y * distRatio,
+                  z: node.z * distRatio,
+              }
+            : { x: 0, y: 0, z: distance }; // special case if node is in (0,0,0)
+    Graph.cameraPosition(
+        newPos, // new position
+        node, // lookAt ({ x, y, z })
+        3000 // ms transition duration
+    );
+}
+is_action = false;
+//유사 데이터 불러오기
+function similardata(nh) {
     console.log("similar입니다", 1);
     let x = nh.fx;
     let y = nh.fy;
@@ -289,15 +358,9 @@ function once(){
 // 관심 데이터 버튼 클릭
 var data_cart = document.querySelector(".data-select-button");
 data_cart.addEventListener("click", (e) => {
-    console.log("관심 버튼 클릭")
-    basket()
+    console.log("관심 버튼 클릭");
+    basket();
 });
-
-
-
-
-
-
 
 (async function () {
     jsonData = await load(); // load도 상수화,, json이 달라지니까
@@ -394,7 +457,7 @@ data_cart.addEventListener("click", (e) => {
 
     let detail_modal_open = document.querySelector(".detail-button");
     detail_modal_open.addEventListener("click", (e) => {
-        console.log("상세정보 버튼 클릭")
+        console.log("상세정보 버튼 클릭");
         if (modal_overlay.classList.contains("hidden")) {
             modal_overlay.classList.remove("hidden");
         }

@@ -361,6 +361,11 @@ input:checked + .slider:before {
     border: solid 1px rgb(153, 153, 153);
 }
 
+.scrolled_text {
+    display: block;
+    overflow-x: hidden;
+}
+
 .side_window.selected_data > .window > .content > .topic_modal_open {
     margin: 10px 5% 0 5%;
     flex-grow: 1;

@@ -353,12 +353,33 @@ input:checked + .slider:before {
 
 .side_window.similar_data > .window > .content > .similar_list > li {
     display: flex;
-    justify-content: center;
     align-items: center;
+    overflow: hidden;
 
     height: 10%;
     border-radius: 5px;
     border: solid 1px rgb(153, 153, 153);
+}
+
+.scrolled_text {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-around;
+    min-width: 100%;
+    white-space: nowrap;
+    animation: slide 10s linear infinite;
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(10px);
+    }
+    50% {
+        transform: translateX(calc(-100% + 190px));
+    }
+    0% {
+        transform: translateX(10px);
+    }
 }
 
 .side_window.selected_data > .window > .content > .topic_modal_open {
