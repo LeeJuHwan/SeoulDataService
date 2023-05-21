@@ -16,33 +16,34 @@ from rest_framework import views
 from rest_framework.response import Response
 from celery.result import AsyncResult
 
-from web.tasks import add
-from web.gpt import Brainstoming
+from web.tasks import gpt_recommandation
+from web.papago_translater import trans
+
 
 ############### JSON DATA ###############
 def node_coordinate(request):
-        with open('/Opendata/csv_file/json/total_0.json', 'r') as f:
-            data = json.load(f)
-        return JsonResponse(data)
+    with open("/Opendata/csv_file/json/total_0.json", "r") as f:
+        data = json.load(f)
+    return JsonResponse(data)
+
 
 ############### Graph View ###############
 class MainView(View):
     # template_name = "web/main.html"
     template_name = "web/index.html"
-    
+
     def get(self, request):
         return render(request, self.template_name)
 
     def post(self, request):
-    
         responseData = json.loads(request.body)
         responseDicKey = list(responseData.keys())[0]
         print("responseDicKey", responseDicKey)
-        
+
         # 노드를 클릭했을 때
-        if(responseDicKey=="data"):
+        if responseDicKey == "data":
             print("responseList: ", responseDicKey)
-            
+
             id = responseData["data"]
             filtering = f"OA-{id}"
             detail = SeoulData.objects.filter(서비스ID=filtering)
@@ -52,7 +53,7 @@ class MainView(View):
             similar_data = []
             result = LoadConfig.index.search_idx(int(id), k=6)["data"][1:]
             # print("RESULT: ", result)
-            
+
             for num, i in enumerate(result):
                 filtering = f"OA-{i[0]}"
                 queryset = SeoulData.objects.filter(서비스ID=filtering)
@@ -66,16 +67,14 @@ class MainView(View):
                 "message": "success",
             }
             return JsonResponse(response_data)
-        
+
         # 주제 생성 버튼을 클릭했을 때
-        elif(responseDicKey=="cartData"):
+        elif responseDicKey == "cartData":
             print("cartData", responseData["cartData"])
-            source_id = str(responseData["cartData"][0])
+            source_id = responseData["cartData"][0].replace(" ", "")
             print("source_id", source_id)
-            
+
             ################ GPT ###############
-            bs = Brainstoming()
-            
             queryset = DataColumn.objects.filter(INF_ID=source_id)
             print("queryset", queryset)
             gpt_input_columns = []
@@ -84,7 +83,7 @@ class MainView(View):
                 temp["column_name"] = i[2]
                 temp["column_description"] = i[3]
                 gpt_input_columns.append(temp)
-    
+
             queryset = SeoulData.objects.filter(서비스ID=source_id).values()[0]
             data_info = {
                 queryset["id"]: {
@@ -94,20 +93,33 @@ class MainView(View):
                 }
             }
 
-            print(gpt_input_columns, data_info)
-            
             field = "사회"  # 사용자 입력 값
             purpose = "공모전"  # 사용자 입력 값
             num_topics = 5
             print("########### 프롬프트 아웃풋 #########")
-            print(bs.process_run(data_info, field, purpose, num_topics))  # 비동기 처리 필수
-        
-            # 임시 필요 없는 코드
-            response_data = {
-                "responseDicKey": responseDicKey
+            # print(bs.process_run(data_info, field, purpose, num_topics))  # 비동기 처리 필수
+
+            # async tasks
+            result = gpt_recommandation.delay(data_info, field, purpose, num_topics)
+            while not result.ready():
+                time.sleep(1)
+            task_result = AsyncResult(result.task_id)
+
+            result_dict = {
+                "task_id": result.task_id,
+                "task_status": task_result.status,
+                "task_result": task_result.result,
             }
-            
+            print("RESULT:, ", result_dict)
+
+            # papago translater api
+            print(trans(result_dict["task_result"]))
+
+            # 임시 필요 없는 코드
+            response_data = {"responseDicKey": responseDicKey}
+
             return JsonResponse(response_data)
+
 
 ################ 비동기 처리 ###############
 # class Test(views.APIView):
@@ -126,13 +138,14 @@ class MainView(View):
 #         return Response(result.task_id, status=202)
 
 
-
 ############### List View ###############
 class ChangeListView(TemplateView):
     template_name = "web/list_view.html"
 
+
 class OpenDataView(View):
     """Project data list and cart product."""
+
     template_name = "web/seouldata_list.html"
 
     def get(self, request):
