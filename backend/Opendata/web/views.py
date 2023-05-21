@@ -36,31 +36,95 @@ class MainView(View):
     def post(self, request):
     
         responseData = json.loads(request.body)
-        id = responseData["data"]
-        # print("ID: ", id)
+        responseDicKey = list(responseData.keys())[0]
+        print("responseDicKey", responseDicKey)
         
-        filtering = f"OA-{id}"
-        detail = SeoulData.objects.filter(서비스ID=filtering)
-        detail_data = [item.to_dict() for item in detail]
-        # print("serialized_data", serialized_data)
+        # 노드를 클릭했을 때
+        if(responseDicKey=="data"):
+            print("responseList: ", responseDicKey)
+            
+            id = responseData["data"]
+            filtering = f"OA-{id}"
+            detail = SeoulData.objects.filter(서비스ID=filtering)
+            detail_data = [item.to_dict() for item in detail]
+            # print("serialized_data", serialized_data)
 
-        similar_data = []
-        result = LoadConfig.index.search_idx(int(id), k=6)["data"][1:]
-        # print("RESULT: ", result)
+            similar_data = []
+            result = LoadConfig.index.search_idx(int(id), k=6)["data"][1:]
+            # print("RESULT: ", result)
+            
+            for num, i in enumerate(result):
+                filtering = f"OA-{i[0]}"
+                queryset = SeoulData.objects.filter(서비스ID=filtering)
+                temp = [item.to_dict() for item in queryset]
+                similar_data.append(temp)
+            # print("similar_data", similar_data)
+
+            response_data = {
+                "detail_data": detail_data,
+                "similar_data": similar_data,
+                "message": "success",
+            }
+            return JsonResponse(response_data)
         
-        for num, i in enumerate(result):
-            filtering = f"OA-{i[0]}"
-            queryset = SeoulData.objects.filter(서비스ID=filtering)
-            temp = [item.to_dict() for item in queryset]
-            similar_data.append(temp)
-        # print("similar_data", similar_data)
+        # 주제 생성 버튼을 클릭했을 때
+        elif(responseDicKey=="cartData"):
+            print("cartData", responseData["cartData"])
+            source_id = str(responseData["cartData"][0])
+            print("source_id", source_id)
+            
+            ################ GPT ###############
+            bs = Brainstoming()
+            
+            queryset = DataColumn.objects.filter(INF_ID=source_id)
+            print("queryset", queryset)
+            gpt_input_columns = []
+            for i in queryset.values_list():
+                temp = {}
+                temp["column_name"] = i[2]
+                temp["column_description"] = i[3]
+                gpt_input_columns.append(temp)
+    
+            queryset = SeoulData.objects.filter(서비스ID=source_id).values()[0]
+            data_info = {
+                queryset["id"]: {
+                    "data_name": queryset["서비스명"],
+                    "data_description": queryset["서비스설명"],
+                    "columns": gpt_input_columns,
+                }
+            }
 
-        response_data = {
-            "detail_data": detail_data,
-            "similar_data": similar_data,
-            "message": "success",
-        }
-        return JsonResponse(response_data)
+            print(gpt_input_columns, data_info)
+            
+            field = "사회"  # 사용자 입력 값
+            purpose = "공모전"  # 사용자 입력 값
+            num_topics = 5
+            print("########### 프롬프트 아웃풋 #########")
+            print(bs.process_run(data_info, field, purpose, num_topics))  # 비동기 처리 필수
+        
+            # 임시 필요 없는 코드
+            response_data = {
+                "responseDicKey": responseDicKey
+            }
+            
+            return JsonResponse(response_data)
+
+################ 비동기 처리 ###############
+# class Test(views.APIView):
+#     def get(self, request: HttpRequest):
+#         result = add.delay(2, 5)
+#         while not result.ready():
+#             time.sleep(1)
+#         task_result = AsyncResult(result.task_id)
+
+#         result_dict = {
+#             "task_id": result.task_id,
+#             "task_status": task_result.status,
+#             "task_result": task_result.result,
+#         }
+#         print("RESULT:, ", result_dict)
+#         return Response(result.task_id, status=202)
+
 
 
 ############### List View ###############
@@ -132,19 +196,3 @@ class OpenDataView(View):
                 "message": "success",
             }
             return JsonResponse(response_data)
-
-################ GPT ###############
-# class Test(views.APIView):
-#     def get(self, request: HttpRequest):
-#         result = add.delay(2, 5)
-#         while not result.ready():
-#             time.sleep(1)
-#         task_result = AsyncResult(result.task_id)
-
-#         result_dict = {
-#             "task_id": result.task_id,
-#             "task_status": task_result.status,
-#             "task_result": task_result.result,
-#         }
-#         print("RESULT:, ", result_dict)
-#         return Response(result.task_id, status=202)

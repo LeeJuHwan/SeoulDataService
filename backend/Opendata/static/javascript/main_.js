@@ -37,6 +37,9 @@ var data_info_detail_charge_tel = document.querySelector(".modal_overlay .detail
 var data_info_detail_renewal_cycle = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(14) > .val")
 var data_info_detail_final_renewal = document.querySelector(".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(15) > .val")
 
+// 주제 생성 리스트 생성
+subject_list = []
+
 // 유사 데이터 div 선택
 var similar_data_content = document.querySelector(
   ".similar_data .similar_list"
@@ -109,7 +112,7 @@ function Checked(node) {
         return data;
       })
       .then((jsonData) => {
-        // console.log("jsonData: ", jsonData)
+        console.log("jsonData: ", jsonData)
         
         // detail data info
         detail = jsonData["detail_data"][0];
@@ -161,27 +164,54 @@ function Checked(node) {
       .catch((error) => console.error(error));
   }
 
-  function basket() {
+  function basket(e) {
+
     cart_data_id = document.querySelector(
-        ".data_info .content_list > li:nth-child(1) > .val > .liVal"
+          ".data_info .content_list > li:nth-child(1) > .val > .liVal"
     ).innerHTML;
     cart_data_name = document.querySelector(
         ".data_info .content_list > li:nth-child(2) > .val > .liVal"
-    ).innerHTML;
-    if (cart_data_id) {
-        console.log("basketData", cart_data_id);
-        console.log("basketData", cart_data_name);
-        let li = document.createElement("li");
+        ).innerHTML;
 
+    if (cart_data_id) {
+        let li = document.createElement("li");
         li.setAttribute("id", cart_data_id);
         li.innerText = cart_data_name;
-
         interest_data_content.appendChild(li);
-
-        // interest_data_content.innerHTML = `<li>${cart_data_name}</li>`;
     } else {
         console.log("정보가 없습니다.");
     }
+
+    subject_list.push(cart_data_id)
+    //console.log("cart_data_id", cart_data_id)
+    console.log("subject_list", subject_list)
+    
+}
+
+function subject(e){
+    console.log("function subject")
+    console.log("subject_list", subject_list)
+
+    const csrftoken = Cookies.get("csrftoken");
+    fetch("/web/", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrftoken,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({"cartData": subject_list}),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        return data;
+      })
+      .then((jsonData) => {
+        console.log("jsonData: ", jsonData)
+      })
+      .catch((error) => console.error(error));
+    
+      //주제 생성 리스트 초기화
+    subject_list = []
 }
 
 // 드래그 앤 드랍 코드
@@ -300,14 +330,15 @@ function once(){
 var data_cart = document.querySelector(".data-select-button");
 data_cart.addEventListener("click", (e) => {
     console.log("관심 버튼 클릭")
-    basket()
+    basket(e)
 });
 
-
-
-
-
-
+// 주제 데이터 버튼 클릭
+var subject_button = document.querySelector(".make-topic");
+subject_button.addEventListener("click", (e) => {
+    console.log("주제 버튼 클릭")
+    subject(e)
+});
 
 (async function () {
     jsonData = await load(); // load도 상수화,, json이 달라지니까
