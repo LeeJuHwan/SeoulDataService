@@ -121,23 +121,6 @@ class MainView(View):
             return JsonResponse(response_data)
 
 
-################ 비동기 처리 ###############
-# class Test(views.APIView):
-#     def get(self, request: HttpRequest):
-#         result = add.delay(2, 5)
-#         while not result.ready():
-#             time.sleep(1)
-#         task_result = AsyncResult(result.task_id)
-
-#         result_dict = {
-#             "task_id": result.task_id,
-#             "task_status": task_result.status,
-#             "task_result": task_result.result,
-#         }
-#         print("RESULT:, ", result_dict)
-#         return Response(result.task_id, status=202)
-
-
 ############### List View ###############
 class ChangeListView(TemplateView):
     template_name = "web/list_view.html"

@@ -12,8 +12,3 @@ def gpt_recommandation(data_info, _field, _purpose, topics=5):
 
     result_data = bs.process_run(data_info, _field, _purpose, topics)
     return [json.dumps(i) for i in result_data["data"].replace("\\", "")]
-
-
-# @shared_task
-# def gpt_recommandation(x, y):
-#     return x + y
