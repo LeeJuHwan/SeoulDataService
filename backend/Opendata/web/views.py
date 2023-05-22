@@ -29,7 +29,7 @@ def node_coordinate(request):
 
 ############### Graph View ###############
 class MainView(View):
-    # template_name = "web/index.html"
+    # template_name = "web/index2.html"
     template_name = "web/index.html"
 
     def get(self, request):

@@ -250,7 +250,7 @@ function dragElement(elmnt, target_elemnt) {
 }
 
 function load(){
-  return fetch("/web/node-coordinate/")
+  return Graph
   .then((response) => response.json())
 }
 
