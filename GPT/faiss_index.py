@@ -45,7 +45,7 @@ class FaissIndex:
             embeddings = model_output.last_hidden_state[:, 0, :].numpy()
         return embeddings
 
-    def build_index(self, id_Col: str, data_Col: str):
+    def build_index(self, id_Col: str, data_Col: str, group_name: str):
         """
         Build Faiss index using data from a CSV file.
 
@@ -53,6 +53,7 @@ class FaissIndex:
             data_file_path: Path to CSV file containing data to index.
         """
         df = pd.read_csv(self.data_file_path)
+        df = df[df['소분류'] == group_name]
 
         titles = df[data_Col].to_list()
         idxs = df[id_Col].to_list()
@@ -177,38 +178,18 @@ class FaissIndex:
 
 
 if __name__ == '__main__':
-    # pip install transformers faiss-cpu numpy torch pandas
-    # from faiss_index import FaissIndex
+    label_path = 'Opendata/csv_file/label_dict.pkl'
+    with open(label_path, 'rb') as f:
+        label = pickle.load(f)
 
-    # Faiss 구축(처음에만)
-    # FaissIndex 객체를 생성합니다.
-    # index = FaissIndex(index_file_path='index.faiss')
+    data_file_path = 'Opendata/csv_file/서울시 공공데이터 최종.csv'
 
-    # 데이터 파일로부터 인덱스를 구축합니다.
-    # index.build_index(data_file_path='Crawling/서울시 공공데이터 최종.csv',
-    #                   id_Col='서비스ID', data_Col='서비스명')
-
-    # 인덱스를 저장합니다.
-    # index.save_index()
-
-    # --------------------------------------------
-    # Faiss 로드
-    # FaissIndex 객체를 생성합니다.
-    index_file_path = 'Opendata/web/index.faiss'
-    data_file_path = 'Opendata/csv_file/서울시 공공데이터 최종_reg1.csv'
-    embeddings_path = 'Opendata/web/embeddings.pkl'
-
-    index = FaissIndex(index_file_path=index_file_path,
-                       data_file_path=data_file_path,
-                       embeddings_path=embeddings_path)
-
-    # index.build_index(data_file_path='Crawling/서울시 공공데이터 최종.csv',
-    #                   id_Col='서비스ID', data_Col='서비스명')
-
-    # 인덱스를 로드
-    index.load_index()
-
-    # 검색 예시
-    query = '지하철'
-    result = index.search_query(query=query, k=5)
-    print(result)
+    for key, name in label.items():
+        index_file_path = f'Opendata/web/index_{key}.faiss'
+        embeddings_path = f'Opendata/csv_file/embeddings_{key}.pkl'
+        index = FaissIndex(index_file_path=index_file_path,
+                           data_file_path=data_file_path,
+                           embeddings_path=embeddings_path
+                           )
+        index.build_index(id_Col='서비스ID', data_Col='서비스명', group_name=name)
+        index.save_index()
