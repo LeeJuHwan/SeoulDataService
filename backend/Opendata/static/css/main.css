@@ -372,13 +372,13 @@ input:checked + .slider:before {
 
 @keyframes slide {
     0% {
-        transform: translateX(10px);
+        transform: translateX(5px);
     }
     50% {
-        transform: translateX(calc(-100% + 190px));
+        transform: translateX(calc(-100% + 195px));
     }
-    0% {
-        transform: translateX(10px);
+    100% {
+        transform: translateX(5px);
     }
 }
 

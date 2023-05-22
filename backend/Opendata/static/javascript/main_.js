@@ -225,12 +225,15 @@ function basket() {
     if (cart_data_id) {
         console.log("basketData", cart_data_id);
         console.log("basketData", cart_data_name);
-        let li = document.createElement("li");
+        let bas_li = document.createElement("li");
+        bas_li.setAttribute("id", cart_data_id);
 
-        li.setAttribute("id", cart_data_id);
-        li.innerText = cart_data_name;
+        let scrolled_text = document.createElement("label");
+        scrolled_text.classList.add("scrolled_text");
+        scrolled_text.innerText = cart_data_name;
+        bas_li.appendChild(scrolled_text);
 
-        interest_data_content.appendChild(li);
+        interest_data_content.appendChild(bas_li);
 
         // interest_data_content.innerHTML = `<li>${cart_data_name}</li>`;
     } else {
