@@ -28,6 +28,8 @@ def trans(text_list: list) -> list:
                 eval(response_body.decode("utf-8"))["message"]["result"][
                     "translatedText"
                 ]
+                .replace("\\", "")
+                .replace('"', "")
             )
         else:
             return "Error Code:" + rescode

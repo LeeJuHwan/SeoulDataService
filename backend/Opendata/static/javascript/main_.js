@@ -1,6 +1,7 @@
 // <div class = "graph"> 에 3D graph 생성
 const graph_elem = document.querySelector(".graph")
 const Graph = ForceGraph3D()(graph_elem)
+    .jsonUrl("/web/node-coordinate/");
 
 // 이게 뭐지
 const modal_overlay = document.querySelector(".modal_overlay");
@@ -249,10 +250,9 @@ function dragElement(elmnt, target_elemnt) {
 }
 
 function load(){
-  return  fetch('/web/node-coordinate/')
+  return Graph
   .then((response) => response.json())
 }
-
 
 function once(){
   if (is_action === true) { is_action = false;

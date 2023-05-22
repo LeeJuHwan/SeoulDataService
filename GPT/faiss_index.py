@@ -26,7 +26,7 @@ class FaissIndex:
 
         self.index = None
         if not self.load_index():
-            print('index_file_path is not exist ')
+            print("index_file_path is not exist ")
 
     def _get_embeddings(self, texts: list) -> list:
         """
@@ -39,7 +39,8 @@ class FaissIndex:
             List of BERT embeddings as numpy arrays.
         """
         encoded_input = self.tokenizer(
-            texts, padding=True, truncation=True, return_tensors='pt')
+            texts, padding=True, truncation=True, return_tensors="pt"
+        )
         with torch.no_grad():
             model_output = self.model(**encoded_input)
             embeddings = model_output.last_hidden_state[:, 0, :].numpy()
@@ -53,12 +54,11 @@ class FaissIndex:
             data_file_path: Path to CSV file containing data to index.
         """
         df = pd.read_csv(self.data_file_path)
-        df = df[df['소분류'] == group_name]
+        df = df[df["소분류"] == group_name]
 
         titles = df[data_Col].to_list()
         idxs = df[id_Col].to_list()
-        idxs = np.array([int(idx.split('-')[1])
-                         for idx in idxs]).astype('int64')
+        idxs = np.array([int(idx.split("-")[1]) for idx in idxs]).astype("int64")
 
         embeddings = self._get_embeddings(titles)
 
@@ -67,7 +67,7 @@ class FaissIndex:
         self.index.add_with_ids(embeddings, idxs)
 
         ############# -----------------#############
-        with open(self.embeddings_path, 'wb') as f:
+        with open(self.embeddings_path, "wb") as f:
             pickle.dump(embeddings, f)
 
     def save_index(self):
@@ -106,29 +106,25 @@ class FaissIndex:
             the search results.
         """
         if not query:
-            return {'status': False,
-                    'msg': 'Empty query string.',
-                    'data': []}
+            return {"status": False, "msg": "Empty query string.", "data": []}
 
         if self.index is None:
             if not self.load_index():
-                return {'status': False,
-                        'msg': 'Failed to load index file.',
-                        'data': []}
+                return {
+                    "status": False,
+                    "msg": "Failed to load index file.",
+                    "data": [],
+                }
 
         if query:
             search_embedding = self._get_embeddings([query])[0]
-            distances, idxs = self.index.search(
-                np.array([search_embedding]), k)
-            data = [(int(idx), float(score))
-                    for idx, score in zip(idxs[0], distances[0])]
-            return {'status': True,
-                    'msg': f'"{query}" search results',
-                    'data': data}
+            distances, idxs = self.index.search(np.array([search_embedding]), k)
+            data = [
+                (int(idx), float(score)) for idx, score in zip(idxs[0], distances[0])
+            ]
+            return {"status": True, "msg": f'"{query}" search results', "data": data}
         else:
-            return {'status': False,
-                    'msg': 'Query is not exist',
-                    'data': []}
+            return {"status": False, "msg": "Query is not exist", "data": []}
 
     def search_idx(self, idx: int, k: int = 5) -> dict:
         """
@@ -147,49 +143,49 @@ class FaissIndex:
         """
 
         if not idx:
-            return {'status': False,
-                    'msg': 'Empty idx int.',
-                    'data': []}
+            return {"status": False, "msg": "Empty idx int.", "data": []}
 
         if self.index is None:
             if not self.load_index():
-                return {'status': False,
-                        'msg': 'Failed to load index file.',
-                        'data': []}
+                return {
+                    "status": False,
+                    "msg": "Failed to load index file.",
+                    "data": [],
+                }
 
         try:
             search_embedding = self.index.reconstruct(idx)
             try:
-                distances, idxs = self.index.search(
-                    np.array([search_embedding]), k)
-                data = [(int(idx), float(score))
-                        for idx, score in zip(idxs[0], distances[0])]
-                return {'status': True,
-                        'msg': f'"idx={idx}" search results',
-                        'data': data}
+                distances, idxs = self.index.search(np.array([search_embedding]), k)
+                data = [
+                    (int(idx), float(score))
+                    for idx, score in zip(idxs[0], distances[0])
+                ]
+                return {
+                    "status": True,
+                    "msg": f'"idx={idx}" search results',
+                    "data": data,
+                }
             except:
-                return {'status': False,
-                        'msg': 'search_idx function error',
-                        'data': []}
+                return {"status": False, "msg": "search_idx function error", "data": []}
         except:
-            return {'status': False,
-                    'msg': 'Failed to found idx in faiss',
-                    'data': []}
+            return {"status": False, "msg": "Failed to found idx in faiss", "data": []}
 
 
-if __name__ == '__main__':
-    label_path = 'Opendata/csv_file/label_dict.pkl'
-    with open(label_path, 'rb') as f:
+if __name__ == "__main__":
+    label_path = "Opendata/csv_file/label_dict.pkl"
+    with open(label_path, "rb") as f:
         label = pickle.load(f)
 
-    data_file_path = 'Opendata/csv_file/서울시 공공데이터 최종.csv'
+    data_file_path = "Opendata/csv_file/서울시 공공데이터 최종.csv"
 
     for key, name in label.items():
-        index_file_path = f'Opendata/web/index_{key}.faiss'
-        embeddings_path = f'Opendata/csv_file/embeddings_{key}.pkl'
-        index = FaissIndex(index_file_path=index_file_path,
-                           data_file_path=data_file_path,
-                           embeddings_path=embeddings_path
-                           )
-        index.build_index(id_Col='서비스ID', data_Col='서비스명', group_name=name)
+        index_file_path = f"Opendata/web/faiss_index/index_{key}.faiss"
+        embeddings_path = f"Opendata/csv_file/embeddings_{key}.pkl"
+        index = FaissIndex(
+            index_file_path=index_file_path,
+            data_file_path=data_file_path,
+            embeddings_path=embeddings_path,
+        )
+        index.build_index(id_Col="서비스ID", data_Col="서비스명", group_name=name)
         index.save_index()
