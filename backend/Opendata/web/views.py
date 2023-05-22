@@ -22,7 +22,7 @@ from web.papago_translater import trans
 
 ############### JSON DATA ###############
 def node_coordinate(request):
-    with open("/Opendata/csv_file/json/total_0.json", "r") as f:
+    with open("/Opendata/csv_file/json/total_11.json", "r") as f:
         data = json.load(f)
     return JsonResponse(data)
 
@@ -30,7 +30,7 @@ def node_coordinate(request):
 ############### Graph View ###############
 class MainView(View):
     # template_name = "web/index.html"
-    template_name = "web/index2.html"
+    template_name = "web/index.html"
 
     def get(self, request):
         return render(request, self.template_name)
