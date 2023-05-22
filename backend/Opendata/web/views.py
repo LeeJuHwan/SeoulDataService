@@ -29,8 +29,8 @@ def node_coordinate(request):
 
 ############### Graph View ###############
 class MainView(View):
-    # template_name = "web/main.html"
-    template_name = "web/index.html"
+    # template_name = "web/index.html"
+    template_name = "web/index2.html"
 
     def get(self, request):
         return render(request, self.template_name)
@@ -101,10 +101,10 @@ class MainView(View):
 
             # async tasks
             result = gpt_recommandation.delay(data_info, field, purpose, num_topics)
-            while not result.ready():
-                time.sleep(1)
-            task_result = AsyncResult(result.task_id)
-
+            # while not result.ready():
+            #     time.sleep(1)
+            # task_result = AsyncResult(result.task_id)
+            task_result = result.get()
             result_dict = {
                 "task_id": result.task_id,
                 "task_status": task_result.status,
