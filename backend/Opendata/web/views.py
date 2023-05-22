@@ -76,14 +76,20 @@ class MainView(View):
 
             ################ GPT ###############
             queryset = DataColumn.objects.filter(INF_ID=source_id)
-            print("queryset", queryset)
-            gpt_input_columns = []
-            for i in queryset.values_list():
-                temp = {}
-                temp["column_name"] = i[2]
-                temp["column_description"] = i[3]
-                gpt_input_columns.append(temp)
+            print("queryset", queryset.values_list())
+            if queryset.values_list():
+                gpt_input_columns = []
 
+                for i in queryset.values_list():
+                    temp = {}
+                    temp["column_name"] = i[2]
+                    temp["column_description"] = i[3]
+                    gpt_input_columns.append(temp)
+
+            else:
+                gpt_input_columns = [
+                    {"column_name": "내용 없음", "column_description": "내용 없음"}
+                ]
             queryset = SeoulData.objects.filter(서비스ID=source_id).values()[0]
             data_info = {
                 queryset["id"]: {
@@ -97,23 +103,14 @@ class MainView(View):
             purpose = "공모전"  # 사용자 입력 값
             num_topics = 5
             print("########### 프롬프트 아웃풋 #########")
-            # print(bs.process_run(data_info, field, purpose, num_topics))  # 비동기 처리 필수
 
             # async tasks
             result = gpt_recommandation.delay(data_info, field, purpose, num_topics)
-            # while not result.ready():
-            #     time.sleep(1)
-            # task_result = AsyncResult(result.task_id)
             task_result = result.get()
-            result_dict = {
-                "task_id": result.task_id,
-                "task_status": task_result.status,
-                "task_result": task_result.result,
-            }
-            print("RESULT:, ", result_dict)
+            print(task_result)
 
             # papago translater api
-            print(trans(result_dict["task_result"]))
+            print(trans(task_result))
 
             # 임시 필요 없는 코드
             response_data = {"responseDicKey": responseDicKey}
