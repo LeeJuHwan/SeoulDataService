@@ -71,36 +71,34 @@ class MainView(View):
         # 주제 생성 버튼을 클릭했을 때
         elif responseDicKey == "cartData":
             print("cartData", responseData["cartData"])
-            source_id = responseData["cartData"][0].replace(" ", "")
-            print("source_id", source_id)
+            source_id = [i.replace(" ", "") for i in responseData["cartData"]]
 
             ################ GPT ###############
-            queryset = DataColumn.objects.filter(INF_ID=source_id)
-            print("queryset", queryset.values_list())
-            if queryset.values_list():
-                gpt_input_columns = []
+            data_info = {}
+            for node_id in source_id:
+                queryset = DataColumn.objects.filter(INF_ID=node_id)
+                if queryset.values_list():
+                    gpt_input_columns = []
 
-                for i in queryset.values_list():
-                    temp = {}
-                    temp["column_name"] = i[2]
-                    temp["column_description"] = i[3]
-                    gpt_input_columns.append(temp)
+                    for i in queryset.values_list():
+                        temp = {}
+                        temp["column_name"] = i[2]
+                        temp["column_description"] = i[3]
+                        gpt_input_columns.append(temp)
 
-            else:
-                gpt_input_columns = [
-                    {"column_name": "내용 없음", "column_description": "내용 없음"}
-                ]
-            queryset = SeoulData.objects.filter(서비스ID=source_id).values()[0]
-            data_info = {
-                queryset["id"]: {
+                else:
+                    gpt_input_columns = [
+                        {"column_name": "내용 없음", "column_description": "내용 없음"}
+                    ]
+
+                queryset = SeoulData.objects.filter(서비스ID=node_id).values()[0]
+                data_info[queryset["서비스ID"]] = {
                     "data_name": queryset["서비스명"],
                     "data_description": queryset["서비스설명"],
                     "columns": gpt_input_columns,
                 }
-            }
-
-            field = "사회"  # 사용자 입력 값
-            purpose = "공모전"  # 사용자 입력 값
+            field = "사회"  # user input
+            purpose = "공모전"  # user input
             num_topics = 5
             print("########### 프롬프트 아웃풋 #########")
 
