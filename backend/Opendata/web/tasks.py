@@ -11,4 +11,4 @@ def gpt_recommandation(data_info, _field, _purpose, topics=5):
     bs = Brainstoming()
 
     result_data = bs.process_run(data_info, _field, _purpose, topics)
-    return [json.dumps(i) for i in result_data["data"].replace("\\", "")]
+    return [json.dumps(i) for i in result_data["data"]]
