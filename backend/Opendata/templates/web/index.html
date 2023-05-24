@@ -34,6 +34,7 @@
             <input class="search" type="text" placeholder=" 노드 검색" />
             <button class="material-icons search_button">search</button>
         </div>
+        <div class="autocomplete_list"></div>
 
         <div class="side_window setting open">
             <button class="material-icons">settings</button>
@@ -42,34 +43,42 @@
                 <div class="content">
                     <ul class="setting_list">
                         <li>
-                            링크 보이기<label class="switch">
-                                <input type="checkbox" />
-                                <span class="slider"></span>
-                            </label>
-                        </li>
-                        <li>
-                            드래그<label class="switch">
-                                <input type="checkbox" />
-                                <span class="slider"></span>
-                            </label>
-                        </li>
-                        <li>
-                            하이라이트<label class="switch">
-                                <input type="checkbox" />
-                                <span class="slider"></span>
-                            </label>
-                        </li>
-                        <li>
-                            조명 효과<label class="switch">
-                                <input type="checkbox" />
-                                <span class="slider"></span>
-                            </label>
+                            주제 선택
+                            <select class="topic_select">
+                                <option value="education">교육</option>
+                                <option value="traffic">교통</option>
+                                <option value="city">도시관리</option>
+                                <option value="culture">문화/관광</option>
+                                <option value="health">보건</option>
+                                <option value="welfare">복지</option>
+                                <option value="industry">산업/경제</option>
+                                <option value="safety">안전</option>
+                                <option value="population">인구/가구</option>
+                                <option value="administration">일반행정</option>
+                                <option value="building">주택/건설</option>
+                                <option value="environment">환경</option>
+                                <option value="etc">기타</option>
+                            </select>
                         </li>
                         <li>
                             관심 데이터 강조<label class="switch">
                                 <input type="checkbox" />
                                 <span class="slider"></span>
                             </label>
+                        </li>
+                        <li>
+                            유사 데이터 연결<label class="switch">
+                                <input type="checkbox" />
+                                <span class="slider"></span>
+                            </label>
+                        </li>
+                        <li>
+                            유사 데이터 개수
+                            <select class="similar_select">
+                                <option value="3">3개</option>
+                                <option value="5">5개</option>
+                                <option value="10">10개</option>
+                            </select>
                         </li>
                     </ul>
                     <button class="graph_modal_open">그래프 생성</button>
@@ -83,13 +92,23 @@
                 <span class="title">데이터 정보</span>
                 <div class="content">
                     <ul class="content_list">
-                        <li>서비스 ID <span class="val"> 알 수 없음 </span></li>
-                        <li>이름 <span class="val"> 알 수 없음 </span></li>
                         <li>
-                            서비스 설명 <span class="val"> 알 수 없음 </span>
+                            서비스 ID
+                            <span class="val"> 알 수 없음 </span>
                         </li>
-                        <li>제공 형식 <span class="val"> 알 수 없음 </span></li>
-                        <li>URL <span class="val"> 알 수 없음 </span></li>
+                        <li>
+                            서비스 이름
+                            <span class="val"> 알 수 없음 </span>
+                        </li>
+                        <li>분류 <span class="val"> 알 수 없음 </span></li>
+                        <li>
+                            제공 형식
+                            <span class="val"> 알 수 없음 </span>
+                        </li>
+                        <li>
+                            서비스 설명
+                            <span class="val"> 알 수 없음 </span>
+                        </li>
                     </ul>
                     <div class="buttons">
                         <button class="detail-button">상세정보</button>
@@ -343,20 +362,18 @@
                 </div>
                 <div class="modal_content">
                     <ul class="detail_list scrollbar">
-                        <li>서비스ID <span class="val"> 알 수 없음 </span></li>
-                        <li>서비스명 <span class="val"> 알 수 없음 </span></li>
+                        <li>서비스 ID <span class="val"> 알 수 없음 </span></li>
                         <li>
-                            서비스 설명 <span class="val"> 알 수 없음 </span>
+                            서비스 이름 <span class="val"> 알 수 없음 </span>
                         </li>
-
-                        <li>
-                            제공사이트 <span class="val"> 알 수 없음 </span>
-                        </li>
-                        <li>제공형식 <span class="val"> 알 수 없음 </span></li>
-
                         <li>대분류 <span class="val"> 알 수 없음 </span></li>
                         <li>중분류 <span class="val"> 알 수 없음 </span></li>
                         <li>소분류 <span class="val"> 알 수 없음 </span></li>
+                        <li>제공형식 <span class="val"> 알 수 없음 </span></li>
+
+                        <li>
+                            서비스 설명 <span class="val"> 알 수 없음 </span>
+                        </li>
 
                         <li>시스템명 <span class="val"> 알 수 없음 </span></li>
                         <li>제공 기관 <span class="val"> 알 수 없음 </span></li>
@@ -375,7 +392,7 @@
                         </li>
                     </ul>
                     <div class="buttons">
-                        <a class="url_link">페이지 이동</a>
+                        <a class="url_link" target="blank">페이지 이동</a>
                         <button class="data_select_button">관심</button>
                     </div>
                 </div>

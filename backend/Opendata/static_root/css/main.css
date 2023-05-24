@@ -50,7 +50,7 @@ html {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: #5e5e5e;
     border-radius: 2px;
     -webkit-transition: 0.4s;
     transition: 0.4s;
@@ -70,7 +70,7 @@ html {
 }
 
 input:checked + .slider {
-    background-color: #2196f3;
+    background-color: #43ff32;
 }
 
 input:focus + .slider {
@@ -217,7 +217,7 @@ input:checked + .slider:before {
 
 .side_window.setting.open > .window {
     width: 240px;
-    height: 390px;
+    height: 250px;
 }
 
 .side_window.data_info.open > .window {
@@ -264,12 +264,22 @@ input:checked + .slider:before {
 
 .side_window.data_info > .window > .content > .content_list > li > .val {
     display: block;
+    height: 2rem;
 
     margin-top: 3px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 
     font-size: 12pt;
     font-weight: 400;
+}
+
+.side_window.data_info
+    > .window
+    > .content
+    > .content_list
+    > li:nth-child(5)
+    > .val {
+    height: 5rem;
 }
 
 .side_window.data_info > .window > .content > .buttons {
@@ -284,7 +294,7 @@ input:checked + .slider:before {
 
     height: 30px;
 
-    background-color: #252729;
+    background-color: #272727;
     border-radius: 7px;
     border: 2px rgb(153, 153, 153) solid;
 
@@ -298,7 +308,6 @@ input:checked + .slider:before {
 }
 
 .side_window.setting > .window > .content > .setting_list {
-    height: 290px;
     display: flex;
     flex-direction: column;
 }
@@ -307,8 +316,43 @@ input:checked + .slider:before {
     margin: 8px 0;
     display: flex;
     justify-content: space-between;
-    font-size: 14pt;
+    font-size: 12pt;
     font-weight: 600;
+}
+
+.side_window.setting > .window > .content > .setting_list > li > select {
+    text-align: center;
+
+    border-radius: 5px;
+
+    color: white;
+    font-size: 11pt;
+
+    background-color: #272727;
+}
+
+.side_window.setting > .window > .content > .setting_list > li > .toplc_select {
+    width: 90px;
+}
+
+.side_window.setting
+    > .window
+    > .content
+    > .setting_list
+    > li
+    > .similar_select {
+    width: 60px;
+}
+
+.side_window.setting > .window > .content > .setting_list > li > select {
+    text-align: center;
+
+    border-radius: 5px;
+
+    color: white;
+    font-size: 11pt;
+
+    background-color: #272727;
 }
 
 .side_window.setting > .window > .content > .graph_modal_open {
@@ -316,7 +360,7 @@ input:checked + .slider:before {
     height: 35px;
     margin: 0 5%;
 
-    background-color: #252729;
+    background-color: #272727;
     border-radius: 10px;
     border: 2px rgb(153, 153, 153) solid;
 
@@ -332,7 +376,7 @@ input:checked + .slider:before {
 .side_window.selected_data > .window > .content > .selected_list {
     width: 100%;
     height: calc(100% - 50px);
-    background-color: #252729;
+    background-color: #272727;
 }
 
 .side_window.selected_data > .window > .content > .selected_list > li {
@@ -348,7 +392,7 @@ input:checked + .slider:before {
     width: 100%;
     height: 100%;
 
-    background-color: #252729;
+    background-color: #272727;
 }
 
 .side_window.similar_data > .window > .content > .similar_list > li {
@@ -390,7 +434,7 @@ input:checked + .slider:before {
     width: 90%;
     height: 40px;
 
-    background-color: #252729;
+    background-color: #272727;
     border-radius: 10px;
     border: 2px rgb(153, 153, 153) solid;
 
@@ -549,7 +593,7 @@ input:checked + .slider:before {
     font-size: 18px;
     color: white;
 
-    background-color: #252729;
+    background-color: #272727;
     border-radius: 7px;
     border: 2px rgb(153, 153, 153) solid;
 
@@ -603,7 +647,7 @@ input:checked + .slider:before {
 
     height: 40px;
 
-    background-color: #252729;
+    background-color: #272727;
     border-radius: 7px;
     border: 2px rgb(153, 153, 153) solid;
 
