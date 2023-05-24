@@ -342,12 +342,14 @@ function similar_link(node_source, node_target) {
     person1.target = node_target.id;
     return person1;
 }
+
 //randomnum
 function getRandomNum() {
     min = -40;
     max = +40;
     return parseFloat((Math.random() * (max - min) + min).toFixed(3));
 }
+
 function intoTheNode(node, Graph) {
     const distance = 120;
     const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
@@ -411,6 +413,22 @@ data_cart.addEventListener("click", (e) => {
     console.log("관심 버튼 클릭");
     basket();
 });
+
+function make_graph() {
+    const selected_category = document.querySelector(".topic_select");
+    const category =
+        selected_category.options[parseInt(selected_category.selectedIndex)]
+            .value;
+    console.log(category);
+    fetch("/web/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json",
+        },
+        category: category,
+    });
+}
 
 (async function () {
     jsonData = await load(); // load도 상수화,, json이 달라지니까
@@ -487,6 +505,7 @@ data_cart.addEventListener("click", (e) => {
 
     let graph_modal_open = document.querySelector(".graph_modal_open");
     graph_modal_open.addEventListener("click", (e) => {
+        make_graph();
         if (modal_overlay.classList.contains("hidden")) {
             modal_overlay.classList.remove("hidden");
         }
