@@ -1,6 +1,6 @@
 // <div class = "graph"> 에 3D graph 생성
 const graph_elem = document.querySelector(".graph");
-const Graph = ForceGraph3D()(graph_elem);
+const Graph = ForceGraph3D()(graph_elem).jsonUrl("/web/node-coordinate/");
 
 // 모달 선택
 const modal_overlay = document.querySelector(".modal_overlay");
@@ -87,6 +87,9 @@ const page_link = document.querySelector(
 // const data_info_detail_final_renewal = document.querySelector(
 //     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(15) > .val"
 // );
+
+// 주제 생성 리스트 생성
+subject_list = [];
 
 // 유사 데이터 div 선택
 const similar_data_content = document.querySelector(
@@ -286,6 +289,36 @@ function basket() {
     } else {
         console.log("정보가 없습니다.");
     }
+
+    subject_list.push(cart_data_id);
+    //console.log("cart_data_id", cart_data_id)
+    console.log("subject_list", subject_list);
+}
+
+function subject(e) {
+    console.log("function subject");
+    console.log("subject_list", subject_list);
+
+    const csrftoken = Cookies.get("csrftoken");
+    fetch("/web/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cartData: subject_list }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            return data;
+        })
+        .then((jsonData) => {
+            console.log("jsonData: ", jsonData);
+        })
+        .catch((error) => console.error(error));
+
+    //주제 생성 리스트 초기화
+    subject_list = [];
 }
 
 // 드래그 앤 드랍 코드
@@ -323,7 +356,7 @@ function dragElement(elmnt, target_elemnt) {
 }
 
 function load() {
-    return fetch("/web/node-coordinate/").then((response) => response.json());
+    return Graph.then((response) => response.json());
 }
 
 function once() {
@@ -342,14 +375,12 @@ function similar_link(node_source, node_target) {
     person1.target = node_target.id;
     return person1;
 }
-
 //randomnum
 function getRandomNum() {
     min = -40;
     max = +40;
     return parseFloat((Math.random() * (max - min) + min).toFixed(3));
 }
-
 function intoTheNode(node, Graph) {
     const distance = 120;
     const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
@@ -429,6 +460,13 @@ function make_graph() {
         category: category,
     });
 }
+
+// 주제 데이터 버튼 클릭
+var subject_button = document.querySelector(".make-topic");
+subject_button.addEventListener("click", (e) => {
+    console.log("주제 버튼 클릭");
+    subject(e);
+});
 
 (async function () {
     jsonData = await load(); // load도 상수화,, json이 달라지니까

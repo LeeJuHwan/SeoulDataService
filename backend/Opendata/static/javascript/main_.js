@@ -1,6 +1,6 @@
 // <div class = "graph"> 에 3D graph 생성
 const graph_elem = document.querySelector(".graph");
-const Graph = ForceGraph3D()(graph_elem);
+const Graph = ForceGraph3D()(graph_elem).jsonUrl("/web/node-coordinate/");
 
 // 모달 선택
 const modal_overlay = document.querySelector(".modal_overlay");
@@ -88,6 +88,9 @@ const page_link = document.querySelector(
 //     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(15) > .val"
 // );
 
+// 주제 생성 리스트 생성
+subject_list = [];
+
 // 유사 데이터 div 선택
 const similar_data_content = document.querySelector(
     ".similar_data .similar_list"
@@ -104,8 +107,6 @@ const autocomplete_list = document.querySelector(".autocomplete_list");
 
 function search_autocomplete(node) {
     const search_text = search_input.value();
-
-    const data_list = 
 }
 
 // 노드 선택
@@ -158,7 +159,10 @@ function Checked(node) {
             return data;
         })
         .then((jsonData) => {
-            // console.log("jsonData: ", jsonData)
+            console.log("jsonData: ", jsonData);
+
+            // detail data info
+            detail = jsonData["detail_data"][0];
 
             // detail data info
             let detail = jsonData["detail_data"][0];
@@ -281,6 +285,36 @@ function basket() {
     } else {
         console.log("정보가 없습니다.");
     }
+
+    subject_list.push(cart_data_id);
+    //console.log("cart_data_id", cart_data_id)
+    console.log("subject_list", subject_list);
+}
+
+function subject(e) {
+    console.log("function subject");
+    console.log("subject_list", subject_list);
+
+    const csrftoken = Cookies.get("csrftoken");
+    fetch("/web/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cartData: subject_list }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            return data;
+        })
+        .then((jsonData) => {
+            console.log("jsonData: ", jsonData);
+        })
+        .catch((error) => console.error(error));
+
+    //주제 생성 리스트 초기화
+    subject_list = [];
 }
 
 // 드래그 앤 드랍 코드
@@ -318,7 +352,7 @@ function dragElement(elmnt, target_elemnt) {
 }
 
 function load() {
-    return fetch("/web/node-coordinate/").then((response) => response.json());
+    return Graph.then((response) => response.json());
 }
 
 function once() {
@@ -330,7 +364,6 @@ function once() {
         return true;
     }
 }
-
 //link 생성
 function similar_link(node_source, node_target) {
     var person1 = new Object();
@@ -338,14 +371,12 @@ function similar_link(node_source, node_target) {
     person1.target = node_target.id;
     return person1;
 }
-
 //randomnum
 function getRandomNum() {
     min = -40;
     max = +40;
     return parseFloat((Math.random() * (max - min) + min).toFixed(3));
 }
-
 function intoTheNode(node, Graph) {
     const distance = 120;
     const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
@@ -364,7 +395,7 @@ function intoTheNode(node, Graph) {
         3000 // ms transition duration
     );
 }
-
+is_action = false;
 //유사 데이터 불러오기
 function similardata(nh) {
     console.log("similar입니다", 1);
@@ -427,10 +458,19 @@ function make_graph() {
         body: JSON.stringify({ category: category }),
     })
         .then((response) => response.json())
-        .then((data) => {console.log(data); graph_data = data;});
+        .then((data) => {
+            console.log(data);
+            graph_data = data;
+        });
 }
 
-// onload functions
+// 주제 데이터 버튼 클릭
+var subject_button = document.querySelector(".make-topic");
+subject_button.addEventListener("click", (e) => {
+    console.log("주제 버튼 클릭");
+    subject(e);
+});
+
 (async function () {
     is_action = false;
     jsonData = await load(); // load도 상수화,, json이 달라지니까
