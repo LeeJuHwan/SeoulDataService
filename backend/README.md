@@ -1,17 +1,18 @@
 # Web Application Server
 
-### WebPage
+### 홈페이지
 > GET 
 ```
 http://3.39.242.243:8000/
 ```
 
 
-### :muscle: 이런 문제를 마주 하고, 이렇게 해결하였습니다.
+### :muscle: 사소한 문제와 처리 과정
 ---
 > **AWS EC2 인스턴스**
 - 초기 인스턴스 유형: t3 large - 8GB 리소스 할당
   - __"No space left on device error"__ -> 도커 빌드하는 과정에서 발생
+  - [참고자료](https://velog.io/@ssssujini99/EC2ServerDocker-EC2-%EC%9A%A9%EB%9F%89-%EA%BD%89-%EC%B0%BC%EC%9D%84-%EB%95%8C-%ED%95%B4%EA%B2%B0%EB%B0%A9%EB%B2%95-No-space-left-on-device-%ED%95%B4%EA%B2%B0)
 
     - **문제**: 용량 부족 현상:scream:
 
