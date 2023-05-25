@@ -102,20 +102,13 @@ const interest_data_content = document.querySelector(
 const search_input = document.querySelector(".search");
 const autocomplete_list = document.querySelector(".autocomplete_list");
 
-window.onload = function () {
-    Graph.onNodeClick((node) => {
-        select_node(node);
-    });
+function search_autocomplete(node) {
+    const search_text = search_input.value();
 
-    // search button click -> 검색창에 있는 value 찾아줌
-    let search = document.querySelector(".search_button");
-    search.addEventListener("click", (e) => {
-        let search_target = document.querySelector(".search").value;
-        //console.log("search_target: ", search_target)
-        search_node(parseInt(search_target));
-    });
-};
+    const data_list = 
+}
 
+// 노드 선택
 function select_node(node) {
     Checked(node);
     // get_adjacent_data(node)
@@ -139,6 +132,7 @@ function select_node(node) {
     );
 }
 
+// 노드 선택 (인덱스 접근)
 function search_node(idx) {
     try {
         select_node(gData.nodes[idx]);
@@ -262,6 +256,7 @@ function Checked(node) {
         .catch((error) => console.error(error));
 }
 
+// 관심 데이터
 function basket() {
     let cart_data_id = document.querySelector(
         ".data_info .content_list > li:nth-child(1) > .val > .liVal"
@@ -335,6 +330,7 @@ function once() {
         return true;
     }
 }
+
 //link 생성
 function similar_link(node_source, node_target) {
     var person1 = new Object();
@@ -368,7 +364,7 @@ function intoTheNode(node, Graph) {
         3000 // ms transition duration
     );
 }
-is_action = false;
+
 //유사 데이터 불러오기
 function similardata(nh) {
     console.log("similar입니다", 1);
@@ -416,6 +412,8 @@ data_cart.addEventListener("click", (e) => {
 
 function make_graph() {
     const selected_category = document.querySelector(".topic_select");
+    const csrftoken = Cookies.get("csrftoken");
+
     const category =
         selected_category.options[parseInt(selected_category.selectedIndex)]
             .value;
@@ -426,11 +424,15 @@ function make_graph() {
             "X-CSRFToken": csrftoken,
             "Content-Type": "application/json",
         },
-        category: category,
-    });
+        body: JSON.stringify({ category: category }),
+    })
+        .then((response) => response.json())
+        .then((data) => {console.log(data); graph_data = data;});
 }
 
+// onload functions
 (async function () {
+    is_action = false;
     jsonData = await load(); // load도 상수화,, json이 달라지니까
     //const nodesById = Object.fromEntries(jsonData.nodes.map(node => [node.name, node]))
     const getNodesTree = (nh) => {
@@ -467,6 +469,7 @@ function make_graph() {
         console.log("visi", visibleNodes);
         return { nodes: visibleNodes, links: visibleLinks };
     };
+
     Graph.graphData(getNodesTree());
     Graph.onNodeClick((node) => {
         select_node(node);
@@ -480,6 +483,7 @@ function make_graph() {
 
         intoTheNode(node, Graph);
     });
+
     Graph.linkWidth(2);
     let search = document.querySelector(".search_button");
     search.addEventListener("click", (e) => {
@@ -496,7 +500,6 @@ function make_graph() {
     let side_window_buttons = document.querySelectorAll(
         ".side_window > button"
     );
-
     for (let but of side_window_buttons) {
         but.addEventListener("click", (e) => {
             but.parentNode.classList.toggle("open");

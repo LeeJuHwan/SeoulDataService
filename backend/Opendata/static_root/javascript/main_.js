@@ -2,7 +2,7 @@
 const graph_elem = document.querySelector(".graph");
 const Graph = ForceGraph3D()(graph_elem);
 
-// 이게 뭐지
+// 모달 선택
 const modal_overlay = document.querySelector(".modal_overlay");
 const graph_make_modal = document.querySelector(".graph_make_modal");
 const topic_make_modal = document.querySelector(".topic_make_modal");
@@ -13,21 +13,21 @@ const data_info_lists = document.querySelectorAll(
     ".data_info .content_list > li > .val"
 );
 
-const data_info_id = document.querySelector(
-    ".data_info .content_list > li:nth-child(1) > .val"
-);
-const data_info_name = document.querySelector(
-    ".data_info .content_list > li:nth-child(2) > .val"
-);
-const data_info_class = document.querySelector(
-    ".data_info .content_list > li:nth-child(3) > .val"
-);
-const data_info_type = document.querySelector(
-    ".data_info .content_list > li:nth-child(4) > .val"
-);
-const data_info_description = document.querySelector(
-    ".data_info .content_list > li:nth-child(5) > .val"
-);
+// const data_info_id = document.querySelector(
+//     ".data_info .content_list > li:nth-child(1) > .val"
+// );
+// const data_info_name = document.querySelector(
+//     ".data_info .content_list > li:nth-child(2) > .val"
+// );
+// const data_info_class = document.querySelector(
+//     ".data_info .content_list > li:nth-child(3) > .val"
+// );
+// const data_info_type = document.querySelector(
+//     ".data_info .content_list > li:nth-child(4) > .val"
+// );
+// const data_info_description = document.querySelector(
+//     ".data_info .content_list > li:nth-child(5) > .val"
+// );
 
 // 상세 정보 선택
 const detail_info_lists = document.querySelectorAll(
@@ -37,56 +37,56 @@ const page_link = document.querySelector(
     ".modal_overlay .detail_info_modal .modal_content .url_link"
 );
 
-const data_info_detail_id = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(1) > .val"
-);
-const data_info_detail_name = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(2) > .val"
-);
-const data_info_detail_description = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(3) > .val"
-);
+// const data_info_detail_id = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(1) > .val"
+// );
+// const data_info_detail_name = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(2) > .val"
+// );
+// const data_info_detail_description = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(3) > .val"
+// );
 
-const data_info_detail_type = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(4) > .val"
-);
-const data_info_detail_URL = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(5) > .val"
-);
+// const data_info_detail_type = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(4) > .val"
+// );
+// const data_info_detail_URL = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(5) > .val"
+// );
 
-const data_info_detail_major = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(6) > .val"
-);
-const data_info_detail_middle = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(7) > .val"
-);
-const data_info_detail_sub = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(8) > .val"
-);
+// const data_info_detail_major = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(6) > .val"
+// );
+// const data_info_detail_middle = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(7) > .val"
+// );
+// const data_info_detail_sub = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(8) > .val"
+// );
 
-const data_info_detail_system = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(9) > .val"
-);
-const data_info_detail_agency = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(10) > .val"
-);
-const data_info_detail_department = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(11) > .val"
-);
+// const data_info_detail_system = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(9) > .val"
+// );
+// const data_info_detail_agency = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(10) > .val"
+// );
+// const data_info_detail_department = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(11) > .val"
+// );
 
-const data_info_detail_charge_nm = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(12) > .val"
-);
-const data_info_detail_charge_tel = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(13) > .val"
-);
+// const data_info_detail_charge_nm = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(12) > .val"
+// );
+// const data_info_detail_charge_tel = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(13) > .val"
+// );
 
-const data_info_detail_renewal_cycle = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(14) > .val"
-);
-const data_info_detail_final_renewal = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(15) > .val"
-);
+// const data_info_detail_renewal_cycle = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(14) > .val"
+// );
+// const data_info_detail_final_renewal = document.querySelector(
+//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(15) > .val"
+// );
 
 // 유사 데이터 div 선택
 const similar_data_content = document.querySelector(
@@ -97,6 +97,10 @@ const similar_data_content = document.querySelector(
 const interest_data_content = document.querySelector(
     ".selected_data .selected_list"
 );
+
+// 검색 선택
+const search_input = document.querySelector(".search");
+const autocomplete_list = document.querySelector(".autocomplete_list");
 
 window.onload = function () {
     Graph.onNodeClick((node) => {
@@ -338,12 +342,14 @@ function similar_link(node_source, node_target) {
     person1.target = node_target.id;
     return person1;
 }
+
 //randomnum
 function getRandomNum() {
     min = -40;
     max = +40;
     return parseFloat((Math.random() * (max - min) + min).toFixed(3));
 }
+
 function intoTheNode(node, Graph) {
     const distance = 120;
     const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
@@ -407,6 +413,22 @@ data_cart.addEventListener("click", (e) => {
     console.log("관심 버튼 클릭");
     basket();
 });
+
+function make_graph() {
+    const selected_category = document.querySelector(".topic_select");
+    const category =
+        selected_category.options[parseInt(selected_category.selectedIndex)]
+            .value;
+    console.log(category);
+    fetch("/web/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json",
+        },
+        category: category,
+    });
+}
 
 (async function () {
     jsonData = await load(); // load도 상수화,, json이 달라지니까
@@ -483,6 +505,7 @@ data_cart.addEventListener("click", (e) => {
 
     let graph_modal_open = document.querySelector(".graph_modal_open");
     graph_modal_open.addEventListener("click", (e) => {
+        make_graph();
         if (modal_overlay.classList.contains("hidden")) {
             modal_overlay.classList.remove("hidden");
         }
