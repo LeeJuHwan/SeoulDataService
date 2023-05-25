@@ -1,6 +1,10 @@
 // <div class = "graph"> 에 3D graph 생성
 const graph_elem = document.querySelector(".graph");
-const Graph = ForceGraph3D()(graph_elem).jsonUrl("/web/node-coordinate/");
+// const Graph = ForceGraph3D()(graph_elem).jsonUrl("/web/node-coordinate/");
+let Graph;
+let graph_data;
+let similar_nodes = [];
+let selected_nodes = [];
 
 // 모달 선택
 const modal_overlay = document.querySelector(".modal_overlay");
@@ -89,7 +93,7 @@ const page_link = document.querySelector(
 // );
 
 // 주제 생성 리스트 생성
-subject_list = [];
+let subject_list = [];
 
 // 유사 데이터 div 선택
 const similar_data_content = document.querySelector(
@@ -104,13 +108,97 @@ const interest_data_content = document.querySelector(
 // 검색 선택
 const search_input = document.querySelector(".search");
 const autocomplete_list = document.querySelector(".autocomplete_list");
+let nowIndex = 0;
+let aclist_range = [0, 5];
+let matched_nodes = [];
 
-function search_autocomplete(node) {
-    const search_text = search_input.value();
+function getSearch() {
+    const search_text = search_input.value;
+    if (search_text == "") {
+        matched_names = [];
+        aclist_range = [0, 5];
+        nowIndex = 0;
+        autocomplete_list.innerHTML = "";
+        return;
+    }
+
+    const temp_length = graph_data.nodes
+        .map((node) => node.name)
+        .filter((name) => name.includes(search_text)).length;
+
+    console.log(temp_length, matched_nodes.length);
+    if (temp_length != matched_nodes.length) {
+        matched_nodes = graph_data.nodes.filter((node) =>
+            node.name.includes(search_text)
+        );
+        aclist_range = [0, 5];
+        nowIndex = 0;
+
+        showList();
+    }
+}
+
+function searchAutocomplete(e) {
+    switch (e.keyCode) {
+        case 38:
+            nowIndex = Math.max(nowIndex - 1, 0);
+            if (nowIndex < aclist_range[0]) {
+                aclist_range = aclist_range.map((i) => i - 1);
+            }
+            break;
+        case 40:
+            nowIndex = Math.min(nowIndex + 1, matched_nodes.length - 1);
+            if (nowIndex >= aclist_range[1]) {
+                aclist_range = aclist_range.map((i) => i + 1);
+            }
+            break;
+        case 13:
+            search_input.value = matched_nodes[nowIndex].name;
+            selectNode(matched_nodes[nowIndex]);
+            aclist_range = [0, 4];
+            nowIndex = 0;
+            // matched_names.length = 0;
+            break;
+        default:
+            nowIndex = 0;
+            break;
+    }
+
+    showList();
+}
+
+function showList() {
+    // showList
+    autocomplete_list.innerHTML = "";
+    matched_nodes.slice(...aclist_range).forEach((node, index) => {
+        let li = document.createElement("li");
+        if (nowIndex === index + aclist_range[0]) li.classList.add("active");
+
+        li.addEventListener("click", (e) => {
+            search_input.value = node.name;
+            selectNode(node);
+            aclist_range = [0, 4];
+            nowIndex = 0;
+            getSearch();
+        });
+
+        let label = document.createElement("label");
+        label.classList.add("scrolled_text");
+        label.innerText = node.name;
+        li.appendChild(label);
+
+        autocomplete_list.appendChild(li);
+    });
+}
+
+function getNodeFromName(text) {
+    graph_data.nodes.filter((node) => node.name == text);
+    if (node.length == 1) return node[0];
+    else console.log("노드를 찾지 못했습니다.");
 }
 
 // 노드 선택
-function select_node(node) {
+function selectNode(node) {
     Checked(node);
     // get_adjacent_data(node)
 
@@ -133,15 +221,6 @@ function select_node(node) {
     );
 }
 
-// 노드 선택 (인덱스 접근)
-function search_node(idx) {
-    try {
-        select_node(gData.nodes[idx]);
-    } catch {
-        console.log(`failed to search ${idx}`);
-    }
-}
-
 function Checked(node) {
     let nodeData = node.id;
     const csrftoken = Cookies.get("csrftoken");
@@ -160,9 +239,6 @@ function Checked(node) {
         })
         .then((jsonData) => {
             console.log("jsonData: ", jsonData);
-
-            // detail data info
-            detail = jsonData["detail_data"][0];
 
             // detail data info
             let detail = jsonData["detail_data"][0];
@@ -241,6 +317,12 @@ function Checked(node) {
                 let sim_li = document.createElement("li");
 
                 sim_li.setAttribute("id", similar_data[i]["서비스ID"]);
+                sim_li.addEventListener("click", (e) => {
+                    let node = getNodeFromName(
+                        `${similar_data[i]["서비스명"]}`
+                    );
+                    selectNode(node);
+                });
 
                 let scrolled_text = document.createElement("label");
                 scrolled_text.classList.add("scrolled_text");
@@ -263,16 +345,22 @@ function Checked(node) {
 // 관심 데이터
 function basket() {
     let cart_data_id = document.querySelector(
-        ".data_info .content_list > li:nth-child(1) > .val > .liVal"
+        ".data_info .content_list > li:nth-child(1) > .val"
     ).innerHTML;
     let cart_data_name = document.querySelector(
-        ".data_info .content_list > li:nth-child(2) > .val > .liVal"
+        ".data_info .content_list > li:nth-child(2) > .val"
     ).innerHTML;
     if (cart_data_id) {
         console.log("basketData", cart_data_id);
         console.log("basketData", cart_data_name);
         let bas_li = document.createElement("li");
         bas_li.setAttribute("id", cart_data_id);
+
+        bas_li.addEventListener("click", (e) => {
+            let node = getNodeFromName(`${cart_data_name}`);
+            if (node.length == 1) selectNode(node[0]);
+            else console.log("노드를 찾지 못했습니다.");
+        });
 
         let scrolled_text = document.createElement("label");
         scrolled_text.classList.add("scrolled_text");
@@ -351,10 +439,6 @@ function dragElement(elmnt, target_elemnt) {
     }
 }
 
-function load() {
-    return Graph.then((response) => response.json());
-}
-
 function once() {
     if (is_action === true) {
         is_action = false;
@@ -365,18 +449,20 @@ function once() {
     }
 }
 //link 생성
-function similar_link(node_source, node_target) {
+function similarLink(node_source, node_target) {
     var person1 = new Object();
     person1.source = node_source.id;
     person1.target = node_target.id;
     return person1;
 }
+
 //randomnum
 function getRandomNum() {
-    min = -40;
-    max = +40;
+    let min = -40;
+    let max = +40;
     return parseFloat((Math.random() * (max - min) + min).toFixed(3));
 }
+
 function intoTheNode(node, Graph) {
     const distance = 120;
     const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
@@ -395,7 +481,8 @@ function intoTheNode(node, Graph) {
         3000 // ms transition duration
     );
 }
-is_action = false;
+
+var is_action = false;
 //유사 데이터 불러오기
 function similardata(nh) {
     console.log("similar입니다", 1);
@@ -429,19 +516,23 @@ function similardata(nh) {
         i["fz"] = z + getRandomNum();
     });
     data_node.forEach((i) => {
-        data_links.push(similar_link(nh, i));
+        data_links.push(similarLink(nh, i));
     });
     return { nodes: data_node, links: data_links };
 }
 
-// 관심 데이터 버튼 클릭
-var data_cart = document.querySelector(".data-select-button");
-data_cart.addEventListener("click", (e) => {
-    console.log("관심 버튼 클릭");
-    basket();
-});
+function createGraph() {
+    graph_elem.innerHTML = "";
+    Graph = ForceGraph3D()(graph_elem);
+    Graph.graphData(graph_data);
+    Graph.linkWidth(2);
+    Graph.onNodeClick((node) => {
+        selectNode(node);
+        intoTheNode(node, Graph);
+    });
+}
 
-function make_graph() {
+async function makeGraph() {
     const selected_category = document.querySelector(".topic_select");
     const csrftoken = Cookies.get("csrftoken");
 
@@ -449,7 +540,7 @@ function make_graph() {
         selected_category.options[parseInt(selected_category.selectedIndex)]
             .value;
     console.log(category);
-    fetch("/web/", {
+    const data = await fetch("/web/", {
         method: "POST",
         headers: {
             "X-CSRFToken": csrftoken,
@@ -461,74 +552,92 @@ function make_graph() {
         .then((data) => {
             console.log(data);
             graph_data = data;
+            Graph.graphData(graph_data);
+            return data;
         });
 }
 
-// 주제 데이터 버튼 클릭
-var subject_button = document.querySelector(".make-topic");
-subject_button.addEventListener("click", (e) => {
-    console.log("주제 버튼 클릭");
-    subject(e);
-});
-
 (async function () {
+    graph_data = await fetch("/web/node-coordinate/").then((response) =>
+        response.json()
+    );
+    console.log(graph_data.nodes);
     is_action = false;
-    jsonData = await load(); // load도 상수화,, json이 달라지니까
+    // let jsonData = await load(); // load도 상수화,, json이 달라지니까
     //const nodesById = Object.fromEntries(jsonData.nodes.map(node => [node.name, node]))
-    const getNodesTree = (nh) => {
-        const visibleNodes = [];
-        const visibleLinks = [];
-        jsonData.nodes.forEach((i) => visibleNodes.push(i));
 
-        let arr = visibleNodes.filter((i) => {
-            return i.collapsed == false;
-        });
-        console.log("arr", arr);
+    // const getNodesTree = (nh) => {
+    //     const visibleNodes = [];
+    //     const visibleLinks = [];
+    //     console.log(jsonData, jsonData.nodes);
+    //     jsonData.nodes.forEach((i) => visibleNodes.push(i));
 
-        if (!nh) {
-            return { nodes: visibleNodes, links: visibleLinks };
-        }
+    //     let arr = visibleNodes.filter((i) => {
+    //         return i.collapsed == false;
+    //     });
+    //     console.log("arr", arr);
 
-        if (!nh.collapsed) {
-            console.log("collapsed");
-            similar = similardata(nh);
-            similar.nodes.forEach((i) => visibleNodes.push(i));
-            similar.links.forEach((i) => visibleLinks.push(i));
-        }
+    //     if (!nh) {
+    //         return { nodes: visibleNodes, links: visibleLinks };
+    //     }
 
-        if (arr) {
-            arr.forEach((i) => {
-                if (i != nh) {
-                    similar = similardata(i);
-                    similar.nodes.forEach((i) => visibleNodes.push(i));
-                    similar.links.forEach((i) => visibleLinks.push(i));
-                }
-            });
-        }
+    //     if (!nh.collapsed) {
+    //         console.log("collapsed");
+    //         similar = similardata(nh);
+    //         similar.nodes.forEach((i) => visibleNodes.push(i));
+    //         similar.links.forEach((i) => visibleLinks.push(i));
+    //     }
 
-        console.log("visi", visibleNodes);
-        return { nodes: visibleNodes, links: visibleLinks };
-    };
+    //     if (arr) {
+    //         arr.forEach((i) => {
+    //             if (i != nh) {
+    //                 similar = similardata(i);
+    //                 similar.nodes.forEach((i) => visibleNodes.push(i));
+    //                 similar.links.forEach((i) => visibleLinks.push(i));
+    //             }
+    //         });
+    //     }
 
-    Graph.graphData(getNodesTree());
-    Graph.onNodeClick((node) => {
-        select_node(node);
-        bool = Object.keys(node).includes("category");
-        if (bool) {
-            return;
-        } else {
-            node.collapsed = !node.collapsed; // toggle collapse state
-        }
-        Graph.graphData(getNodesTree(node));
+    //     console.log("visi", visibleNodes);
+    //     return { nodes: visibleNodes, links: visibleLinks };
+    // };
 
-        intoTheNode(node, Graph);
+    //EventHandlers
+    createGraph();
+
+    window.addEventListener("resize", function () {
+        Graph.width(graph_elem.offsetWidth);
+        Graph.height(graph_elem.offsetHeight);
     });
 
-    Graph.linkWidth(2);
+    search_input.addEventListener("keyup", (e) => {
+        getSearch();
+    });
+
+    search_input.addEventListener("keydown", (e) => {
+        searchAutocomplete(e);
+    });
+
+    // 주제 데이터 버튼 클릭
+    var subject_button = document.querySelector(".topic_modal_open");
+    subject_button.addEventListener("click", (e) => {
+        console.log("주제 버튼 클릭");
+        subject(e);
+    });
+
+    // 관심 데이터 버튼 클릭
+    var data_cart = document.querySelector(".data-select-button");
+    data_cart.addEventListener("click", (e) => {
+        console.log("관심 버튼 클릭");
+        basket();
+    });
+
     let search = document.querySelector(".search_button");
     search.addEventListener("click", (e) => {
-        let search_target = document.querySelector(".search").value;
-        search_node(parseInt(search_target));
+        search_input.value = matched_nodes[nowIndex].name;
+        selectNode(matched_nodes[nowIndex]);
+        aclist_range = [0, 4];
+        nowIndex = 0;
     });
 
     let side_windows = document.querySelectorAll(".side_window");
@@ -548,13 +657,13 @@ subject_button.addEventListener("click", (e) => {
 
     let graph_modal_open = document.querySelector(".graph_modal_open");
     graph_modal_open.addEventListener("click", (e) => {
-        make_graph();
-        if (modal_overlay.classList.contains("hidden")) {
-            modal_overlay.classList.remove("hidden");
-        }
-        if (graph_make_modal.classList.contains("hidden")) {
-            graph_make_modal.classList.remove("hidden");
-        }
+        makeGraph();
+        // if (modal_overlay.classList.contains("hidden")) {
+        //     modal_overlay.classList.remove("hidden");
+        // }
+        // if (graph_make_modal.classList.contains("hidden")) {
+        //     graph_make_modal.classList.remove("hidden");
+        // }
     });
 
     let graph_modal_close = document.querySelector(".graph_modal_close");

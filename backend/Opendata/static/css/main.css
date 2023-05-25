@@ -143,6 +143,46 @@ input:checked + .slider:before {
     font-size: 12pt;
 }
 
+.autocomplete_list {
+    position: absolute;
+    display: block;
+
+    z-index: 1;
+
+    left: 35px;
+    top: 60px;
+    width: 265px;
+
+    background-color: #383838;
+    color: rgb(243, 243, 243);
+
+    --scroll-width: 265px;
+}
+
+.autocomplete_list > li {
+    /* width: 100%;
+    height: 15px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden; */
+    cursor: pointer;
+    display: flex;
+    overflow: hidden;
+
+    height: 25px;
+
+    font-size: 15pt;
+
+    --scroll-width: 265px;
+}
+
+.autocomplete_list > li.active {
+    background-color: rgb(102, 102, 102);
+}
+
 .side_window {
     position: absolute;
     z-index: 1;
@@ -156,7 +196,7 @@ input:checked + .slider:before {
 
 .side_window.setting {
     left: 220px;
-    top: 80px;
+    top: 200px;
 }
 
 .side_window.data_info {
@@ -267,7 +307,7 @@ input:checked + .slider:before {
     height: 2rem;
 
     margin-top: 3px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 
     font-size: 12pt;
     font-weight: 400;
@@ -277,9 +317,37 @@ input:checked + .slider:before {
     > .window
     > .content
     > .content_list
+    > li:nth-child(1)
+    > .val {
+    height: 1rem;
+}
+
+.side_window.data_info
+    > .window
+    > .content
+    > .content_list
+    > li:nth-child(2)
+    > .val {
+    height: 3rem;
+}
+
+.side_window.data_info
+    > .window
+    > .content
+    > .content_list
+    > li:nth-child(4)
+    > .val {
+    height: 1rem;
+}
+
+.side_window.data_info
+    > .window
+    > .content
+    > .content_list
     > li:nth-child(5)
     > .val {
-    height: 5rem;
+    height: 7rem;
+    overflow-y: scroll;
 }
 
 .side_window.data_info > .window > .content > .buttons {
@@ -381,11 +449,14 @@ input:checked + .slider:before {
 
 .side_window.selected_data > .window > .content > .selected_list > li {
     display: flex;
-    justify-content: center;
     align-items: center;
+    overflow: hidden;
 
     height: 10%;
+    border-radius: 5px;
     border: solid 1px rgb(153, 153, 153);
+
+    --scroll-width: 200px;
 }
 
 .side_window.similar_data > .window > .content > .similar_list {
@@ -403,12 +474,15 @@ input:checked + .slider:before {
     height: 10%;
     border-radius: 5px;
     border: solid 1px rgb(153, 153, 153);
+
+    --scroll-width: 200px;
 }
 
 .scrolled_text {
     flex-shrink: 0;
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+    /* justify-content: space-around; */
     min-width: 100%;
     white-space: nowrap;
     animation: slide 10s linear infinite;
@@ -416,13 +490,16 @@ input:checked + .slider:before {
 
 @keyframes slide {
     0% {
-        transform: translateX(5px);
+        transform: translateX(0);
     }
-    50% {
-        transform: translateX(calc(-100% + 195px));
+    10% {
+        transform: translateX(0);
+    }
+    90% {
+        transform: translateX(calc(-100% + var(--scroll-width)));
     }
     100% {
-        transform: translateX(5px);
+        transform: translateX(calc(-100% + var(--scroll-width)));
     }
 }
 

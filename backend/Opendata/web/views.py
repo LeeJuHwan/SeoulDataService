@@ -116,9 +116,9 @@ class MainView(View):
             return JsonResponse(response_data)
 
         # create graph
-        # elif responseDicKey == "category":
-        #     json_key = responseData.get("category", 0)
-        #     # print("JSON :", json_key)
-        #     with open(f"/Opendata/csv_file/json/total_{json_key}.json", "r") as f:
-        #         data = json.load(f)
-        #     return JsonResponse(data)
+        elif responseDicKey == "category":
+            json_key = responseData.get("category", 0)
+            # print("JSON :", json_key)
+            with open(f"/Opendata/csv_file/json/total_{json_key}.json", "r") as f:
+                data = json.load(f)
+            return JsonResponse(data)
