@@ -73,11 +73,16 @@ class Data2Node:
         for i, row in tqdm(enumerate(idxs)):
             source = row[0]
             # print(row[i:])
-            for c, target in enumerate(row):
+            for c, target in enumerate(row[1:], start=1):
                 # print(source, target, distances_int[i][c])
-                link = {"source": str(source),
-                        "target": str(target),
-                        "distances": int(distances[i][c])}
+                if c == 1:  # 노드당 1개 이상 링크 가질 수 있도록
+                    link = {"source": str(source),
+                            "target": str(target),
+                            "distances": 0}
+                else:
+                    link = {"source": str(source),
+                            "target": str(target),
+                            "distances": int(distances[i][c])}
                 self.links.append(link)
 
     def _set_info(self):
