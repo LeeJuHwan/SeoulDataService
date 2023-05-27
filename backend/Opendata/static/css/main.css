@@ -28,7 +28,8 @@ html {
 }
 
 .scrollbar::-webkit-scrollbar-track {
-    background-color: grey;
+    /* background-color: grey; */
+    background-color: rgba(0, 0, 0, 0);
     border-radius: 10px;
     /* box-shadow: inset 0px 0px 5px white; */
 }
@@ -463,6 +464,7 @@ input:checked + .slider:before {
 .side_window.selected_data > .window > .content > .selected_list {
     width: 100%;
     height: calc(100% - 150px);
+    overflow-y: scroll;
     border: 2px rgba(255, 255, 255, 0.5) solid;
 }
 
@@ -475,7 +477,7 @@ input:checked + .slider:before {
     border-radius: 5px;
     border: solid 1px rgb(153, 153, 153);
 
-    --scroll-width: 200px;
+    --scroll-width: 190px;
 }
 
 .side_window.similar_data > .window > .content > .similar_list {

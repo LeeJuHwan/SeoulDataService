@@ -248,6 +248,7 @@ function expandNode(source_node, target_nodes) {
         expand_target_nodes.push(target_list);
         expand_links.push(links_list);
     }
+    reloadData();
 }
 
 function Checked(node) {
@@ -380,6 +381,13 @@ function Checked(node) {
             // <li id='${similar_3["서비스ID"]}'>${similar_3["서비스명"]}</li>
             // <li id='${similar_4["서비스ID"]}'>${similar_4["서비스명"]}</li>
             // `;
+
+            if (selected_nodes.includes(node))
+                document.querySelector(".data-select-button").innerText =
+                    "관심 해제";
+            else
+                document.querySelector(".data-select-button").innerText =
+                    "관심";
         })
         .catch((error) => console.error(error));
 }
@@ -396,13 +404,21 @@ function basket() {
         console.log("basketData", cart_data_id);
         console.log("basketData", cart_data_name);
 
-        let basket_node = getNodeFromName(cart_data_name);
+        let basket_node = current_node;
         if (selected_nodes.includes(basket_node)) {
-            console.log("이미 관심 등록한 데이터입니다.");
+            let idx = selected_nodes.findIndex((node) => node === basket_node);
+            console.log(idx);
+            selected_nodes.splice(idx, 1);
+            subject_list.splice(idx, 1);
+            interest_data_content.removeChild(
+                interest_data_content.childNodes[idx]
+            );
+            document.querySelector(".data-select-button").innerText = "관심";
             return;
         }
+        subject_list.push(cart_data_id);
         selected_nodes.push(basket_node);
-
+        document.querySelector(".data-select-button").innerText = "관심 해제";
         reloadGraph();
 
         let bas_li = document.createElement("li");
@@ -418,15 +434,12 @@ function basket() {
         bas_li.appendChild(scrolled_text);
 
         interest_data_content.appendChild(bas_li);
+        document.querySelector(".data-select-button").innerText = "관심 해제";
 
         // interest_data_content.innerHTML = `<li>${cart_data_name}</li>`;
     } else {
         console.log("정보가 없습니다.");
     }
-
-    subject_list.push(cart_data_id);
-    //console.log("cart_data_id", cart_data_id)
-    console.log("subject_list", subject_list);
 }
 
 function subject(e) {
@@ -559,11 +572,16 @@ function createGraph() {
     Graph.nodeVal((node) => {
         return 5;
     });
-    Graph.nodeOpacity(0.68);
     Graph.onNodeClick((node) => {
         selectNode(node);
     });
+    // static background image
+    Graph.nodeOpacity(0.68);
+    Graph.linkDirectionalParticleWidth(2);
+    // Graph.linkDirectionalParticleColor("red");
+    Graph.backgroundColor("rgba(0, 0, 0, 0.0)");
     reloadGraph();
+    reloadData();
 }
 
 function reloadGraph() {
@@ -571,28 +589,34 @@ function reloadGraph() {
     let expanded_source_node_list = expand_source_nodes.flat(1);
     let expanded_target_node_list = expand_target_nodes.flat(1);
     Graph.nodeColor((node) => {
-        if (similar_nodes.includes(node)) return "#A68A56";
+        if (current_node === node) return "yellow";
+        else if (similar_nodes.includes(node)) return "#A68A56";
         else if (selected_nodes.includes(node)) return "#40180F";
         else if (expanded_source_node_list.includes(node)) return "red";
         else if (expanded_target_node_list.includes(node)) return "blue";
         else return "#732E1F";
     });
     Graph.linkWidth((link) => (expanded_link_list.includes(link) ? 6 : 2));
-    Graph.linkColor((link) => {
-        expanded_link_list.includes(link) ? "#FFFFFF" : "#B0B0B0";
-    });
-    Graph.linkDirectionalParticles((link) => {
-        expanded_link_list.includes(link) ? 4 : 0;
-    });
-    Graph.linkDirectionalParticleWidth(2);
-    Graph.linkDirectionalParticleColor("#732E1F");
+    Graph.linkColor((link) =>
+        expanded_link_list.includes(link) ? "#FFFFFF" : "#B0B0B0"
+    );
+    Graph.linkDirectionalParticles((link) =>
+        expanded_link_list.includes(link) ? 4 : 0
+    );
+}
 
-    Graph.graphData({
-        nodes: graph_data.nodes,
-        links: graph_data.links.concat(expanded_link_list),
-    });
-    // static background image
-    Graph.backgroundColor("rgba(0, 0, 0, 0.0)");
+function reloadData() {
+    if (document.querySelector(".similar_link")) {
+        let expanded_link_list = expand_links.flat(1);
+        Graph.graphData({
+            nodes: graph_data.nodes,
+            links: graph_data.links.concat(expanded_link_list),
+        });
+    } else
+        Graph.graphData({
+            nodes: graph_data.nodes,
+            links: graph_data.links,
+        });
 }
 
 async function makeGraph() {
