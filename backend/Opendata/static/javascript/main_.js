@@ -588,11 +588,11 @@ function createGraph() {
 }
 
 function reloadGraph() {
-    Graph.nodeColor((node) => {
-        if (similar_nodes.includes(node)) return "#000000";
-        else if (selected_nodes.includes(node)) return "#FFFFFF";
-        else return "#AAAAAA";
-    });
+    // Graph.nodeColor((node) => {
+    //     if (similar_nodes.includes(node)) return "#000000";
+    //     else if (selected_nodes.includes(node)) return "#FFFFFF";
+    //     else return "#AAAAAA";
+    // });
     Graph.linkColor((link) => {
         if (expand_links.includes(link)) return "blue";
         else return "red";
@@ -606,6 +606,15 @@ function reloadGraph() {
         nodes: graph_data.nodes,
         links: links,
     });
+    // static background image
+    Graph.backgroundColor("rgba(0, 0, 0, 0.0)");
+    Graph.nodeColor((node) => {
+        return "rgb(255,255,255)";
+    });
+    Graph.nodeVal((node) => {
+        return 5;
+    });
+    Graph.nodeOpacity(0.68);
 }
 
 async function makeGraph() {

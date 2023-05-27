@@ -113,15 +113,14 @@ input:checked + .slider:before {
 }
 
 .search_box > button {
-    background: #6d6d6d;
-    border: 0px;
-    border-radius: 0 10px 10px 0;
-
+    
+    border: 2px rgba(255, 255, 255, 0.5) solid;
+    border-radius: 0 4px 4px 0;
     font-size: 18px;
 }
 
 .search_box > button:active {
-    background: #b4b4b4;
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .search_box > .search {
@@ -131,9 +130,10 @@ input:checked + .slider:before {
     flex-grow: 1 1;
     flex-shrink: 1 1;
 
-    background: #383838;
-    border: 0px;
-    border-radius: 10px 0 0 10px;
+    background-color: black;
+
+    border: 2px rgba(253, 255, 255, 0.5) solid;
+    border-radius: 4px 0 0 4px;
 
     font-size: 18px;
 }
@@ -215,17 +215,17 @@ input:checked + .slider:before {
 }
 
 .side_window > button {
+
     position: relative;
-    background-color: #383838;
     z-index: 2;
+    background-color: black;
 
     width: 40px;
     height: 40px;
 
-    border-width: 0px;
-    border-radius: 20px;
 
-    color: rgb(146, 146, 146);
+    color: rgba(255, 255, 255);
+    border: 0px rgba(255, 255, 255, 0.5) solid;
 }
 
 .side_window > button:active {
@@ -243,9 +243,8 @@ input:checked + .slider:before {
     height: 0px;
 
     border-width: 0px;
-    border-radius: 20px;
-
-    background-color: #363636;
+    border-radius: 5px; /* 수정 */
+    border: 2px rgba(255, 255, 255, 0.5) solid;
 
     transform: translateY(-40px);
     transition: 0.4s;
@@ -289,7 +288,7 @@ input:checked + .slider:before {
 
 .side_window > .window > .content {
     flex-grow: 1;
-    padding: 10px 20px;
+    padding: 2px 15px 15px 15px;
 }
 
 .side_window.data_info > .window > .content > .content_list {
@@ -362,8 +361,8 @@ input:checked + .slider:before {
 
     height: 30px;
 
-    background-color: #272727;
-    border-radius: 7px;
+    background-color: black;
+    border-radius: 5px;
     border: 2px rgb(153, 153, 153) solid;
 
     color: rgb(214, 214, 214);
@@ -424,12 +423,12 @@ input:checked + .slider:before {
 }
 
 .side_window.setting > .window > .content > .graph_modal_open {
-    width: 90%;
+    width: 100%;
     height: 35px;
-    margin: 0 5%;
+    margin: 0 0%;
 
-    background-color: #272727;
-    border-radius: 10px;
+    background-color: black;
+    border-radius: 5px; /* 수정 */
     border: 2px rgb(153, 153, 153) solid;
 
     color: rgb(214, 214, 214);
@@ -444,23 +443,26 @@ input:checked + .slider:before {
 .side_window.selected_data > .window > .content > .selected_list {
     width: 100%;
     height: calc(100% - 50px);
-    background-color: #272727;
+    border: 2px rgba(255, 255, 255, 0.5) solid;
 }
 
 .side_window.selected_data > .window > .content > .selected_list > li {
     display: flex;
-    justify-content: center;
     align-items: center;
+    overflow: hidden;
 
     height: 10%;
+    border-radius: 5px;
     border: solid 1px rgb(153, 153, 153);
+
+    --scroll-width: 200px;
 }
 
 .side_window.similar_data > .window > .content > .similar_list {
     width: 100%;
     height: 100%;
 
-    background-color: #272727;
+    border: 2px rgba(255, 255, 255, 0.5) solid;
 }
 
 .side_window.similar_data > .window > .content > .similar_list > li {
@@ -501,15 +503,15 @@ input:checked + .slider:before {
 }
 
 .side_window.selected_data > .window > .content > .topic_modal_open {
-    margin: 10px 5% 0 5%;
+    margin: 5% 0% 0% 0%;
     flex-grow: 1;
     flex-basis: 0;
 
-    width: 90%;
-    height: 40px;
+    width: 100%;
+    height: 35px;
 
-    background-color: #272727;
-    border-radius: 10px;
+    background-color: black;
+    border-radius: 5px; /* 수정 */
     border: 2px rgb(153, 153, 153) solid;
 
     color: rgb(214, 214, 214);
@@ -561,7 +563,7 @@ input:checked + .slider:before {
     backdrop-filter: blur(13.5px);
     -webkit-backdrop-filter: blur(13.5px);
 
-    border-radius: 10px;
+    border-radius: 5px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     color: white;
 }
@@ -722,7 +724,7 @@ input:checked + .slider:before {
     height: 40px;
 
     background-color: #272727;
-    border-radius: 7px;
+    border-radius: 5px;
     border: 2px rgb(153, 153, 153) solid;
 
     color: rgb(214, 214, 214);

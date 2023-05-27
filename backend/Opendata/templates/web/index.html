@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="ko">
     <head>
@@ -22,12 +21,18 @@
             href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap"
             rel="stylesheet"
         />
+        <style>
+            .graph{
+                background-image: url("{% static './image/space.png' %}");
+            }
+        </style>
         <link rel="stylesheet" href="{% static 'css/main.css' %}" />
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
         <script defer src="//unpkg.com/3d-force-graph"></script>
         <script defer src="{% static 'javascript/main_.js' %}"></script>
+
     </head>
+
 
     <body>
         <div class="search_box">

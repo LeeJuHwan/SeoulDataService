@@ -3,6 +3,8 @@ const graph_elem = document.querySelector(".graph");
 // const Graph = ForceGraph3D()(graph_elem).jsonUrl("/web/node-coordinate/");
 let Graph;
 let graph_data;
+let similar_nodes = [];
+let selected_nodes = [];
 
 // 모달 선택
 const modal_overlay = document.querySelector(".modal_overlay");
@@ -189,6 +191,12 @@ function showList() {
     });
 }
 
+function getNodeFromName(text) {
+    graph_data.nodes.filter((node) => node.name == text);
+    if (node.length == 1) return node[0];
+    else console.log("노드를 찾지 못했습니다.");
+}
+
 // 노드 선택
 function selectNode(node) {
     Checked(node);
@@ -310,11 +318,10 @@ function Checked(node) {
 
                 sim_li.setAttribute("id", similar_data[i]["서비스ID"]);
                 sim_li.addEventListener("click", (e) => {
-                    let node = graph_data.nodes.filter(
-                        (node) => node.name == similar_data[i]["서비스명"]
+                    let node = getNodeFromName(
+                        `${similar_data[i]["서비스명"]}`
                     );
-                    if (node.length == 1) selectNode(node[0]);
-                    else console.log("노드를 찾지 못했습니다.");
+                    selectNode(node);
                 });
 
                 let scrolled_text = document.createElement("label");
@@ -338,10 +345,10 @@ function Checked(node) {
 // 관심 데이터
 function basket() {
     let cart_data_id = document.querySelector(
-        ".data_info .content_list > li:nth-child(1) > .val > .liVal"
+        ".data_info .content_list > li:nth-child(1) > .val"
     ).innerHTML;
     let cart_data_name = document.querySelector(
-        ".data_info .content_list > li:nth-child(2) > .val > .liVal"
+        ".data_info .content_list > li:nth-child(2) > .val"
     ).innerHTML;
     if (cart_data_id) {
         console.log("basketData", cart_data_id);
@@ -350,9 +357,7 @@ function basket() {
         bas_li.setAttribute("id", cart_data_id);
 
         bas_li.addEventListener("click", (e) => {
-            let node = graph_data.nodes.filter(
-                (node) => node.name == cart_data_name
-            );
+            let node = getNodeFromName(`${cart_data_name}`);
             if (node.length == 1) selectNode(node[0]);
             else console.log("노드를 찾지 못했습니다.");
         });
@@ -525,6 +530,15 @@ function createGraph() {
         selectNode(node);
         intoTheNode(node, Graph);
     });
+    // static background image
+    Graph.backgroundColor('rgba(0, 0, 0, 0.0)');
+    Graph.nodeColor((node) => {
+        return '#0067a3'
+    })    
+    Graph.nodeVal(node => {
+        return 5
+    })
+    Graph.nodeOpacity(0.68)
 }
 
 async function makeGraph() {
