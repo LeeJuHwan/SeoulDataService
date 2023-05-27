@@ -530,6 +530,15 @@ function createGraph() {
         selectNode(node);
         intoTheNode(node, Graph);
     });
+    // static background image
+    Graph.backgroundColor('rgba(0, 0, 0, 0.0)');
+    Graph.nodeColor((node) => {
+        return '#0067a3'
+    })    
+    Graph.nodeVal(node => {
+        return 5
+    })
+    Graph.nodeOpacity(0.68)
 }
 
 async function makeGraph() {

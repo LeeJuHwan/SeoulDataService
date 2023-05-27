@@ -60,7 +60,7 @@ function select_node(node){
     Checked(node)
     // get_adjacent_data(node)
 
-    const distance = 400;
+    const distance = 120;
     const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
 
     const newPos =
@@ -147,7 +147,7 @@ function Checked(node) {
 
         data_info_detail_renewal_cycle.innerHTML = `<li id='${nodeData}'>${detail['갱신주기']} </li>`
         data_info_detail_final_renewal.innerHTML = `<li id='${nodeData}'>${detail['최종갱신일자']} </li>`
-
+          console.log('하하 여기가 첫번째?')
         // Insert similar data 
         similar_data_content.innerHTML = `
         <li id='${similar_0['서비스ID']}'>${similar_0['서비스명']}</li>
@@ -233,9 +233,48 @@ function once(){
           3000  // ms transition duration
         );
   }
+
+similardata_total =[]
+  function getSimilarData(node){
+    nodeData = node.id;
+    const csrftoken = Cookies.get("csrftoken");
+    fetch("/web/", {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrftoken,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"data": nodeData}),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          return data;
+        })
+        .then((jsonData) => {
+            similardata_total=[]
+            similar_dataset = []
+            jsonData["similar_data"].forEach((i) => {
+            var similar_data = new Object();
+            similar_data.id = i[0].서비스명
+            similar_data.collapsed = true
+            similar_data.category = false
+            similardata_total.push(similar_data)
+            store(similar_data)
+          })
+        })
+  }
+  function store(set){
+    similardata_total.push(set)
+    console.log('gkgkgkgk하하하',similardata_total)
+  }
   is_action = false
   //유사 데이터 불러오기
-  function similardata(nh) {
+  async function similardata(nh) {
+    await getSimilarData(nh)
+
+    
+    console.log(similardata_total)
+    data_nodes = store
     console.log("similar입니다", 1);
     let x = nh.fx;
     let y = nh.fy;
@@ -266,16 +305,21 @@ function once(){
         i["fy"] = y + getRandomNum();
         i["fz"] = z + getRandomNum();
     });
+    console.log('data탐색입니다아아아아',data_nodes, '222',data_node)
     data_node.forEach((i) => {
         data_links.push(similar_link(nh, i));
     });
-    return { nodes: data_node, links: data_links };
+    return new Promise(function(resolve, reject) {
+        resolve( {nodes: data_node, links: data_links } );
+     });
 }
 
 (async function () {
     jsonData = await load(); // load도 상수화,, json이 달라지니까
     //const nodesById = Object.fromEntries(jsonData.nodes.map(node => [node.name, node]))
-    const getNodesTree = (nh) => {
+    
+    const getNodesTree = async function (nh) {
+        console.log()
         const visibleNodes = [];
         const visibleLinks = [];
         jsonData.nodes.forEach((i) => visibleNodes.push(i));
@@ -284,43 +328,47 @@ function once(){
             return i.collapsed == false;
         });
         console.log("arr", arr);
-
+        console.log
         if (!nh) {
             return { nodes: visibleNodes, links: visibleLinks };
         }
 
         if (!nh.collapsed) {
             console.log("collapsed");
-            similar = similardata(nh);
+            similar = await similardata(nh);
             similar.nodes.forEach((i) => visibleNodes.push(i));
             similar.links.forEach((i) => visibleLinks.push(i));
         }
-
+console.log('여기까지도 안온다고..????')
         if (arr) {
             arr.forEach((i) => {
                 if (i != nh) {
                     similar = similardata(i);
                     similar.nodes.forEach((i) => visibleNodes.push(i));
                     similar.links.forEach((i) => visibleLinks.push(i));
-                }
+                    }
             });
-        }
+                }   
 
         console.log("visi", visibleNodes);
         return { nodes: visibleNodes, links: visibleLinks };
     };
-    Graph.graphData(getNodesTree());
+    console.log(getNodesTree)
+    Graph.graphData(getNodesTree);
     Graph.onNodeClick((node) => {
+
         select_node(node);
         bool = Object.keys(node).includes("category");
+        console.log('ㅁㄴㅇㄹㅁㅇㄴㅇㄴㅁㄹㄴㅁㄹㄴㅁㄹㄴㅁㄹㄴㄹㅁㄴㅇㅎㅇㅎㅇㅎㅇㅎㅇㅎㅇㅎㅇㅁㄹㄴㅁㄹㄴㅁ',node, bool)
         if (bool) {
             return;
         } else {
+            console.log('여기 안오냐????')
             node.collapsed = !node.collapsed; // toggle collapse state
         }
         Graph.graphData(getNodesTree(node));
-
-        intoTheNode(node, Graph);
+        console.log('ㅁㄴㅇㄹㅁㅇㄴㅇㄴㅁㄹㄴㅁㄹㄴㅁㄹㄴㅁㄹㄴㄹㅁㄴㅇㅎㅇㅎㅇㅎㅇㅎㅇㅎㅇㅎㅇㅁㄹㄴㅁㄹㄴㅁ',node)
+        //intoTheNode(node, Graph);
     });
     Graph.linkWidth(2);
     let search = document.querySelector(".search_button");
