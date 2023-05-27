@@ -3,8 +3,12 @@ const graph_elem = document.querySelector(".graph");
 // const Graph = ForceGraph3D()(graph_elem).jsonUrl("/web/node-coordinate/");
 let Graph;
 let graph_data;
+let current_node;
 let similar_nodes = [];
 let selected_nodes = [];
+let expand_source_nodes = [];
+let expand_target_nodes = [];
+let expand_links = [];
 
 // 모달 선택
 const modal_overlay = document.querySelector(".modal_overlay");
@@ -192,8 +196,8 @@ function showList() {
 }
 
 function getNodeFromName(text) {
-    graph_data.nodes.filter((node) => node.name == text);
-    if (node.length == 1) return node[0];
+    let filtered = graph_data.nodes.filter((node) => node.name == text);
+    if (filtered.length == 1) return filtered[0];
     else console.log("노드를 찾지 못했습니다.");
 }
 
@@ -221,6 +225,31 @@ function selectNode(node) {
     );
 }
 
+// 노드 확장
+function expandNode(source_node, target_nodes) {
+    // console.log();
+    if (expand_source_nodes.includes(source_node)) {
+        let idx = expand_source_nodes.findIndex(sourcenode);
+        expand_source_nodes.splice(idx, 1);
+        expand_target_nodes.splice(idx, 1);
+        expand_links.splice(idx, 1);
+    } else {
+        expand_source_nodes.push(source_node);
+
+        let target_list = [];
+        let links_list = [];
+        for (let tg of target_nodes) {
+            target_list.push(tg);
+            links_list.push({
+                source: source_node,
+                target: tg,
+            });
+        }
+        expand_target_nodes.push(target_list);
+        expand_links.push(links_list);
+    }
+}
+
 function Checked(node) {
     let nodeData = node.id;
     const csrftoken = Cookies.get("csrftoken");
@@ -243,11 +272,24 @@ function Checked(node) {
             // detail data info
             let detail = jsonData["detail_data"][0];
 
+            similar_nodes = [];
             // similar data info
             let similar_data = new Array();
             for (let i = 0; i < 5; i++) {
                 similar_data.push(jsonData["similar_data"][i][0]);
+                let get_node = getNodeFromName(
+                    `${similar_data[i]["서비스명"]}`
+                );
+                if (get_node) similar_nodes.push(get_node);
             }
+
+            if (current_node === node) {
+                expandNode(current_node, similar_nodes);
+            } else {
+                current_node = node;
+            }
+
+            reloadGraph();
 
             // Insert info
             let data_info_strs = [
@@ -353,13 +395,21 @@ function basket() {
     if (cart_data_id) {
         console.log("basketData", cart_data_id);
         console.log("basketData", cart_data_name);
+
+        let basket_node = getNodeFromName(cart_data_name);
+        if (selected_nodes.includes(basket_node)) {
+            console.log("이미 관심 등록한 데이터입니다.");
+            return;
+        }
+        selected_nodes.push(basket_node);
+
+        reloadGraph();
+
         let bas_li = document.createElement("li");
         bas_li.setAttribute("id", cart_data_id);
 
         bas_li.addEventListener("click", (e) => {
-            let node = getNodeFromName(`${cart_data_name}`);
-            if (node.length == 1) selectNode(node[0]);
-            else console.log("노드를 찾지 못했습니다.");
+            selectNode(basket_node);
         });
 
         let scrolled_text = document.createElement("label");
@@ -529,6 +579,32 @@ function createGraph() {
     Graph.onNodeClick((node) => {
         selectNode(node);
         intoTheNode(node, Graph);
+    });
+    Graph.nodeColor((node) => {
+        if (similar_nodes.includes(node)) return "#000000";
+        else if (selected_nodes.includes(node)) return "#FFFFFF";
+        else return "#AAAAAA";
+    });
+}
+
+function reloadGraph() {
+    Graph.nodeColor((node) => {
+        if (similar_nodes.includes(node)) return "#000000";
+        else if (selected_nodes.includes(node)) return "#FFFFFF";
+        else return "#AAAAAA";
+    });
+    Graph.linkColor((link) => {
+        if (expand_links.includes(link)) return "blue";
+        else return "red";
+    });
+    let links = graph_data.links;
+    for (let el of expand_links) {
+        links = links.concat(el);
+    }
+
+    Graph.graphData({
+        nodes: graph_data.nodes,
+        links: links,
     });
 }
 
