@@ -1,3 +1,9 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+.notosanskr * {
+    font-family: "Noto Sans KR", sans-serif;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -102,7 +108,7 @@ input:checked + .slider:before {
 
     display: flex;
 
-    width: 300px;
+    width: 240px;
     height: 40px;
 
     margin: 10px 10px;
@@ -113,7 +119,6 @@ input:checked + .slider:before {
 }
 
 .search_box > button {
-    
     border: 2px rgba(255, 255, 255, 0.5) solid;
     border-radius: 0 4px 4px 0;
     font-size: 18px;
@@ -136,6 +141,7 @@ input:checked + .slider:before {
     border-radius: 4px 0 0 4px;
 
     font-size: 18px;
+    color: white;
 }
 
 .search_box > .search::placeholder {
@@ -149,14 +155,14 @@ input:checked + .slider:before {
 
     z-index: 1;
 
-    left: 35px;
+    left: 32px;
     top: 60px;
-    width: 265px;
+    width: 236px;
 
     background-color: #383838;
     color: rgb(243, 243, 243);
 
-    --scroll-width: 265px;
+    --scroll-width: 236px;
 }
 
 .autocomplete_list > li {
@@ -175,8 +181,6 @@ input:checked + .slider:before {
     height: 25px;
 
     font-size: 15pt;
-
-    --scroll-width: 265px;
 }
 
 .autocomplete_list > li.active {
@@ -215,14 +219,12 @@ input:checked + .slider:before {
 }
 
 .side_window > button {
-
     position: relative;
     z-index: 2;
     background-color: black;
 
     width: 40px;
     height: 40px;
-
 
     color: rgba(255, 255, 255);
     border: 0px rgba(255, 255, 255, 0.5) solid;
@@ -261,7 +263,7 @@ input:checked + .slider:before {
 
 .side_window.data_info.open > .window {
     width: 240px;
-    height: 500px;
+    height: 480px;
 }
 
 .side_window.selected_data.open > .window {
@@ -284,6 +286,8 @@ input:checked + .slider:before {
 
     font-size: 16pt;
     font-weight: 600;
+
+    margin: 0px 0px 0px 15px;
 }
 
 .side_window > .window > .content {
@@ -292,7 +296,6 @@ input:checked + .slider:before {
 }
 
 .side_window.data_info > .window > .content > .content_list {
-    margin-left: 5px;
     list-style-type: disc;
 
     height: 380px;
@@ -302,6 +305,10 @@ input:checked + .slider:before {
 
     border: 2px rgba(255, 255, 255, 0.5) solid;
     list-style-type: none;
+}
+
+.side_window.data_info > .window > .content > .content_list > li {
+    margin: 8px;
 }
 
 .side_window.data_info > .window > .content > .content_list > li > .val {
@@ -358,7 +365,7 @@ input:checked + .slider:before {
 }
 
 .side_window.data_info > .window > .content > .buttons > button {
-    margin: 5% 0% 0% 0%;
+    /*margin: 5% 0% 0% 0%;*/
     flex-grow: 1;
     flex-basis: 0;
 
@@ -373,6 +380,14 @@ input:checked + .slider:before {
     font-size: 10pt;
 }
 
+.side_window.data_info > .window > .content > .buttons > button {
+    margin: 5% 3.5% 0% 0%;
+}
+
+.side_window.data_info > .window > .content > .buttons > button {
+    margin: 5% 0% 0% 3.5%;
+}
+
 .side_window.data_info > .window > .content > .buttons > button:active {
     border-color: white;
 }
@@ -385,7 +400,7 @@ input:checked + .slider:before {
 }
 
 .side_window.setting > .window > .content > .setting_list > li {
-    margin: 8px 0;
+    margin: 8px;
     display: flex;
     justify-content: space-between;
     font-size: 12pt;
@@ -447,7 +462,7 @@ input:checked + .slider:before {
 
 .side_window.selected_data > .window > .content > .selected_list {
     width: 100%;
-    height: calc(100% - 50px);
+    height: calc(100% - 150px);
     border: 2px rgba(255, 255, 255, 0.5) solid;
 }
 
@@ -456,7 +471,7 @@ input:checked + .slider:before {
     align-items: center;
     overflow: hidden;
 
-    height: 10%;
+    height: 20%;
     border-radius: 5px;
     border: solid 1px rgb(153, 153, 153);
 
@@ -466,6 +481,8 @@ input:checked + .slider:before {
 .side_window.similar_data > .window > .content > .similar_list {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 
     border: 2px rgba(255, 255, 255, 0.5) solid;
 }
@@ -474,6 +491,8 @@ input:checked + .slider:before {
     display: flex;
     align-items: center;
     overflow: hidden;
+
+    flex-grow: 1;
 
     height: 10%;
     border-radius: 5px;
@@ -508,7 +527,7 @@ input:checked + .slider:before {
 }
 
 .side_window.selected_data > .window > .content > .topic_modal_open {
-    margin: 5% 0% 0% 0%;
+    margin: 7% 0% 0% 0%;
     flex-grow: 1;
     flex-basis: 0;
 
@@ -526,6 +545,27 @@ input:checked + .slider:before {
 
 .side_window.selected_data > .window > .content > .topic_modal_open:active {
     border-color: white;
+}
+
+.side_window.selected_data > .window > .content > input {
+    margin: 7% 0% 0% 0%;
+    flex-grow: 1;
+    flex-basis: 0;
+
+    width: 100%;
+    height: 35px;
+
+    background-color: black;
+    border-radius: 5px; /* 수정 */
+    border: 2px rgb(153, 153, 153) solid;
+
+    color: rgb(214, 214, 214);
+
+    font-size: 10pt;
+}
+
+.side_window.selected_data > .window > .content > input::placeholder {
+    text-align: center;
 }
 
 .modal_overlay {

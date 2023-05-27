@@ -22,7 +22,7 @@
             rel="stylesheet"
         />
         <style>
-            .graph{
+            .graph {
                 background-image: url("{% static './image/space.png' %}");
             }
         </style>
@@ -30,9 +30,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
         <script defer src="//unpkg.com/3d-force-graph"></script>
         <script defer src="{% static 'javascript/main_.js' %}"></script>
-
     </head>
-
 
     <body>
         <div class="search_box">
@@ -129,6 +127,16 @@
                 <span class="title">관심 데이터</span>
                 <div class="content">
                     <ul class="selected_list"></ul>
+                    <input
+                        type="text"
+                        class="field_input"
+                        placeholder="생성할 주제 분야"
+                    />
+                    <input
+                        type="text"
+                        class="purpose_input"
+                        placeholder="생성할 주제 목적"
+                    />
                     <button class="topic_modal_open">주제 생성</button>
                 </div>
             </div>
@@ -145,217 +153,6 @@
         </div>
 
         <div class="modal_overlay hidden">
-            <div class="graph_make_modal modal_window hidden">
-                <button
-                    class="graph_modal_close modal_close_button material-icons"
-                >
-                    close
-                </button>
-                <div class="modal_title">
-                    <h3>그래프 생성 옵션</h3>
-                </div>
-                <div class="modal_content">
-                    <ul class="graph_options">
-                        <li>
-                            <label>주제 선택</label>
-                            <ul class="tag_list">
-                                <script>
-                                    let tagDict = {};
-                                    tagDict["education"] = "교육";
-                                    tagDict["traffic"] = "교통";
-                                    tagDict["city"] = "도시관리";
-                                    tagDict["culture"] = "문화/관광";
-                                    tagDict["health"] = "보건";
-                                    tagDict["welfare"] = "복지";
-                                    tagDict["industry"] = "산업/경제";
-                                    tagDict["safety"] = "안전";
-                                    tagDict["population"] = "인구/가구";
-                                    tagDict["administration"] = "일반행정";
-                                    tagDict["building"] = "주택/건설";
-                                    tagDict["environment"] = "환경";
-                                    tagDict["etc"] = "기타";
-
-                                    let content_list = document.querySelector(
-                                        ".graph_make_modal .tag_list"
-                                    );
-                                    for (let tag in tagDict) {
-                                        console.log(tag);
-                                        console.log(tagDict[tag]);
-
-                                        let li = document.createElement("li");
-                                        let label =
-                                            document.createElement("label");
-                                        let input =
-                                            document.createElement("input");
-                                        input.setAttribute("type", "checkbox");
-                                        input.setAttribute("id", tag);
-                                        label.appendChild(input);
-                                        label.appendChild(
-                                            document.createTextNode(
-                                                tagDict[tag]
-                                            )
-                                        );
-
-                                        li.appendChild(label);
-                                        content_list.appendChild(li);
-                                    }
-                                </script>
-                            </ul>
-                        </li>
-                        <li>
-                            <label>노드 크기 설정</label>
-                            <ul class="option_list">
-                                <li>
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            name="node_size"
-                                            value="data_size"
-                                            checked
-                                        />
-                                        데이터 크기 비례
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            name="node_size"
-                                            value="big"
-                                        />
-                                        크게
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            name="node_size"
-                                            value="middle"
-                                        />
-                                        중간
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            name="node_size"
-                                            value="small"
-                                        />
-                                        작게
-                                    </label>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <label>노드 색 설정</label>
-                            <ul class="option_list">
-                                <li>
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            name="node_color"
-                                            value="topic"
-                                            checked
-                                        />
-                                        주제별로 구분
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            name="node_color"
-                                            value="one"
-                                        />
-                                        단색
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            name="node_color"
-                                            value="random"
-                                        />
-                                        무작위
-                                    </label>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <label>링크 기준</label>
-                            <ul class="option_list">
-                                <li>
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            name="link_criteria"
-                                            checked
-                                        />
-                                        좁은 범위
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            name="link_criteria"
-                                        />
-                                        넓은 범위
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            name="link_criteria"
-                                            value="big"
-                                        />
-                                        링크하지 않음
-                                    </label>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <label>주제 미리보기</label>
-                            <ul class="option_list">
-                                <li>
-                                    <label>
-                                        <input
-                                            type="radio"
-                                            name="show_topic"
-                                            checked
-                                        />
-                                        O
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="radio" name="show_topic" />
-                                        X
-                                    </label>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <button class="graph_make">그래프 생성</button>
-                </div>
-            </div>
-
-            <div class="topic_make_modal modal_window hidden">
-                <button
-                    class="topic_modal_close modal_close_button material-icons"
-                >
-                    close
-                </button>
-                <div class="modal_title">
-                    <h3>주제 생성 결과</h3>
-                </div>
-                <div class="modal_content"></div>
-            </div>
-
             <div class="detail_info_modal modal_window hidden">
                 <button
                     class="detail_modal_close modal_close_button material-icons"
