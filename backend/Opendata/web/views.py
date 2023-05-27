@@ -108,7 +108,7 @@ class MainView(View):
             print(task_result)
 
             # papago translater api -> 1회 요청 리소스 1717/10000
-            # print(trans(task_result))
+            print("Korean ver.", trans(task_result))
 
             # 임시 필요 없는 코드
             response_data = {"responseDicKey": responseDicKey}

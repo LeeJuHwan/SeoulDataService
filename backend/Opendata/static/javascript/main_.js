@@ -533,7 +533,7 @@ function createGraph() {
     // static background image
     Graph.backgroundColor('rgba(0, 0, 0, 0.0)');
     Graph.nodeColor((node) => {
-        return '#0067a3'
+        return 'rgb(255,255,255)'
     })    
     Graph.nodeVal(node => {
         return 5
