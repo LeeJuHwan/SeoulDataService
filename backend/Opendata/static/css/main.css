@@ -284,6 +284,7 @@ input:checked + .slider:before {
 
     font-size: 16pt;
     font-weight: 600;
+    margin: 0px 0px 0px 15px;
 }
 
 .side_window > .window > .content {
@@ -292,7 +293,7 @@ input:checked + .slider:before {
 }
 
 .side_window.data_info > .window > .content > .content_list {
-    margin-left: 5px;
+    margin-top: 4px;
     list-style-type: disc;
 
     height: 380px;
@@ -358,7 +359,6 @@ input:checked + .slider:before {
 }
 
 .side_window.data_info > .window > .content > .buttons > button {
-    margin: 5% 0% 0% 0%;
     flex-grow: 1;
     flex-basis: 0;
 
@@ -373,6 +373,14 @@ input:checked + .slider:before {
     font-size: 10pt;
 }
 
+.side_window.data_info > .window > .content > .buttons > .detail-button {
+    margin: 6% 3% 0% 0%;
+}
+
+.side_window.data_info > .window > .content > .buttons > .data-select-button {
+    margin: 6% 0% 0% 3%;
+}
+
 .side_window.data_info > .window > .content > .buttons > button:active {
     border-color: white;
 }
@@ -381,7 +389,6 @@ input:checked + .slider:before {
     display: flex;
     flex-direction: column;
     border: 2px rgba(255, 255, 255, 0.5) solid;
-    margin-bottom: 10px;
 }
 
 .side_window.setting > .window > .content > .setting_list > li {
@@ -430,7 +437,7 @@ input:checked + .slider:before {
 .side_window.setting > .window > .content > .graph_modal_open {
     width: 100%;
     height: 35px;
-    margin: 0 0%;
+    margin: 6% 0% 0% 0%;
 
     background-color: black;
     border-radius: 5px; /* 수정 */
@@ -449,6 +456,7 @@ input:checked + .slider:before {
     width: 100%;
     height: calc(100% - 50px);
     border: 2px rgba(255, 255, 255, 0.5) solid;
+    margin-top: 3px
 }
 
 .side_window.selected_data > .window > .content > .selected_list > li {
@@ -508,7 +516,7 @@ input:checked + .slider:before {
 }
 
 .side_window.selected_data > .window > .content > .topic_modal_open {
-    margin: 5% 0% 0% 0%;
+    margin: 6% 0% 0% 0%;
     flex-grow: 1;
     flex-basis: 0;
 

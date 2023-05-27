@@ -299,6 +299,9 @@ input:checked + .slider:before {
 
     font-size: 14pt;
     font-weight: 600;
+
+    border: 2px rgba(255, 255, 255, 0.5) solid;
+    list-style-type: none;
 }
 
 .side_window.data_info > .window > .content > .content_list > li > .val {
@@ -355,7 +358,7 @@ input:checked + .slider:before {
 }
 
 .side_window.data_info > .window > .content > .buttons > button {
-    margin: 5px;
+    margin: 5% 0% 0% 0%;
     flex-grow: 1;
     flex-basis: 0;
 
@@ -377,6 +380,8 @@ input:checked + .slider:before {
 .side_window.setting > .window > .content > .setting_list {
     display: flex;
     flex-direction: column;
+    border: 2px rgba(255, 255, 255, 0.5) solid;
+    margin-bottom: 10px;
 }
 
 .side_window.setting > .window > .content > .setting_list > li {
