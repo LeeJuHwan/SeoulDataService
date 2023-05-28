@@ -146,7 +146,7 @@ input:checked + .slider:before {
     flex-grow: 1 1;
     flex-shrink: 1 1;
 
-    background-color: black;
+    background-color: transparent;
 
     border: 2px rgba(253, 255, 255, 0.5) solid;
     border-radius: 4px 0 0 4px;
@@ -168,7 +168,7 @@ input:checked + .slider:before {
 
     left: 32px;
     top: 60px;
-    width: 236px;
+    width: 202px;
 
     background-color: transparent;
     color: rgb(243, 243, 243);

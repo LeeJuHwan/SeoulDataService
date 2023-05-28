@@ -176,6 +176,7 @@ function expandNode(source_node, target_nodes) {
 }
 
 function Checked(node) {
+    console.log("노드으으으으으", node)
     let nodeData = node.id;
     const csrftoken = Cookies.get("csrftoken");
 

@@ -5,7 +5,8 @@ from .models import SeoulData, DataColumn
 from .get_session import get_session
 from django.core.cache import cache
 from django.http import JsonResponse
-from Opendata.load import LoadConfig
+from web.faiss_index import FaissIndex
+from web.load_faiss import category_by_faiss_load
 
 import json
 import time
@@ -50,7 +51,9 @@ class MainView(View):
             detail_data = [item.to_dict() for item in detail]
 
             similar_data = []
-            result = LoadConfig.index.search_idx(int(id), k=6)["data"][1:]
+            category_by_faiss_load.load_index()
+            result = category_by_faiss_load(FaissIndex).search_idx(int(id), k=6)["data"][1:]
+            # result = LoadConfig.index.search_idx(int(id), k=6)["data"][1:]
 
             for num, i in enumerate(result):
                 filtering = f"OA-{i[0]}"
