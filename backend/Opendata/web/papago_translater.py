@@ -15,10 +15,10 @@ def trans(text_list: list) -> list:
     for i in range(len(text_list)):
         encText = urllib.parse.quote(text_list[i])
         data = "source=en&target=ko&text=" + encText
-        url = "https://openapi.naver.com/v1/papago/n2mt"
+        url = "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation"
         request = urllib.request.Request(url)
-        request.add_header("X-Naver-Client-Id", client_id)
-        request.add_header("X-Naver-Client-Secret", client_secret)
+        request.add_header("X-NCP-APIGW-API-KEY-ID", client_id)
+        request.add_header("X-NCP-APIGW-API-KEY", client_secret)
         response = urllib.request.urlopen(request, data=data.encode("utf-8"))
         rescode = response.getcode()
         if rescode == 200:

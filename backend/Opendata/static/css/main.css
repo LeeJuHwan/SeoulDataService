@@ -191,11 +191,12 @@ input:checked + .slider:before {
 
     height: 25px;
 
-    font-size: 15pt;
+    font-size: 11pt;
 }
 
 .autocomplete_list > li.active {
-    background-color: rgb(102, 102, 102);
+    /*background-color: rgb(102, 102, 102);*/
+    border: 1px rgba(255, 255, 255) solid;
 }
 
 .side_window {

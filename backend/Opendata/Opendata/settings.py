@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     "web.apps.WebConfig",
     "corsheaders",
     "django_celery_results",
-    "django_celery_beat",
+    # "django_celery_beat",
 ]
 
 MIDDLEWARE = [

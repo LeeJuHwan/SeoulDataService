@@ -51,15 +51,15 @@ services:
       - rabbitmq
       - db
 
-  celery_beat:
-    container_name: celery_beat
-    build:
-      context: .
-    command: sh -c "celery -A Opendata beat --loglevel=info"
-    depends_on:
-      - app
-      - rabbitmq
-      - celery_worker
+  # celery_beat:
+  #   container_name: celery_beat
+  #   build:
+  #     context: .
+  #   command: sh -c "celery -A Opendata beat --loglevel=info"
+  #   depends_on:
+  #     - app
+  #     - rabbitmq
+  #     - celery_worker
 
 volumes:
   postgres-data:

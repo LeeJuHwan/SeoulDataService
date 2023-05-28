@@ -108,8 +108,8 @@ class MainView(View):
             subjectResult = task_result
 
             # papago translater api -> 1회 요청 리소스 1717/10000
-            # print("Korean ver.", trans(task_result))
-            # subjectResult = [trans(task_result)]
+            print("Korean ver.", trans(task_result))
+            subjectResult = [trans(task_result)]
             
             response_data = {"subjectResult": subjectResult}
             return JsonResponse(response_data)
