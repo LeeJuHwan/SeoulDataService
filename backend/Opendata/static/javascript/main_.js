@@ -1,6 +1,6 @@
 // <div class = "graph"> 에 3D graph 생성
 const graph_elem = document.querySelector(".graph");
-// const Graph = ForceGraph3D()(graph_elem).jsonUrl("/web/node-coordinate/");
+
 let Graph;
 let graph_data;
 let current_node;
@@ -10,34 +10,15 @@ let expand_source_nodes = [];
 let expand_target_nodes = [];
 let expand_links = [];
 
-// 모달 선택
 const modal_overlay = document.querySelector(".modal_overlay");
 const graph_make_modal = document.querySelector(".graph_make_modal");
 const topic_make_modal = document.querySelector(".topic_make_modal");
 const detail_info_modal = document.querySelector(".detail_info_modal");
 
-// 데이터 정보 선택
 const data_info_lists = document.querySelectorAll(
     ".data_info .content_list > li > .val"
 );
 
-// const data_info_id = document.querySelector(
-//     ".data_info .content_list > li:nth-child(1) > .val"
-// );
-// const data_info_name = document.querySelector(
-//     ".data_info .content_list > li:nth-child(2) > .val"
-// );
-// const data_info_class = document.querySelector(
-//     ".data_info .content_list > li:nth-child(3) > .val"
-// );
-// const data_info_type = document.querySelector(
-//     ".data_info .content_list > li:nth-child(4) > .val"
-// );
-// const data_info_description = document.querySelector(
-//     ".data_info .content_list > li:nth-child(5) > .val"
-// );
-
-// 상세 정보 선택
 const detail_info_lists = document.querySelectorAll(
     ".modal_overlay .detail_info_modal .modal_content .detail_list > li > .val"
 );
@@ -45,71 +26,16 @@ const page_link = document.querySelector(
     ".modal_overlay .detail_info_modal .modal_content .url_link"
 );
 
-// const data_info_detail_id = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(1) > .val"
-// );
-// const data_info_detail_name = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(2) > .val"
-// );
-// const data_info_detail_description = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(3) > .val"
-// );
-
-// const data_info_detail_type = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(4) > .val"
-// );
-// const data_info_detail_URL = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(5) > .val"
-// );
-
-// const data_info_detail_major = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(6) > .val"
-// );
-// const data_info_detail_middle = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(7) > .val"
-// );
-// const data_info_detail_sub = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(8) > .val"
-// );
-
-// const data_info_detail_system = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(9) > .val"
-// );
-// const data_info_detail_agency = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(10) > .val"
-// );
-// const data_info_detail_department = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(11) > .val"
-// );
-
-// const data_info_detail_charge_nm = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(12) > .val"
-// );
-// const data_info_detail_charge_tel = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(13) > .val"
-// );
-
-// const data_info_detail_renewal_cycle = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(14) > .val"
-// );
-// const data_info_detail_final_renewal = document.querySelector(
-//     ".modal_overlay .detail_info_modal .modal_content .detail_list > li:nth-child(15) > .val"
-// );
-
-// 주제 생성 리스트 생성
 let subject_list = [];
 
-// 유사 데이터 div 선택
 const similar_data_content = document.querySelector(
     ".similar_data .similar_list"
 );
 
-// 관심 데이터 div 선택
 const interest_data_content = document.querySelector(
     ".selected_data .selected_list"
 );
 
-// 검색 선택
 const search_input = document.querySelector(".search");
 const autocomplete_list = document.querySelector(".autocomplete_list");
 let nowIndex = 0;
@@ -201,10 +127,8 @@ function getNodeFromName(text) {
     else console.log("노드를 찾지 못했습니다.");
 }
 
-// 노드 선택
 function selectNode(node) {
     Checked(node);
-    // get_adjacent_data(node)
 
     const distance = 400;
     const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
@@ -268,13 +192,9 @@ function Checked(node) {
             return data;
         })
         .then((jsonData) => {
-            console.log("jsonData: ", jsonData);
-
-            // detail data info
             let detail = jsonData["detail_data"][0];
 
             similar_nodes = [];
-            // similar data info
             let similar_data = new Array();
             for (let i = 0; i < 5; i++) {
                 similar_data.push(jsonData["similar_data"][i][0]);
@@ -292,7 +212,6 @@ function Checked(node) {
 
             reloadGraph();
 
-            // Insert info
             let data_info_strs = [
                 `${detail["서비스ID"]}`,
                 `${detail["서비스명"]}`,
@@ -304,13 +223,6 @@ function Checked(node) {
                 data_info_lists[idx].innerText = data_info_strs[idx];
             }
 
-            // data_info_id.innerText = `${detail["서비스ID"]}`;
-            // data_info_name.innerText = `${detail["서비스명"]}`;
-            // data_info_class.innerText = `${detail["대분류"]} / ${detail["중분류"]} / ${detail["소분류"]}`;
-            // data_info_type.innerText = `${detail["제공형식"]}`;
-            // data_info_description.innerText = `${detail["서비스설명"]}`;
-
-            // Insert detail info
             let detail_info_strs = [
                 `${detail["서비스ID"]}`,
                 `${detail["서비스명"]}`,
@@ -333,28 +245,6 @@ function Checked(node) {
             }
             page_link.setAttribute("href", detail["urls"]);
 
-            // data_info_detail_id.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["서비스ID"]} </li>`;
-            // data_info_detail_name.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["서비스명"]} </li>`;
-            // data_info_detail_description.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["서비스설명"]} </li>`;
-
-            // data_info_detail_type.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["제공형식"]} </li>`;
-            // data_info_detail_URL.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["urls"]} </li>`;
-
-            // data_info_detail_major.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["대분류"]} </li>`;
-            // data_info_detail_sub.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["중분류"]} </li>`;
-            // data_info_detail_middle.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["소분류"]} </li>`;
-
-            // data_info_detail_system.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["시스템명"]} </li>`;
-            // data_info_detail_agency.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["제공기관"]} </li>`;
-            // data_info_detail_department.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["제공부서명"]} </li>`;
-
-            // data_info_detail_charge_nm.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["담당자명"]} </li>`;
-            // data_info_detail_charge_tel.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["담당자연락처"]} </li>`;
-
-            // data_info_detail_renewal_cycle.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["갱신주기"]} </li>`;
-            // data_info_detail_final_renewal.innerHTML = `<li id='${detail["서비스ID"]}'>${detail["최종갱신일자"]} </li>`;
-
-            // Insert similar data
             similar_data_content.innerHTML = "";
             for (let i = 0; i < 5; i++) {
                 let sim_li = document.createElement("li");
@@ -374,13 +264,6 @@ function Checked(node) {
 
                 similar_data_content.appendChild(sim_li);
             }
-            //     similar_data_content.innerHTML = `
-            // <li id='${similar_0["서비스ID"]}'>${similar_0["서비스명"]}</li>
-            // <li id='${similar_1["서비스ID"]}'>${similar_1["서비스명"]}</li>
-            // <li id='${similar_2["서비스ID"]}'>${similar_2["서비스명"]}</li>
-            // <li id='${similar_3["서비스ID"]}'>${similar_3["서비스명"]}</li>
-            // <li id='${similar_4["서비스ID"]}'>${similar_4["서비스명"]}</li>
-            // `;
 
             if (selected_nodes.includes(node))
                 document.querySelector(".data-select-button").innerText =
@@ -392,7 +275,6 @@ function Checked(node) {
         .catch((error) => console.error(error));
 }
 
-// 관심 데이터
 function basket() {
     let cart_data_id = document.querySelector(
         ".data_info .content_list > li:nth-child(1) > .val"
@@ -401,8 +283,6 @@ function basket() {
         ".data_info .content_list > li:nth-child(2) > .val"
     ).innerHTML;
     if (cart_data_id) {
-        console.log("basketData", cart_data_id);
-        console.log("basketData", cart_data_name);
 
         let basket_node = current_node;
         if (selected_nodes.includes(basket_node)) {
@@ -436,23 +316,16 @@ function basket() {
         interest_data_content.appendChild(bas_li);
         document.querySelector(".data-select-button").innerText = "관심 해제";
 
-        // interest_data_content.innerHTML = `<li>${cart_data_name}</li>`;
     } else {
         console.log("정보가 없습니다.");
     }
 }
 
 function subject(e) {
-    console.log("function subject");
-    console.log("subject_list", subject_list);
+    field = document.querySelector(".side_window.selected_data > .window > .content > .field_input")
+    purpose = document.querySelector(".side_window.selected_data > .window > .content > .purpose_input")
+    addList = [field.value, purpose.value]
     
-    field = document.querySelector(".side_window.selected_data > .window > .content > .field_input").value
-    purpose = document.querySelector(".side_window.selected_data > .window > .content > .purpose_input").value
-
-    addList = []
-    addList.push(field)
-    addList.push(purpose)
-    console.log('asdsadasd',addList)
     const csrftoken = Cookies.get("csrftoken");
     fetch("/web/", {
         method: "POST",
@@ -467,13 +340,21 @@ function subject(e) {
             return data;
         })
         .then((jsonData) => {
-            console.log("jsonData: ", jsonData);
             console.log('subjectResult', jsonData["subjectResult"])
         })
         .catch((error) => console.error(error));
 
-    // 주제 생성 리스트 초기화
-    subject_list = [];
+        selected_ul = document.querySelector(".side_window.selected_data > .window > .content > .selected_list")
+        selected_li = selected_ul.querySelectorAll('li')
+
+        selected_li.forEach(li => {
+            li.remove()
+          });
+
+        field.value = null;
+        purpose.value = null;
+        
+        subject_list = [];
 }
 
 // 드래그 앤 드랍 코드
@@ -722,14 +603,12 @@ async function makeGraph() {
     // 주제 데이터 버튼 클릭
     var subject_button = document.querySelector(".topic_modal_open");
     subject_button.addEventListener("click", (e) => {
-        console.log("주제 버튼 클릭");
         subject(e);
     });
 
     // 관심 데이터 버튼 클릭
     var data_cart = document.querySelector(".data-select-button");
     data_cart.addEventListener("click", (e) => {
-        console.log("관심 버튼 클릭");
         basket();
     });
 

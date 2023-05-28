@@ -29,7 +29,6 @@ def node_coordinate(request):
 
 ############### Graph View ###############
 class MainView(View):
-    # template_name = "web/index2.html"
     template_name = "web/index.html"
 
     def get(self, request):
@@ -49,18 +48,15 @@ class MainView(View):
             filtering = f"OA-{id}"
             detail = SeoulData.objects.filter(서비스ID=filtering)
             detail_data = [item.to_dict() for item in detail]
-            # print("serialized_data", serialized_data)
 
             similar_data = []
             result = LoadConfig.index.search_idx(int(id), k=6)["data"][1:]
-            # print("RESULT: ", result)
 
             for num, i in enumerate(result):
                 filtering = f"OA-{i[0]}"
                 queryset = SeoulData.objects.filter(서비스ID=filtering)
                 temp = [item.to_dict() for item in queryset]
                 similar_data.append(temp)
-            # print("similar_data", similar_data)
 
             response_data = {
                 "detail_data": detail_data,
@@ -114,16 +110,13 @@ class MainView(View):
             # papago translater api -> 1회 요청 리소스 1717/10000
             # print("Korean ver.", trans(task_result))
             # subjectResult = [trans(task_result)]
-
-            # 임시 필요 없는 코드
+            
             response_data = {"subjectResult": subjectResult}
-
             return JsonResponse(response_data)
 
         # create graph
         elif responseDicKey == "category":
             json_key = responseData.get("category", 0)
-            # print("JSON :", json_key)
             with open(f"/Opendata/csv_file/json/total_{json_key}.json", "r") as f:
                 data = json.load(f)
             return JsonResponse(data)
