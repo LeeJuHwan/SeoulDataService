@@ -1,9 +1,19 @@
-@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+/*@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 
 .notosanskr * {
     font-family: "Noto Sans KR", sans-serif;
+}*/
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
+
+html { 
+    font-family: "S-CoreDream-3Light", sans-serif;
+}
 * {
     box-sizing: border-box;
 }
@@ -12,9 +22,9 @@ a {
     text-decoration: none;
 }
 
-html {
+/*html {
     font-family: "Nanum Gothic", sans-serif;
-}
+}*/
 
 .scrollbar::-webkit-scrollbar {
     width: 10px;
