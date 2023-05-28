@@ -445,7 +445,14 @@ function basket() {
 function subject(e) {
     console.log("function subject");
     console.log("subject_list", subject_list);
+    
+    field = document.querySelector(".side_window.selected_data > .window > .content > .field_input").value
+    purpose = document.querySelector(".side_window.selected_data > .window > .content > .purpose_input").value
 
+    addList = []
+    addList.push(field)
+    addList.push(purpose)
+    console.log('asdsadasd',addList)
     const csrftoken = Cookies.get("csrftoken");
     fetch("/web/", {
         method: "POST",
@@ -453,7 +460,7 @@ function subject(e) {
             "X-CSRFToken": csrftoken,
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ cartData: subject_list }),
+        body: JSON.stringify({ cartData: subject_list, addition: addList }),
     })
         .then((response) => response.json())
         .then((data) => {
@@ -461,6 +468,7 @@ function subject(e) {
         })
         .then((jsonData) => {
             console.log("jsonData: ", jsonData);
+            console.log('subjectResult', jsonData["subjectResult"])
         })
         .catch((error) => console.error(error));
 

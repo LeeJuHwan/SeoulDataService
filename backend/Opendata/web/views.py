@@ -37,6 +37,7 @@ class MainView(View):
 
     def post(self, request):
         responseData = json.loads(request.body)
+        print("responseData:", responseData)
         responseDicKey = list(responseData.keys())[0]
         print("responseDicKey", responseDicKey)
 
@@ -97,21 +98,25 @@ class MainView(View):
                     "data_description": queryset["서비스설명"],
                     "columns": gpt_input_columns,
                 }
-            field = "사회"  # user input
-            purpose = "공모전"  # user input
+            
+            field = responseData["addition"][0]
+            purpose = responseData["addition"][1]
             num_topics = 5
+            
             print("########### 프롬프트 아웃풋 #########")
 
             # async tasks
             result = gpt_recommandation.delay(data_info, field, purpose, num_topics)
             task_result = result.get()
             print(task_result)
+            subjectResult = task_result
 
             # papago translater api -> 1회 요청 리소스 1717/10000
-            print("Korean ver.", trans(task_result))
+            # print("Korean ver.", trans(task_result))
+            # subjectResult = [trans(task_result)]
 
             # 임시 필요 없는 코드
-            response_data = {"responseDicKey": responseDicKey}
+            response_data = {"subjectResult": subjectResult}
 
             return JsonResponse(response_data)
 
