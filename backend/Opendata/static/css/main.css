@@ -484,7 +484,7 @@ input:checked + .slider:before {
 
     height: 20%;
     border-radius: 5px;
-    border: solid 1px rgb(153, 153, 153);
+    /*border: solid 1px rgb(153, 153, 153);*/
 
     --scroll-width: 190px;
 }
@@ -507,7 +507,7 @@ input:checked + .slider:before {
 
     height: 10%;
     border-radius: 5px;
-    border: solid 1px rgb(153, 153, 153);
+    /*border: solid 1px rgb(153, 153, 153);*/
 
     --scroll-width: 200px;
 }
