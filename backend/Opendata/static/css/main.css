@@ -381,7 +381,7 @@ input:checked + .slider:before {
 
     height: 30px;
 
-    background-color: black;
+    background-color: transparent;
     border-radius: 5px;
     border: 2px rgb(153, 153, 153) solid;
 
@@ -456,7 +456,7 @@ input:checked + .slider:before {
     height: 35px;
     margin: 6% 0% 0% 0%;
 
-    background-color: black;
+    background-color: transparent;
     border-radius: 5px; /* 수정 */
     border: 2px rgb(153, 153, 153) solid;
 
@@ -545,7 +545,7 @@ input:checked + .slider:before {
     width: 100%;
     height: 35px;
 
-    background-color: black;
+    background-color: transparent;
     border-radius: 5px; /* 수정 */
     border: 2px rgb(153, 153, 153) solid;
 
@@ -566,7 +566,7 @@ input:checked + .slider:before {
     width: 100%;
     height: 35px;
 
-    background-color: black;
+    background-color: transparent;
     border-radius: 5px; /* 수정 */
     border: 2px rgb(153, 153, 153) solid;
 
