@@ -3,8 +3,12 @@ const graph_elem = document.querySelector(".graph");
 // const Graph = ForceGraph3D()(graph_elem).jsonUrl("/web/node-coordinate/");
 let Graph;
 let graph_data;
+let current_node;
 let similar_nodes = [];
 let selected_nodes = [];
+let expand_source_nodes = [];
+let expand_target_nodes = [];
+let expand_links = [];
 
 // 모달 선택
 const modal_overlay = document.querySelector(".modal_overlay");
@@ -192,8 +196,8 @@ function showList() {
 }
 
 function getNodeFromName(text) {
-    graph_data.nodes.filter((node) => node.name == text);
-    if (node.length == 1) return node[0];
+    let filtered = graph_data.nodes.filter((node) => node.name == text);
+    if (filtered.length == 1) return filtered[0];
     else console.log("노드를 찾지 못했습니다.");
 }
 
@@ -217,8 +221,34 @@ function selectNode(node) {
     Graph.cameraPosition(
         newPos, // new position
         node, // lookAt ({ x, y, z })
-        1500 // ms transition duration
+        1000 // ms transition duration
     );
+}
+
+// 노드 확장
+function expandNode(source_node, target_nodes) {
+    // console.log();
+    if (expand_source_nodes.includes(source_node)) {
+        let idx = expand_source_nodes.findIndex((elem) => (elem = source_node));
+        expand_source_nodes.splice(idx, 1);
+        expand_target_nodes.splice(idx, 1);
+        expand_links.splice(idx, 1);
+    } else {
+        expand_source_nodes.push(source_node);
+
+        let target_list = [];
+        let links_list = [];
+        for (let tg of target_nodes) {
+            target_list.push(tg);
+            links_list.push({
+                source: source_node,
+                target: tg,
+            });
+        }
+        expand_target_nodes.push(target_list);
+        expand_links.push(links_list);
+    }
+    reloadData();
 }
 
 function Checked(node) {
@@ -243,11 +273,24 @@ function Checked(node) {
             // detail data info
             let detail = jsonData["detail_data"][0];
 
+            similar_nodes = [];
             // similar data info
             let similar_data = new Array();
             for (let i = 0; i < 5; i++) {
                 similar_data.push(jsonData["similar_data"][i][0]);
+                let get_node = getNodeFromName(
+                    `${similar_data[i]["서비스명"]}`
+                );
+                if (get_node) similar_nodes.push(get_node);
             }
+
+            if (current_node === node) {
+                expandNode(current_node, similar_nodes);
+            } else {
+                current_node = node;
+            }
+
+            reloadGraph();
 
             // Insert info
             let data_info_strs = [
@@ -338,6 +381,13 @@ function Checked(node) {
             // <li id='${similar_3["서비스ID"]}'>${similar_3["서비스명"]}</li>
             // <li id='${similar_4["서비스ID"]}'>${similar_4["서비스명"]}</li>
             // `;
+
+            if (selected_nodes.includes(node))
+                document.querySelector(".data-select-button").innerText =
+                    "관심 해제";
+            else
+                document.querySelector(".data-select-button").innerText =
+                    "관심";
         })
         .catch((error) => console.error(error));
 }
@@ -353,13 +403,29 @@ function basket() {
     if (cart_data_id) {
         console.log("basketData", cart_data_id);
         console.log("basketData", cart_data_name);
+
+        let basket_node = current_node;
+        if (selected_nodes.includes(basket_node)) {
+            let idx = selected_nodes.findIndex((node) => node === basket_node);
+            console.log(idx);
+            selected_nodes.splice(idx, 1);
+            subject_list.splice(idx, 1);
+            interest_data_content.removeChild(
+                interest_data_content.childNodes[idx]
+            );
+            document.querySelector(".data-select-button").innerText = "관심";
+            return;
+        }
+        subject_list.push(cart_data_id);
+        selected_nodes.push(basket_node);
+        document.querySelector(".data-select-button").innerText = "관심 해제";
+        reloadGraph();
+
         let bas_li = document.createElement("li");
         bas_li.setAttribute("id", cart_data_id);
 
         bas_li.addEventListener("click", (e) => {
-            let node = getNodeFromName(`${cart_data_name}`);
-            if (node.length == 1) selectNode(node[0]);
-            else console.log("노드를 찾지 못했습니다.");
+            selectNode(basket_node);
         });
 
         let scrolled_text = document.createElement("label");
@@ -368,15 +434,12 @@ function basket() {
         bas_li.appendChild(scrolled_text);
 
         interest_data_content.appendChild(bas_li);
+        document.querySelector(".data-select-button").innerText = "관심 해제";
 
         // interest_data_content.innerHTML = `<li>${cart_data_name}</li>`;
     } else {
         console.log("정보가 없습니다.");
     }
-
-    subject_list.push(cart_data_id);
-    //console.log("cart_data_id", cart_data_id)
-    console.log("subject_list", subject_list);
 }
 
 function subject(e) {
@@ -401,7 +464,7 @@ function subject(e) {
         })
         .catch((error) => console.error(error));
 
-    //주제 생성 리스트 초기화
+    // 주제 생성 리스트 초기화
     subject_list = [];
 }
 
@@ -463,25 +526,6 @@ function getRandomNum() {
     return parseFloat((Math.random() * (max - min) + min).toFixed(3));
 }
 
-function intoTheNode(node, Graph) {
-    const distance = 120;
-    const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
-
-    const newPos =
-        node.x || node.y || node.z
-            ? {
-                  x: node.x * distRatio,
-                  y: node.y * distRatio,
-                  z: node.z * distRatio,
-              }
-            : { x: 0, y: 0, z: distance }; // special case if node is in (0,0,0)
-    Graph.cameraPosition(
-        newPos, // new position
-        node, // lookAt ({ x, y, z })
-        3000 // ms transition duration
-    );
-}
-
 var is_action = false;
 //유사 데이터 불러오기
 function similardata(nh) {
@@ -524,21 +568,55 @@ function similardata(nh) {
 function createGraph() {
     graph_elem.innerHTML = "";
     Graph = ForceGraph3D()(graph_elem);
-    Graph.graphData(graph_data);
-    Graph.linkWidth(2);
+    // Graph.graphData(graph_data);
+    Graph.nodeVal((node) => {
+        return 5;
+    });
     Graph.onNodeClick((node) => {
         selectNode(node);
-        intoTheNode(node, Graph);
     });
     // static background image
-    Graph.backgroundColor('rgba(0, 0, 0, 0.0)');
+    Graph.nodeOpacity(0.68);
+    Graph.linkDirectionalParticleWidth(2);
+    // Graph.linkDirectionalParticleColor("red");
+    Graph.backgroundColor("rgba(0, 0, 0, 0.0)");
+    reloadGraph();
+    reloadData();
+}
+
+function reloadGraph() {
+    let expanded_link_list = expand_links.flat(1);
+    let expanded_source_node_list = expand_source_nodes.flat(1);
+    let expanded_target_node_list = expand_target_nodes.flat(1);
     Graph.nodeColor((node) => {
-        return 'rgb(255,255,255)'
-    })    
-    Graph.nodeVal(node => {
-        return 5
-    })
-    Graph.nodeOpacity(0.68)
+        if (current_node === node) return "yellow";
+        else if (similar_nodes.includes(node)) return "#A68A56";
+        else if (selected_nodes.includes(node)) return "#40180F";
+        else if (expanded_source_node_list.includes(node)) return "red";
+        else if (expanded_target_node_list.includes(node)) return "blue";
+        else return "#732E1F";
+    });
+    Graph.linkWidth((link) => (expanded_link_list.includes(link) ? 6 : 2));
+    Graph.linkColor((link) =>
+        expanded_link_list.includes(link) ? "#FFFFFF" : "#B0B0B0"
+    );
+    Graph.linkDirectionalParticles((link) =>
+        expanded_link_list.includes(link) ? 4 : 0
+    );
+}
+
+function reloadData() {
+    if (document.querySelector(".similar_link")) {
+        let expanded_link_list = expand_links.flat(1);
+        Graph.graphData({
+            nodes: graph_data.nodes,
+            links: graph_data.links.concat(expanded_link_list),
+        });
+    } else
+        Graph.graphData({
+            nodes: graph_data.nodes,
+            links: graph_data.links,
+        });
 }
 
 async function makeGraph() {
@@ -564,6 +642,12 @@ async function makeGraph() {
             Graph.graphData(graph_data);
             return data;
         });
+
+    similar_nodes.length = 0;
+    selected_nodes.length = 0;
+    expand_source_nodes.length = 0;
+    expand_target_nodes.length = 0;
+    expand_links.length = 0;
 }
 
 (async function () {
@@ -667,22 +751,6 @@ async function makeGraph() {
     let graph_modal_open = document.querySelector(".graph_modal_open");
     graph_modal_open.addEventListener("click", (e) => {
         makeGraph();
-        // if (modal_overlay.classList.contains("hidden")) {
-        //     modal_overlay.classList.remove("hidden");
-        // }
-        // if (graph_make_modal.classList.contains("hidden")) {
-        //     graph_make_modal.classList.remove("hidden");
-        // }
-    });
-
-    let graph_modal_close = document.querySelector(".graph_modal_close");
-    graph_modal_close.addEventListener("click", (e) => {
-        if (!modal_overlay.classList.contains("hidden")) {
-            modal_overlay.classList.add("hidden");
-        }
-        if (!graph_make_modal.classList.contains("hidden")) {
-            graph_make_modal.classList.add("hidden");
-        }
     });
 
     let detail_modal_open = document.querySelector(".detail-button");
@@ -706,23 +774,23 @@ async function makeGraph() {
         }
     });
 
-    let topic_modal_open = document.querySelector(".topic_modal_open");
-    topic_modal_open.addEventListener("click", (e) => {
-        if (modal_overlay.classList.contains("hidden")) {
-            modal_overlay.classList.remove("hidden");
-        }
-        if (topic_make_modal.classList.contains("hidden")) {
-            topic_make_modal.classList.remove("hidden");
-        }
-    });
+    // let topic_modal_open = document.querySelector(".topic_modal_open");
+    // topic_modal_open.addEventListener("click", (e) => {
+    //     if (modal_overlay.classList.contains("hidden")) {
+    //         modal_overlay.classList.remove("hidden");
+    //     }
+    //     if (topic_make_modal.classList.contains("hidden")) {
+    //         topic_make_modal.classList.remove("hidden");
+    //     }
+    // });
 
-    let topic_modal_close = document.querySelector(".topic_modal_close");
-    topic_modal_close.addEventListener("click", (e) => {
-        if (!modal_overlay.classList.contains("hidden")) {
-            modal_overlay.classList.add("hidden");
-        }
-        if (!topic_make_modal.classList.contains("hidden")) {
-            topic_make_modal.classList.add("hidden");
-        }
-    });
+    // let topic_modal_close = document.querySelector(".topic_modal_close");
+    // topic_modal_close.addEventListener("click", (e) => {
+    //     if (!modal_overlay.classList.contains("hidden")) {
+    //         modal_overlay.classList.add("hidden");
+    //     }
+    //     if (!topic_make_modal.classList.contains("hidden")) {
+    //         topic_make_modal.classList.add("hidden");
+    //     }
+    // });
 })();
