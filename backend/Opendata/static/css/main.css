@@ -170,7 +170,7 @@ input:checked + .slider:before {
     top: 60px;
     width: 236px;
 
-    background-color: #383838;
+    background-color: transparent;
     color: rgb(243, 243, 243);
 
     --scroll-width: 236px;
