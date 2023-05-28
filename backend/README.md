@@ -6,6 +6,40 @@
 >> [접속 링크](http://3.39.242.243:8000/)
 
 
+### AWS 서버
+> 도커
+- 데모나이즈 실행
+  ```
+  sudo docker-compose up -d
+  ```
+- 데모나이즈 상태에서 print문, 도커 로그 확인
+  ```
+  sudo docker-compose logs
+  
+  optional --
+  sudo docker-compose logs -f : following log (자동 줄 이동)
+  ```
+
+- 서버 종료 
+  ```
+  sudo docker-compose down
+  ```
+
+- 서버 시작 (데모나이즈 X) -> 프린트 문, 로그 등 다양한 명령어를 즉각적으로 확인 할 때 사용
+  ```
+  sudo docker-compose up
+  ```
+- 도커 프로세스 확인
+  ```
+  sudo docker-compose ps
+  ```
+- 사소한 에러
+```
+backend-app | exited with code 137 : out of memory 현상
+```
+  - 해결 한 방법 -> 도커 종료 후 재 실행
+  
+
 ### :muscle: 사소한 문제와 처리 과정
 ---
 > **AWS EC2 인스턴스**
