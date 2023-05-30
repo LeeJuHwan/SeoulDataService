@@ -30,7 +30,11 @@
         <link rel="stylesheet" href="{% static 'css/main.css' %}" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
         <script defer src="//unpkg.com/3d-force-graph"></script>
-        <script defer src="{% static 'javascript/main_.js' %}"></script>
+        <script type="importmap">{ "imports": { "three": "https://unpkg.com/three/build/three.module.js" }}</script>
+        <!-- <script type="module" defer>
+            
+        </script> -->
+        <script defer type="module" src="{% static 'javascript/main_.js' %}"></script>
     </head>
 
     <body>
@@ -46,6 +50,14 @@
                 <span class="title">그래프 설정</span>
                 <div class="content">
                     <ul class="setting_list">
+                        <li>
+                            그래프 테마
+                            <select class="theme_select">
+                                <option value="1">theme 1</option>
+                                <option value="2">theme 2</option>
+                                <option value="3">theme 3</option>
+                            </select>
+                        </li>
                         <li>
                             카테고리 선택
                             <select class="topic_select">
@@ -65,14 +77,14 @@
                             </select>
                         </li>
                         <li>
-                            관심 데이터 강조<label class="switch">
-                                <input type="checkbox selected_show" />
+                            이름 미리보기<label class="switch">
+                                <input type="checkbox" class="selected_show"/>
                                 <span class="slider"></span>
                             </label>
                         </li>
                         <li>
                             유사 데이터 연결<label class="switch">
-                                <input type="checkbox similar_link" />
+                                <input type="checkbox" class="similar_link" />
                                 <span class="slider"></span>
                             </label>
                         </li>
@@ -80,12 +92,11 @@
                             유사 데이터 개수
                             <select class="similar_select">
                                 <option value="3">3개</option>
-                                <option value="5">5개</option>
+                                <option value="5" selected>5개</option>
                                 <option value="10">10개</option>
                             </select>
                         </li>
                     </ul>
-                    <button class="graph_modal_open">그래프 생성</button>
                 </div>
             </div>
         </div>
@@ -95,25 +106,27 @@
             <div class="window">
                 <span class="title">데이터 정보</span>
                 <div class="content">
-                    <ul class="content_list">
-                        <li>
-                            서비스 ID
-                            <span class="val"> 알 수 없음 </span>
-                        </li>
-                        <li>
-                            서비스 이름
-                            <span class="val"> 알 수 없음 </span>
-                        </li>
-                        <li>분류 <span class="val"> 알 수 없음 </span></li>
-                        <li>
-                            제공 형식
-                            <span class="val"> 알 수 없음 </span>
-                        </li>
-                        <li>
-                            서비스 설명
-                            <span class="val scrollbar"> 알 수 없음 </span>
-                        </li>
-                    </ul>
+                    <div class="inner_content">
+                        <ul class="content_list">
+                            <li>
+                                서비스 ID
+                                <span class="val"> 알 수 없음 </span>
+                            </li>
+                            <li>
+                                서비스 이름
+                                <span class="val"> 알 수 없음 </span>
+                            </li>
+                            <li>분류 <span class="val"> 알 수 없음 </span></li>
+                            <li>
+                                제공 형식
+                                <span class="val"> 알 수 없음 </span>
+                            </li>
+                            <li>
+                                서비스 설명
+                                <span class="val scrollbar"> 알 수 없음 </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="buttons">
                         <button class="detail-button">상세정보</button>
                         <button class="data-select-button">관심</button>
@@ -141,9 +154,14 @@
                     <button class="topic_modal_open">주제 생성</button>
                 </div>
             </div>
+            <div class="topic_window">
+                <button class="detail_modal_close material-icons"> close </button>
+                <ul class="topic_list"></ul>
+                <button class="reload_topic">새로 고침</button>
+            </div>
         </div>
 
-        <div class="side_window similar_data open">
+        <div class="side_window similar_data open middle">
             <button class="material-icons">view_list</button>
             <div class="window">
                 <span class="title">유사 데이터</span>
@@ -154,6 +172,7 @@
         </div>
 
         <div class="modal_overlay hidden">
+
             <div class="detail_info_modal modal_window hidden">
                 <button
                     class="detail_modal_close modal_close_button material-icons"

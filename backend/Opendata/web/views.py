@@ -5,9 +5,8 @@ from .models import SeoulData, DataColumn
 from .get_session import get_session
 from django.core.cache import cache
 from django.http import JsonResponse
-from web.faiss_index import FaissIndex
-from web.load_faiss import category_by_faiss_load
-
+import copy
+from Opendata.load import LoadConfig
 import json
 import time
 
@@ -23,7 +22,7 @@ from web.papago_translater import trans
 
 ############### JSON DATA ###############
 def node_coordinate(request):
-    with open("/Opendata/csv_file/json/total_11.json", "r") as f:
+    with open("/Opendata/csv_file/json/total_0.json", "r") as f:
         data = json.load(f)
     return JsonResponse(data)
 
@@ -31,6 +30,14 @@ def node_coordinate(request):
 ############### Graph View ###############
 class MainView(View):
     template_name = "web/index.html"
+    
+    # @property
+    # def get_faiss_index_number(self):
+    #     return "11"
+    
+    # @get_faiss_index_number.setter
+    # def get_faiss_index_number(self, value):
+    #     return value
 
     def get(self, request):
         return render(request, self.template_name)
@@ -44,16 +51,15 @@ class MainView(View):
         # 노드를 클릭했을 때
         if responseDicKey == "data":
             print("responseList: ", responseDicKey)
-
             id = responseData["data"]
+            count_of_similar_data = int(responseData.get("n", 5)) + 1
             filtering = f"OA-{id}"
             detail = SeoulData.objects.filter(서비스ID=filtering)
             detail_data = [item.to_dict() for item in detail]
 
             similar_data = []
-            category_by_faiss_load.load_index()
-            result = category_by_faiss_load(FaissIndex).search_idx(int(id), k=6)["data"][1:]
-            # result = LoadConfig.index.search_idx(int(id), k=6)["data"][1:]
+            LoadConfig.index.load_index(responseData["category"])  # 유사데이터 faiss file mapping
+            result = LoadConfig.index.search_idx(int(id), k=count_of_similar_data)["data"][1:]
 
             for num, i in enumerate(result):
                 filtering = f"OA-{i[0]}"
@@ -110,7 +116,6 @@ class MainView(View):
             print(task_result)
             subjectResult = task_result
 
-            # papago translater api -> 1회 요청 리소스 1717/10000
             print("Korean ver.", trans(task_result))
             subjectResult = [trans(task_result)]
             

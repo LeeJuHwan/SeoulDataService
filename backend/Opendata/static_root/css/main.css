@@ -13,6 +13,7 @@
 
 html { 
     font-family: "S-CoreDream-3Light", sans-serif;
+    overflow: hidden;
 }
 * {
     box-sizing: border-box;
@@ -26,12 +27,17 @@ a {
     font-family: "Nanum Gothic", sans-serif;
 }*/
 
+.graph{
+    width: 100vw;
+    height: 100vh;
+}
+
 .scrollbar::-webkit-scrollbar {
     width: 10px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-    background-color: #2f3542;
+    background-color: rgba(15, 16, 31, 0.37);
     border-radius: 10px;
     background-clip: padding-box;
     border: 2px solid transparent;
@@ -109,6 +115,10 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
+.material-icons{
+    background-color: rgba(255, 255, 255, 0);
+}
+
 .search_box {
     position: absolute;
 
@@ -146,7 +156,7 @@ input:checked + .slider:before {
     flex-grow: 1 1;
     flex-shrink: 1 1;
 
-    background-color: black;
+    background-color: transparent;
 
     border: 2px rgba(253, 255, 255, 0.5) solid;
     border-radius: 4px 0 0 4px;
@@ -168,12 +178,12 @@ input:checked + .slider:before {
 
     left: 32px;
     top: 60px;
-    width: 236px;
+    width: 202px;
 
     background-color: transparent;
     color: rgb(243, 243, 243);
 
-    --scroll-width: 236px;
+    --scroll-width: 202px;
 }
 
 .autocomplete_list > li {
@@ -196,18 +206,21 @@ input:checked + .slider:before {
 
 .autocomplete_list > li.active {
     /*background-color: rgb(102, 102, 102);*/
-    border: 2px rgba(255, 255, 255, 0.5) solid;
+    border: 1px rgba(255, 255, 255) solid;
 }
 
 .side_window {
     position: absolute;
     z-index: 1;
 
+    width: 40px;
+    height: 40px;
     margin: 10px 10px;
 
     border: 0px;
-
-    color: rgb(243, 243, 243);
+    
+    /* background-color: rgba(0, 0, 0, 1); */
+    color: rgba(243, 243, 243);
 }
 
 .side_window.setting {
@@ -233,7 +246,7 @@ input:checked + .slider:before {
 .side_window > button {
     position: relative;
     z-index: 2;
-    background-color: black;
+    /* background-color: black; */
 
     width: 40px;
     height: 40px;
@@ -270,7 +283,7 @@ input:checked + .slider:before {
 
 .side_window.setting.open > .window {
     width: 240px;
-    height: 250px;
+    height: 280px;
 }
 
 .side_window.data_info.open > .window {
@@ -320,6 +333,7 @@ input:checked + .slider:before {
 
 .side_window.data_info > .window > .content > .content_list > li {
     margin: 8px;
+    text-align: center;
 }
 
 .side_window.data_info > .window > .content > .content_list > li > .val {
@@ -331,6 +345,7 @@ input:checked + .slider:before {
 
     font-size: 12pt;
     font-weight: 400;
+    text-align: center;
 }
 
 .side_window.data_info

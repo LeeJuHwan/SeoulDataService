@@ -9,29 +9,41 @@ let selected_nodes = [];
 let expand_source_nodes = [];
 let expand_target_nodes = [];
 let expand_links = [];
+let category = 0;
 
+// 모달 생성 버튼
 const modal_overlay = document.querySelector(".modal_overlay");
 const graph_make_modal = document.querySelector(".graph_make_modal");
 const topic_make_modal = document.querySelector(".topic_make_modal");
 const detail_info_modal = document.querySelector(".detail_info_modal");
 
+// 그래프 설정
+
+const selected_category = document.querySelector(".topic_select");
+const similar_num = document.querySelector(".similar_select");
+
+// 데이터 정보
 const data_info_lists = document.querySelectorAll(
     ".data_info .content_list > li > .val"
 );
 
+// 데이터 상세 정보
 const detail_info_lists = document.querySelectorAll(
     ".modal_overlay .detail_info_modal .modal_content .detail_list > li > .val"
 );
+// 상세 정보 링크
 const page_link = document.querySelector(
     ".modal_overlay .detail_info_modal .modal_content .url_link"
 );
 
 let subject_list = [];
 
+// 유사 데이터
 const similar_data_content = document.querySelector(
     ".similar_data .similar_list"
 );
 
+// 관심 데이터
 const interest_data_content = document.querySelector(
     ".selected_data .selected_list"
 );
@@ -176,6 +188,7 @@ function expandNode(source_node, target_nodes) {
 }
 
 function Checked(node) {
+    console.log("노드으으으으으", node)
     let nodeData = node.id;
     const csrftoken = Cookies.get("csrftoken");
 
@@ -185,7 +198,7 @@ function Checked(node) {
             "X-CSRFToken": csrftoken,
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data: nodeData }),
+        body: JSON.stringify({ data: nodeData, category: category }),
     })
         .then((response) => response.json())
         .then((data) => {
@@ -509,10 +522,9 @@ function reloadData() {
 }
 
 async function makeGraph() {
-    const selected_category = document.querySelector(".topic_select");
     const csrftoken = Cookies.get("csrftoken");
 
-    const category =
+    category =
         selected_category.options[parseInt(selected_category.selectedIndex)]
             .value;
     console.log(category);

@@ -1,3 +1,7 @@
-def category_by_faiss_load(cls, num=None):
-    index = cls(index_file_path="web/index.faiss" or f"web/index_{num}.faiss")
+from web.faiss_index import FaissIndex
+
+
+def category_by_faiss_load(num=0):
+    index = FaissIndex(index_file_path=f"web/index.faiss")
+    index.load_index()
     return index

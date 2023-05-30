@@ -3,6 +3,7 @@ import faiss
 import numpy as np
 import torch
 import pandas as pd
+import os
 
 
 class FaissIndex:
@@ -10,7 +11,7 @@ class FaissIndex:
     Faiss index for semantic search using BERT embeddings.
     """
 
-    def __init__(self, index_file_path: str):
+    def __init__(self):
         """
         Initialize Faiss index with a specified file path.
 
@@ -19,10 +20,10 @@ class FaissIndex:
         """
         self.tokenizer = AutoTokenizer.from_pretrained("kykim/bert-kor-base")
         self.model = AutoModel.from_pretrained("kykim/bert-kor-base")
-        self.index_file_path = index_file_path
+        self.index_file_path = "web/faiss_index/"
         self.index = None
-        if not self.load_index():
-            print('index_file_path is not exist ')
+        # if not self.load_index():
+        #     print('index_file_path is not exist ')
 
     def _get_embeddings(self, texts: list) -> list:
         """
@@ -67,7 +68,7 @@ class FaissIndex:
         if self.index:
             faiss.write_index(self.index, self.index_file_path)
 
-    def load_index(self) -> bool:
+    def load_index(self, index_num_of_category) -> bool:
         """
         Load Faiss index from disk.
 
@@ -75,7 +76,7 @@ class FaissIndex:
             True if index was loaded successfully, False otherwise.
         """
         try:
-            self.index = faiss.read_index(self.index_file_path)
+            self.index = faiss.read_index(os.path.join(self.index_file_path, f"index_{index_num_of_category}.faiss"))
             return True
         except:
             return False
@@ -101,10 +102,10 @@ class FaissIndex:
                     'data': []}
 
         if self.index is None:
-            if not self.load_index():
-                return {'status': False,
-                        'msg': 'Failed to load index file.',
-                        'data': []}
+            # if not self.load_index():
+            return {'status': False,
+                    'msg': 'Failed to load index file.',
+                    'data': []}
 
         if query:
             search_embedding = self._get_embeddings([query])[0]
@@ -142,10 +143,10 @@ class FaissIndex:
                     'data': []}
 
         if self.index is None:
-            if not self.load_index():
-                return {'status': False,
-                        'msg': 'Failed to load index file.',
-                        'data': []}
+            # if not self.load_index():
+            return {'status': False,
+                    'msg': 'Failed to load index file.',
+                    'data': []}
 
         try:
             search_embedding = self.index.reconstruct(idx)
@@ -188,7 +189,7 @@ if __name__ == '__main__':
     index = FaissIndex(index_file_path='index.faiss')
 
     # 인덱스를 로드
-    index.load_index()
+    index.load_index("11")
 
     # 검색 예시
     query = '테스트'
