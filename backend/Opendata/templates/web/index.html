@@ -5,6 +5,7 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="../static/image/favicon.png" type="image/x-icon">
 
         <title>Seoul</title>
         <link
@@ -22,10 +23,10 @@
             rel="stylesheet"
         />
         <style>
-            .graph {
+            /* .graph {
                 background-image: url("{% static './image/space.png' %}");
                 background-size:cover;
-            }
+            } */
         </style>
         <link rel="stylesheet" href="{% static 'css/main.css' %}" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
@@ -37,12 +38,14 @@
         <script defer type="module" src="{% static 'javascript/main_.js' %}"></script>
     </head>
 
-    <body>
+    <body class="theme_space">
         <div class="search_box">
             <input class="search" type="text" placeholder=" 노드 검색" />
             <button class="material-icons search_button">search</button>
         </div>
         <ul class="autocomplete_list"></ul>
+
+        <button class="help_modal_open material-icons"> help </button>
 
         <div class="side_window setting open">
             <button class="material-icons">settings</button>
@@ -53,9 +56,8 @@
                         <li>
                             그래프 테마
                             <select class="theme_select">
-                                <option value="1">theme 1</option>
-                                <option value="2">theme 2</option>
-                                <option value="3">theme 3</option>
+                                <option value="1">우주</option>
+                                <option value="2">하늘</option>
                             </select>
                         </li>
                         <li>
@@ -69,7 +71,7 @@
                                 <option value="5">산업/경제</option>
                                 <option value="6">교통</option>
                                 <option value="7">복지</option>
-                                <option value="8">기타</option>
+                                <!-- <option value="8">기타</option> -->
                                 <option value="9">교육</option>
                                 <option value="10">안전</option>
                                 <option value="11">도시관리</option>
@@ -108,19 +110,15 @@
                 <div class="content">
                     <div class="inner_content">
                         <ul class="content_list">
-                            <li>
+                            <!-- <li>
                                 서비스 ID
                                 <span class="val"> 알 수 없음 </span>
-                            </li>
+                            </li> -->
                             <li>
                                 서비스 이름
-                                <span class="val"> 알 수 없음 </span>
+                                <span class="val scrollbar"> 알 수 없음 </span>
                             </li>
-                            <li>분류 <span class="val"> 알 수 없음 </span></li>
-                            <li>
-                                제공 형식
-                                <span class="val"> 알 수 없음 </span>
-                            </li>
+                            <li>분류 <span class="val scrollbar"> 알 수 없음 </span></li>
                             <li>
                                 서비스 설명
                                 <span class="val scrollbar"> 알 수 없음 </span>
@@ -128,7 +126,8 @@
                         </ul>
                     </div>
                     <div class="buttons">
-                        <button class="detail-button">상세정보</button>
+                        <button class="detail-button">상세히 보기</button>
+                        <a class="page-link" target="blank">페이지 이동</a>
                         <button class="data-select-button">관심</button>
                     </div>
                 </div>
@@ -151,13 +150,13 @@
                         class="purpose_input"
                         placeholder="생성할 주제 목적"
                     />
-                    <button class="topic_modal_open">주제 생성</button>
+                    <button class="topic_window_open">주제 생성</button>
                 </div>
             </div>
             <div class="topic_window">
-                <button class="topic_close material-icons"> close </button>
+                <span class="title">주제 확인</span>
+                <button class="topic_window_close material-icons"> close </button>
                 <ul class="topic_list"></ul>
-                <button class="reload_topic">새로 고침</button>
             </div>
         </div>
 
@@ -173,54 +172,127 @@
 
         <div class="modal_overlay hidden">
 
-            <div class="detail_info_modal modal_window hidden">
+            <div class="help_modal modal_window hidden">
                 <button
-                    class="detail_modal_close modal_close_button material-icons"
+                    class="help_modal_close material-icons"
                 >
                     close
                 </button>
                 <div class="modal_title">
-                    <h3>상세 정보</h3>
+                    <h3>도움말</h3>
                 </div>
                 <div class="modal_content">
-                    <ul class="detail_list scrollbar">
-                        <li>서비스 ID <span class="val"> 알 수 없음 </span></li>
-                        <li>
-                            서비스 이름 <span class="val"> 알 수 없음 </span>
-                        </li>
-                        <li>대분류 <span class="val"> 알 수 없음 </span></li>
-                        <li>중분류 <span class="val"> 알 수 없음 </span></li>
-                        <li>소분류 <span class="val"> 알 수 없음 </span></li>
-                        <li>제공형식 <span class="val"> 알 수 없음 </span></li>
-
-                        <li>
-                            서비스 설명 <span class="val"> 알 수 없음 </span>
-                        </li>
-
-                        <li>시스템명 <span class="val"> 알 수 없음 </span></li>
-                        <li>제공 기관 <span class="val"> 알 수 없음 </span></li>
-                        <li>
-                            제공 부서명 <span class="val"> 알 수 없음 </span>
-                        </li>
-
-                        <li>담당자명 <span class="val"> 알 수 없음 </span></li>
-                        <li>
-                            담당자 연락처 <span class="val"> 알 수 없음 </span>
-                        </li>
-
-                        <li>갱신주기 <span class="val"> 알 수 없음 </span></li>
-                        <li>
-                            최종갱신일자 <span class="val"> 알 수 없음 </span>
-                        </li>
-                    </ul>
-                    <div class="buttons">
-                        <a class="url_link" target="blank">페이지 이동</a>
-                        <button class="data_select_button">관심</button>
+                    <button class="material-icons slide_left">
+                        arrow_back_ios
+                    </button>
+                    <button class="material-icons slide_right">
+                        arrow_forward_ios
+                    </button>
+                    <div class="slide">
+                        <ul class="slide_list">
+                            <li>
+                                <h1>
+                                    환영합니다!
+                                </h1>
+                                <h1>
+                                    Would You Like An Idea? 사이트 입니다!
+                                </h1>
+                                <p>
+                                    저희 사이트는 서울시 공공데이터 포털의 데이터들을 그래프로 보여줘 사용자의 이해와 편의를 제공하기 위해 만들어졌습니다.<br>
+                                    그래프를 통해 데이터들의 관계를 확인하고, 관심 데이터를 등록해 원하는 목적, 분야로 주제를 생성해볼 수 있습니다.<br>
+                                    부디 자유롭게 사용해주세요!
+                                </p>
+                            </li>
+                            <li>
+                                <h1>
+                                    전체적인 화면 및 조작 설명
+                                </h1>
+                                <p>
+                                    그래프 뷰 : 선택한 분야의 데이터들의 관계를 그래프를 통해 확인할 수 있습니다.<br>
+                                        마우스 좌클릭 및 우클릭으로 시점을 조절할 수 있고, 휠을 통해 확대/축소할 수 있습니다.<br>
+                                        노드를 클릭하면 해당 노드로 이동하며, 그 데이터의 정보를 확인할 수 있습니다.<br>
+                                    검색 : 데이터 서비스 이름을 기준으로 검색할 수 있습니다.<br>
+                                    사이드 바 : 그래프 설정, 데이터 설명, 관심 데이터, 유사 데이터에 대한 정보를 제공합니다.<br>
+                                        버튼을 눌러 우측 상단의 심볼을 눌러 확대/축소가 가능하며, 드래그하여 위치를 임의로 조정할 수 있습니다.<br>
+                                </p>
+                            </li>
+                            <li>
+                                <h1>
+                                    그래프 설정 기능 설명
+                                </h1>
+                                <p>
+                                    그래프에 대한 여러가지 설정을 할 수 있습니다.
+                                    테마 선택 : 그래프를 다양한 테마 중 하나로 볼 수 있습니다<br>
+                                    카테고리 선택 : 어떤 카테고리의 데이터를 그래프로 그릴 지 선택할 수 있습니다.<br>
+                                    이름 미리보기 : 데이터를 선택했을 때, 해당 데이터와 그 유사 데이터들의 이름이 그래프에 나타납니다.<br>
+                                    유사 데이터 연결 : 데이터를 선택했을 때, 해당 데이터와 유사한 데이터들이 연결됩니다.<br>
+                                    유사 데이터 연결 개수 : 유사 데이터로 나타나는 데이터의 개수를 선택할 수 있습니다.<br>
+                                </p>
+                            </li>
+                            <li>
+                                <h1>
+                                    데이터 설명 기능 설명
+                                </h1>
+                                <p>
+                                    데이터에 대한 이름, 분류, 설명 등의 정보를 확인할 수 있습니다.<br>
+                                    상세히 보기 / 간략히 보기 : 데이터에 대한 간략한 정보를 볼지, 상세한 정보를 볼 지 선택할 수 있습니다.<br>
+                                    관심 등록 / 관심 해제 : 해당 데이터를 관심 데이터로 등록/해제 할 수 있습니다.<br>
+                                    페이지 이동 : 해당 데이터가 위치한 공공데이터 사이트로 이동합니다.<br>
+                                </p>
+                            </li>
+                            <li>
+                                <h1>
+                                    관심 데이터 기능 설명
+                                </h1>
+                                <p>
+                                    데이터 설명에서 관심으로 등록한 데이터들을 모아볼 수 있습니다.<br>
+                                    주제 생성에 사용될 주제를 입력할 수 있습니다. 어떤 목적으로 주제를 생성하는지 적어주세요.<br>
+                                    주제 생성에 사용될 분야를 입력할 수 있습니다. 어떤 분야에 대한 주제를 얻고싶은지 적어주세요.<br>
+                                    주제 생성 : 관심 데이터로 등록된 데이터들과 입력한, 주제와 분야를 바탕으로 주제를 생성할 수 있습니다.<br>
+                                    생성된 주제들을 확인할 수 있습니다.<br>
+                                </p>
+                            </li>
+                            <li>
+                                <h1>
+                                    유사 데이터 기능 설명
+                                </h1>
+                                <p>
+                                    선택된 데이터와 유사한 데이터들의 목록을 볼 수 있습니다.<br>
+                                    설정에서 표시되는 개수를 설정할 수 있으며, <br>
+                                    연결 기능이 활성화 된 경우, 그래프 상에서 원본 데이터와 유사 데이터가 연결됩니다.<br>
+                                </p>
+                            </li>
+                            <li>
+                                <h1>
+                                    About us
+                                </h1>
+                                <h1>
+                                    개발자 이주환 | Email: wavytheosean@naver.com
+                                </h1>
+                                <br>
+                                <h1>
+                                    고고릴라 고건영 | Email: goodyoung.goh@gmail.com
+                                </h1><br>
+                                <h1>
+                                    강어플라이 강지원 | Email: kangjiwon5961@gmail.com
+                                </h1><br>
+                                <h1>
+                                    19학번 김택관 | Email: tempus2612@gmail.com
+                                </h1><br>
+                                <h1>
+                                    부산사나이 김병진 | Email: a66600492@gmail.com
+                                </h1><br>
+                                <h1>
+                                    Copyright ⓒ ConnectFull., Ltd. All rights reserved.
+                                </h1>
+                            </li>
+                        </ul>
+                        
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="graph"></div>
+        <div class="graph theme_space"></div>
     </body>
 </html>

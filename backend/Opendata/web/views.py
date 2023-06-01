@@ -5,11 +5,10 @@ from .models import SeoulData, DataColumn
 from .get_session import get_session
 from django.core.cache import cache
 from django.http import JsonResponse
-import copy
 from Opendata.load import LoadConfig
 import json
-import time
-
+import logging
+import re
 
 from django.http import HttpRequest
 from rest_framework import views
@@ -18,6 +17,18 @@ from celery.result import AsyncResult
 
 from web.tasks import gpt_recommandation
 from web.papago_translater import trans
+
+
+# logging
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+logger.addHandler(stream_handler)
+file_handler = logging.FileHandler("seouldata.log")
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 
 ############### JSON DATA ###############
@@ -30,27 +41,17 @@ def node_coordinate(request):
 ############### Graph View ###############
 class MainView(View):
     template_name = "web/index.html"
-    
-    # @property
-    # def get_faiss_index_number(self):
-    #     return "11"
-    
-    # @get_faiss_index_number.setter
-    # def get_faiss_index_number(self, value):
-    #     return value
 
     def get(self, request):
         return render(request, self.template_name)
 
     def post(self, request):
         responseData = json.loads(request.body)
-        print("responseData:", responseData)
         responseDicKey = list(responseData.keys())[0]
-        print("responseDicKey", responseDicKey)
+        logger.info(f"responseData: {responseData}")
 
         # 노드를 클릭했을 때
         if responseDicKey == "data":
-            print("responseList: ", responseDicKey)
             id = responseData["data"]
             count_of_similar_data = int(responseData.get("n", 5)) + 1
             filtering = f"OA-{id}"
@@ -76,7 +77,6 @@ class MainView(View):
 
         # 주제 생성 버튼을 클릭했을 때
         elif responseDicKey == "cartData":
-            print("cartData", responseData["cartData"])
             source_id = [i.replace(" ", "") for i in responseData["cartData"]]
 
             ################ GPT ###############
@@ -98,26 +98,28 @@ class MainView(View):
                     ]
 
                 queryset = SeoulData.objects.filter(서비스ID=node_id).values()[0]
+                
                 data_info[queryset["서비스ID"]] = {
-                    "data_name": queryset["서비스명"],
+                    "data_name": re.sub('[一-龥]+|[\(\)]+','', queryset["서비스명"]),
                     "data_description": queryset["서비스설명"],
                     "columns": gpt_input_columns,
                 }
             
-            field = responseData["addition"][0]
-            purpose = responseData["addition"][1]
+            field = responseData.get("field", "issue")
+            purpose = responseData.get("purpose","step by step")
             num_topics = 5
             
-            print("########### 프롬프트 아웃풋 #########")
-
+            logger.info("########### GPT prompt input #########")
+            logger.info(f"DATA INFO: {data_info}\nField: {field}\nPurpose: {purpose}")
             # async tasks
             result = gpt_recommandation.delay(data_info, field, purpose, num_topics)
             task_result = result.get()
-            print(task_result)
+            logger.info(f"GPT: {task_result}")
             subjectResult = task_result
+            translate = trans(task_result)
 
-            print("Korean ver.", trans(task_result))
-            subjectResult = [trans(task_result)]
+            logger.info(f"PAPAGO: {translate}")
+            subjectResult = [translate]
             
             response_data = {"subjectResult": subjectResult}
             return JsonResponse(response_data)

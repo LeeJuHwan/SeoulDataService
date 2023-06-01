@@ -1,5 +1,37 @@
 import { CSS2DRenderer, CSS2DObject } from '//unpkg.com/three/examples/jsm/renderers/CSS2DRenderer.js';
 
+// 테마 프로토타입
+function Theme(background_class, base_node_color, current_node_color, similar_node_color, selected_node_color, expand_source_node_color, expand_target_node_color){
+    this.background_class = background_class;
+
+    this.base_node_color = base_node_color;
+    this.current_node_color = current_node_color;
+    this.similar_node_color = similar_node_color;
+    this.selected_node_color = selected_node_color
+    this.expand_source_node_color = expand_source_node_color;
+    this.expand_target_node_color = expand_target_node_color;
+}
+
+// 테마 설정
+const theme_space = new Theme("theme_space",
+                                "#765EFF",
+                                "#24F018",
+                                "#FFCC33",
+                                "#40180F",
+                                "#FF2828",
+                                "#FF7B10")
+
+const theme_sky = new Theme("theme_sky",
+                            "#765EFF",
+                            "#D4A7FB",
+                            "#FFFFFF",
+                            "#40180F",
+                            "#2E64FE",
+                            "#58ACFA")                               
+                           
+const theme_list = [theme_space, theme_sky]
+let current_theme = theme_space;
+
 // 그래프, 노드 변수
 const graph_elem = document.querySelector(".graph");
 let Graph;
@@ -16,12 +48,6 @@ let category = 0;
 let current_node;
 let detail;
 
-// 버튼
-const modal_overlay = document.querySelector(".modal_overlay");
-const graph_make_modal = document.querySelector(".graph_make_modal");
-const topic_make_modal = document.querySelector(".topic_make_modal");
-const detail_info_modal = document.querySelector(".detail_info_modal");
-
 // 그래프 설정
 const setting_category = document.querySelector(".topic_select");
 const setting_preview = document.querySelector(".selected_show");
@@ -34,6 +60,18 @@ const side_data_info = document.querySelector(".side_window.data_info");
 const side_graph_setting = document.querySelector(".side_window.setting");
 const side_selected_data = document.querySelector(".side_window.selected_data");
 const side_similar_data = document.querySelector(".side_window.similar_data");
+const side_topic_window = document.querySelector(".topic_window");
+
+// 모달
+const modal_overlay = document.querySelector(".modal_overlay");
+const help_modal = document.querySelector(".help_modal");
+const slide_list = document.querySelector(".slide_list");
+
+// 페이징
+const slide_pages = document.querySelectorAll(".slide_list > *").length;
+const slide_width = 688;
+let page = 0;
+
 
 // 데이터 정보 
 let data_info_lists = document.querySelectorAll(
@@ -42,9 +80,8 @@ let data_info_lists = document.querySelectorAll(
 
 // 상세 정보 링크
 const page_link = document.querySelector(
-    ".modal_overlay .detail_info_modal .modal_content .url_link"
+    ".data_info .page-link"
 );
-
 
 // 유사 데이터
 const similar_data_content = document.querySelector(
@@ -55,6 +92,9 @@ const similar_data_content = document.querySelector(
 const interest_data_content = document.querySelector(
     ".selected_data .selected_list"
 );
+
+// 주제
+const topic_content = document.querySelector(".topic_window > .topic_list");
 
 // 검색 
 const search_input = document.querySelector(".search");
@@ -200,10 +240,9 @@ function selectNode(node) {
                     "관심";
 
             // 그래프 확장
-            if (setting_link.checked && current_node === node) {
+            current_node = node;
+            if (setting_link.checked) {
                 expandNode(current_node, similar_nodes);
-            } else {
-                current_node = node;
             }
 
             // 그래프 갱신
@@ -281,10 +320,8 @@ function showData(){
     }
     else{
         const data_strs = [
-            `${detail["서비스ID"]}`,
             `${detail["서비스명"]}`,
             `${detail["대분류"]} / ${detail["중분류"]} / ${detail["소분류"]}`,
-            `${detail["제공형식"]}`,
             `${detail["서비스설명"]}`,
         ];
         for (let idx = 0; idx < data_strs.length; idx++) {
@@ -320,13 +357,10 @@ function showSimilar(similar_data, n){
 
 // 관심 데이터 등록 / 해제
 function basket() {
-    let cart_data_id = document.querySelector(
-        ".data_info .content_list > li:nth-child(1) > .val"
-    ).innerText;
-    let cart_data_name = document.querySelector(
-        ".data_info .content_list > li:nth-child(2) > .val"
-    ).innerText;
-    if (cart_data_id != "알 수 없음") {
+;
+    if (detail) {
+        let cart_data_name = `${detail["서비스명"]}`;
+        let cart_data_id = detail["서비스ID"];
 
         let basket_node = current_node;
         if (selected_nodes.includes(basket_node)) {
@@ -366,40 +400,25 @@ function basket() {
 }
 
 // 주제 생성
-function subject(e) {
+async function getSubject() {
     let field = document.querySelector(".side_window.selected_data > .window > .content > .field_input")
     let purpose = document.querySelector(".side_window.selected_data > .window > .content > .purpose_input")
-    let addList = [field.value, purpose.value]
     
     const csrftoken = Cookies.get("csrftoken");
-    fetch("/web/", {
+    let data = await fetch("/web/", {
         method: "POST",
         headers: {
             "X-CSRFToken": csrftoken,
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ cartData: subject_list, addition: addList }),
+        body: JSON.stringify({ cartData: subject_list, field: field.value, purpose: purpose.value }),
     })
         .then((response) => response.json())
-        .then((data) => {
-            return data;
-        })
-        .then((jsonData) => {
-            console.log('subjectResult', jsonData["subjectResult"])
-        })
+        .then((json) => json["subjectResult"][0])
         .catch((error) => console.error(error));
 
-        let selected_ul = document.querySelector(".side_window.selected_data > .window > .content > .selected_list")
-        let selected_li = selected_ul.querySelectorAll('li')
-
-        selected_li.forEach(li => {
-            li.remove()
-          });
-
-        field.value = null;
-        purpose.value = null;
         
-        subject_list = [];
+    return data
 }
 
 // 드래그 앤 드랍 코드
@@ -470,10 +489,8 @@ function dataTable(){
 
 function dataList(){
     const data_titles = [
-        '서비스 ID',
         '서비스 이름',
         '서비스 분류',
-        '제공 형식',
         '서비스 설명'
     ]
 
@@ -487,6 +504,7 @@ function dataList(){
 
         let span = document.createElement("span")
         span.classList.add("val")
+        span.classList.add("scrollbar")
 
         li.appendChild(text)
         li.appendChild(span)
@@ -496,77 +514,14 @@ function dataList(){
     return ul
 }
 
-// ?
-// function once() {
-//     if (is_action === true) {
-//         is_action = false;
-//         return false;
-//     } else {
-//         is_action = true;
-//         return true;
-//     }
-// }
 
-// // link 생성
-// function similarLink(node_source, node_target) {
-//     var person1 = new Object();
-//     person1.source = node_source.id;
-//     person1.target = node_target.id;
-//     return person1;
-// }
-
-// //randomnum
-// function getRandomNum() {
-//     let min = -40;
-//     let max = +40;
-//     return parseFloat((Math.random() * (max - min) + min).toFixed(3));
-// }
-
-// var is_action = false;
-//유사 데이터 불러오기
-// function similardata(nh) {
-//     console.log("similar입니다", 1);
-//     let x = nh.fx;
-//     let y = nh.fy;
-//     let z = nh.fz;
-//     data_links = [];
-//     //유사도 패치 불러오기 return이 data 모양
-//     //data가 겹쳐서,, 그런다... 패치로 불러와야한다..
-//     if (is_action == false) {
-//         data_node = [
-//             { id: "일반행정", group: 5, collapsed: true, category: false },
-//             { id: "보건", group: 0, collapsed: true, category: false },
-//             { id: "문화/관광", group: 1, collapsed: true, category: false },
-//             { id: "산업/경제", group: 2, collapsed: true, category: false },
-//         ];
-//         is_action = once();
-//     } else {
-//         data_node = [
-//             { id: "안녕", group: 5, collapsed: true, category: false },
-//             { id: "호호", group: 0, collapsed: true, category: false },
-//             { id: "하/관광", group: 1, collapsed: true, category: false },
-//             { id: "경제", group: 2, collapsed: true, category: false },
-//         ];
-//         is_action = once();
-//     }
-
-//     data_node.forEach((i) => {
-//         i["fx"] = x + getRandomNum();
-//         i["fy"] = y + getRandomNum();
-//         i["fz"] = z + getRandomNum();
-//     });
-//     data_node.forEach((i) => {
-//         data_links.push(similarLink(nh, i));
-//     });
-//     return { nodes: data_node, links: data_links };
-// }
-
+// 그래프 초기 설정
 function createGraph() {
     graph_elem.innerHTML = "";
     Graph = ForceGraph3D( {extraRenderers: [new CSS2DRenderer()]})(graph_elem);
     // Graph.graphData(graph_data);
     Graph.nodeVal((node) => {
-        return 5;
+        return 4;
     });
     Graph.onNodeClick((node) => {
         selectNode(node);
@@ -586,14 +541,22 @@ function reloadGraph() {
     let expanded_link_list = expand_links.flat(1);
     let expanded_target_node_list = expand_target_nodes.flat(1);
     Graph.nodeColor((node) => {
-        if (current_node === node) return "#D4A7FB";//"#7553CB";
-        else if (similar_nodes.includes(node)) return "#FFCC33";//"#68A17E"
-        else if (selected_nodes.includes(node)) return "#40180F";
-        else if (expanded_source_node_list.includes(node)) return "red";
-        else if (expanded_target_node_list.includes(node)) return "blue";
-        else return "#463899";//#6F74FF";
+        if (current_node === node) return current_theme.current_node_color;//"#7553CB"; 핑크: #D4A7FB 노랑 : #FFCC33
+        else if (similar_nodes.includes(node)) return current_theme.similar_node_color;//"#68A17E" -> 유사 노드
+        else if (selected_nodes.includes(node)) return current_theme.selected_node_color;
+        else if (expanded_source_node_list.includes(node)) return current_theme.expand_source_node_color;
+        else if (expanded_target_node_list.includes(node)) return current_theme.expand_target_node_color;
+        else return current_theme.base_node_color;//#6F74FF"; 보라: #463899
     });
-    Graph.linkWidth((link) => (expanded_link_list.includes(link) ? 6 : 2));
+    Graph.nodeVal(node => {
+        if(current_node === node)
+            return 36
+        else if (similar_nodes.includes(node))
+            return 16
+        else
+            return 4
+    })
+    Graph.linkWidth((link) => (expanded_link_list.includes(link) ? 3 : 1));
     Graph.linkColor((link) =>
         expanded_link_list.includes(link) ? "#FFFFFF" : "#B0B0B0"
     );
@@ -655,45 +618,6 @@ async function getGraph() {
         response.json()
     );
     console.log(graph_data.nodes);
-    // is_action = false;
-    // let jsonData = await load(); // load도 상수화,, json이 달라지니까
-    //const nodesById = Object.fromEntries(jsonData.nodes.map(node => [node.name, node]))
-
-    // const getNodesTree = (nh) => {
-    //     const visibleNodes = [];
-    //     const visibleLinks = [];
-    //     console.log(jsonData, jsonData.nodes);
-    //     jsonData.nodes.forEach((i) => visibleNodes.push(i));
-
-    //     let arr = visibleNodes.filter((i) => {
-    //         return i.collapsed == false;
-    //     });
-    //     console.log("arr", arr);
-
-    //     if (!nh) {
-    //         return { nodes: visibleNodes, links: visibleLinks };
-    //     }
-
-    //     if (!nh.collapsed) {
-    //         console.log("collapsed");
-    //         similar = similardata(nh);
-    //         similar.nodes.forEach((i) => visibleNodes.push(i));
-    //         similar.links.forEach((i) => visibleLinks.push(i));
-    //     }
-
-    //     if (arr) {
-    //         arr.forEach((i) => {
-    //             if (i != nh) {
-    //                 similar = similardata(i);
-    //                 similar.nodes.forEach((i) => visibleNodes.push(i));
-    //                 similar.links.forEach((i) => visibleLinks.push(i));
-    //             }
-    //         });
-    //     }
-
-    //     console.log("visi", visibleNodes);
-    //     return { nodes: visibleNodes, links: visibleLinks };
-    // };
 
     //EventHandlers
     createGraph();
@@ -713,6 +637,19 @@ async function getGraph() {
     });
 
     // 그래프 설정 이벤트
+    // 테마 변경
+    setting_theme.addEventListener("change", (e) => {
+        graph_elem.classList.remove(current_theme.background_class)
+        document.querySelector("body").classList.remove(current_theme.background_class)
+
+        let theme_idx = parseInt(setting_theme.selectedIndex)
+        current_theme = theme_list[theme_idx]
+        
+        graph_elem.classList.add(current_theme.background_class)
+        document.querySelector("body").classList.add(current_theme.background_class)
+        reloadGraph();
+    })
+
     // 카테고리 선택시 갱신
     setting_category.addEventListener("change", (e) => {
         getGraph();
@@ -724,9 +661,9 @@ async function getGraph() {
             Graph.nodeThreeObject(node => {
                 if(similar_nodes.includes(node) || selected_nodes.includes(node) || current_node === node){
                     const nodeEl = document.createElement('div');
-                    nodeEl.textContent = node.name;
-                    nodeEl.style.color = node.color;
                     nodeEl.className = 'node-label';
+                    nodeEl.textContent = node.name;
+                    // if(node === current_node) nodeEl.style.color = "white";
                     return new CSS2DObject(nodeEl);
                 }
               })
@@ -750,12 +687,6 @@ async function getGraph() {
         }
     })
 
-
-    // 주제 데이터 버튼 클릭
-    var subject_button = document.querySelector(".topic_modal_open");
-    subject_button.addEventListener("click", (e) => {
-        subject(e);
-    });
 
     // 관심 데이터 버튼 클릭
     var data_cart = document.querySelector(".data-select-button");
@@ -798,12 +729,14 @@ async function getGraph() {
 
             if(side_data_info.classList.contains("expand")){
                 side_data_info.classList.remove("expand");
+                detail_modal_open.innerText = "상세히 보기";
                 inner.appendChild(dataList());
                 data_info_lists = inner.querySelectorAll(".val");
                 showData();
             }
             else{
                 side_data_info.classList.add("expand");
+                detail_modal_open.innerText = "간략히 보기";
                 inner.appendChild(dataTable());
                 data_info_lists = inner.querySelectorAll("td");
                 showData();
@@ -811,23 +744,78 @@ async function getGraph() {
         }
     });
 
-    let topic_modal_open = document.querySelector(".topic_modal_open");
-    topic_modal_open.addEventListener("click", (e) => {
-        // if (modal_overlay.classList.contains("hidden")) {
-        //     modal_overlay.classList.remove("hidden");
-        // }
-        // if (topic_make_modal.classList.contains("hidden")) {
-        //     topic_make_modal.classList.remove("hidden");
-        // }
+    // 주제 생성 오픈
+    let topic_window_open = document.querySelector(".topic_window_open");
+    topic_window_open.addEventListener("click", async function(e) {
+        topic_window_open.innerText = "주제 생성 중..."
+        topic_window_open.disabled = true;
+        let result = await getSubject().then(result => result);
+        console.log(result)
+        topic_content.innerHTML = "";
+        for(let topic of result){
+
+            let li = document.createElement("li");
+
+            let label = document.createElement("label");
+            label.classList.add("scrolled_text");
+            label.innerText = topic
+            li.appendChild(label)
+
+            console.log(topic)
+            topic_content.appendChild(li);
+        }
+        topic_window_open.innerText = "주제 생성"
+        topic_window_open.disabled = false;
+
+        if (!side_topic_window.classList.contains("open")) {
+            side_topic_window.classList.add("open");
+        }
     });
 
-    // let topic_modal_close = document.querySelector(".topic_modal_close");
-    // topic_modal_close.addEventListener("click", (e) => {
-        // if (!modal_overlay.classList.contains("hidden")) {
-        //     modal_overlay.classList.add("hidden");
-        // }
-        // if (!topic_make_modal.classList.contains("hidden")) {
-        //     topic_make_modal.classList.add("hidden");
-        // }
-    // });
+    let topic_window_close = document.querySelector(".topic_window_close");
+    topic_window_close.addEventListener("click", (e) => {
+        if (side_topic_window.classList.contains("open")) {
+            side_topic_window.classList.remove("open");
+            topic_window_open.innerText = "주제 생성"
+        }
+    });
+
+    let help_modal_open = document.querySelector(".help_modal_open");
+    help_modal_open.addEventListener("click", (e) => {
+        if (modal_overlay.classList.contains("hidden")) {
+            modal_overlay.classList.remove("hidden");
+        }
+
+        if (help_modal.classList.contains("hidden")) {
+            help_modal.classList.remove("hidden");
+        }
+    })
+
+    let help_modal_close = document.querySelector(".help_modal_close");
+    help_modal_close.addEventListener("click", (e) => {
+        if (!modal_overlay.classList.contains("hidden")) {
+            modal_overlay.classList.add("hidden");
+        }
+
+        if (!help_modal.classList.contains("hidden")) {
+            help_modal.classList.add("hidden");
+        }
+    })
+
+    let slide_left = document.querySelector(".slide_left");
+    slide_left.addEventListener("click", (e) => {
+        if(page > 0){
+            page--;
+            slide_list.style.marginLeft = `-${slide_width*page}px`
+        }
+    })
+
+    let slide_right = document.querySelector(".slide_right")
+    slide_right.addEventListener("click", (e) => {
+        if(page < slide_pages - 1){
+            page++;
+            slide_list.style.marginLeft = `-${slide_width*page}px`
+        }
+    })
+
 })();
