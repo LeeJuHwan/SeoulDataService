@@ -54,6 +54,14 @@
 3. 데이터 시각화
 4. 사용자 친화적인 그래프 생성
 
+### 프로젝트에 참고한 자료들
+- [3d-graph-force](https://github.com/vasturiano/3d-force-graph/)
+- [Celery](https://velog.io/@ssssujini99/EC2-Docker-Django-Celery-RabbitMQ-EC2-Docker-환경에서-Celery-세팅-및-테스트)
+- [Django](https://docs.djangoproject.com/en/4.2/topics/class-based-views/)
+- [Redis](https://github.com/jazzband/django-redis)
+- [PostgreSQL](https://velog.io/@chaeri93/Django-Django%EC%99%80-Postgresql-%EC%97%B0%EB%8F%99%ED%95%98%EA%B8%B0)
+- [AWS 용량부족 에러](https://velog.io/@ssssujini99/EC2ServerDocker-EC2-%EC%9A%A9%EB%9F%89-%EA%BD%89-%EC%B0%BC%EC%9D%84-%EB%95%8C-%ED%95%B4%EA%B2%B0%EB%B0%A9%EB%B2%95-No-space-left-on-device-%ED%95%B4%EA%B2%B0)
+
 ### 프로젝트 회고
 - [블로그](https://velog.io/@1eejuhwany/%EC%84%9C%EC%9A%B8%EC%97%B4%EB%A6%B0%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%9B%B9-%EC%95%B1-%EA%B3%B5%EB%AA%A8%EC%A0%84-%EC%B0%B8%EA%B0%80-%EB%B0%8F-%ED%9A%8C%EA%B3%A0)
 
