@@ -13,7 +13,7 @@
   |고건영|데이터 수집 및 전처리, 3D 그래프 생성|[깃허브](https://github.com/goodyoung)|
   |강지원|프론트 - 백엔드 서버 통신, UI 디자인|[깃허브](https://github.com/kanggeowon)|
   |김병진|3D 그래프 생성, 프론트엔드 기능 구현|[깃허브](https://github.com/0BackFlash0)|
-  |이주환|웹 어플리케이션 서버 기능 구현|[깃허브](https://github.com/LeeJuHwan)|
+  |이주환|웹 어플리케이션 서버 기능 구현, 도커 컨테이너 빌드|[깃허브](https://github.com/LeeJuHwan)|
    
 :date:   **수행기간** 
 - **4.9 ~ 5.31**
