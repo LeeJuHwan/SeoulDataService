@@ -32,7 +32,7 @@
 ### 프로젝트 배경
 ![image](https://github.com/LeeJuHwan/SeoulDataService/assets/118493627/68cc4fbe-cee4-4758-93d6-e3e9aa430efb)
 
-
+---
 ### IA
 ![image](https://github.com/LeeJuHwan/SeoulDataService/assets/118493627/ac4f9cb0-10e1-41eb-87b4-247ed6756df2)
 
@@ -44,15 +44,16 @@
 ![image](https://github.com/LeeJuHwan/SeoulDataService/assets/118493627/b6e6c866-84ae-4641-9d86-ed3341d9c288)
 
 ![image](https://github.com/LeeJuHwan/SeoulDataService/assets/118493627/97484bf3-fc7a-4218-ae80-d1f19e293678)
-
+---
 
 ### 결론 - 프로젝트 요약
-사용자 중심의 공공데이터 포털을 만드는 것, 의사결정을 도울 수 있는 생성 AI를 도입 하여 아이디어의 확장을 돕는 서비스를 목표로 하였다.
+사용자 중심의 공공데이터 포털을 만드는 것이며 의사결정을 도울 수 있는 생성 AI를 도입 하여 아이디어의 확장을 돕는 서비스를 목표로 하였습니다.
 
 1. 브레인스토밍
 2. 사용자 입력 데이터 외에 유사데이터 제공
 3. 데이터 시각화
 4. 사용자 친화적인 그래프 생성
+---
 
 ### 프로젝트에 참고한 자료들
 - [3d-graph-force](https://github.com/vasturiano/3d-force-graph/)
