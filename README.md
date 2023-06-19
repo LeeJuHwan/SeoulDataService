@@ -2,7 +2,7 @@
 [![image](https://user-images.githubusercontent.com/118493627/230771019-846ead77-1796-4896-980f-7d84a3f8591b.png)](https://data.seoul.go.kr/#)
 ---
 ### 서비스 주소
-- [웹 페이지](http://3.39.242.243:8000/web/)
+- closed
 ---
 ### 팀 구성
 
